@@ -26,18 +26,14 @@
     pointsTableImg: "/assets/points-table.jpg"
   };
 
+  var bc = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel("volt_config_channel") : null;
+
   function loadConfig() {
     try {
       var saved = localStorage.getItem("volt_app_config");
       if (saved) {
         var parsed = JSON.parse(saved);
         var merged = Object.assign({}, DEFAULT_CONFIG, parsed);
-        if (Array.isArray(merged.amounts)) {
-          merged.amounts = merged.amounts.filter(function(a) {
-            var val = typeof a === "object" ? a.amount : a;
-            return val !== 50 && val !== 100;
-          });
-        }
         return merged;
       }
     } catch (e) {
@@ -50,6 +46,9 @@
     try {
       localStorage.setItem("volt_app_config", JSON.stringify(newConfig));
       window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: newConfig }));
+      if (bc) {
+        try { bc.postMessage({ type: "voltConfigUpdated", detail: newConfig }); } catch(err) {}
+      }
       
       // Real-time Cloud Sync with Firebase Firestore if initialized
       if (window.db || (window.firebase && window.firebase.firestore)) {
@@ -77,7 +76,7 @@
     if (isCloudSyncInitialized) return;
 
     var attempts = 0;
-    var maxAttempts = 25;
+    var maxAttempts = 30;
 
     function attemptSync() {
       attempts++;
@@ -93,12 +92,6 @@
                 var cloudData = doc.data();
                 if (cloudData) {
                   var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
-                  if (Array.isArray(merged.amounts)) {
-                    merged.amounts = merged.amounts.filter(function(a) {
-                      var val = typeof a === "object" ? a.amount : a;
-                      return val !== 50 && val !== 100;
-                    });
-                  }
                   localStorage.setItem("volt_app_config", JSON.stringify(merged));
                   window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
                 }
@@ -132,6 +125,15 @@
     }
   });
 
+  if (bc) {
+    bc.onmessage = function(e) {
+      if (e.data && e.data.type === "voltConfigUpdated" && e.data.detail) {
+        localStorage.setItem("volt_app_config", JSON.stringify(e.data.detail));
+        window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: e.data.detail }));
+      }
+    };
+  }
+
   // Init cloud sync when DOM is ready or immediately
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initCloudSync);
@@ -146,6 +148,7 @@
     initCloudSync: initCloudSync,
     subscribe: function(cb) {
       if (typeof cb === "function") {
+        cb(loadConfig());
         window.addEventListener("voltConfigUpdated", function(e) {
           cb(e.detail);
         });

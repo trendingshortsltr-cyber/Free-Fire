@@ -503,12 +503,12 @@
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
                         <i class="ri-time-line text-blue-400 text-lg"></i>
-                        <input type="text" value="${timeStr}" onchange="updateTimeSlotText(${index}, this.value)"
-                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-28 text-center focus:outline-none focus:border-blue-500" />
+                        <input type="text" value="${timeStr}" data-index="${index}" onchange="updateTimeSlotText(${index}, this.value)"
+                            class="admin-time-input bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-28 text-center focus:outline-none focus:border-blue-500" />
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <select onchange="updateTimeSlotStatus(${index}, this.value)" class="bg-[#101014] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-bold text-white outline-none cursor-pointer focus:border-blue-500">
+                        <select data-index="${index}" onchange="updateTimeSlotStatus(${index}, this.value)" class="admin-time-select bg-[#101014] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-bold text-white outline-none cursor-pointer focus:border-blue-500">
                             <option value="available" ${status === 'available' ? 'selected' : ''}>🟢 Available</option>
                             <option value="full" ${status === 'full' ? 'selected' : ''}>🔴 Slot Full</option>
                             <option value="expired" ${status === 'expired' ? 'selected' : ''}>⏰ Expired</option>
@@ -575,8 +575,8 @@
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
                         <span class="text-yellow-400 font-bold text-base">₹</span>
-                        <input type="number" value="${amt}" onchange="updateAmountValue(${index}, this.value)"
-                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-24 text-center focus:outline-none focus:border-blue-500" />
+                        <input type="number" value="${amt}" data-index="${index}" onchange="updateAmountValue(${index}, this.value)"
+                            class="admin-amount-input bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-24 text-center focus:outline-none focus:border-blue-500" />
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="toggleAmountStatus(${index})" class="text-xs font-bold px-3 py-1 rounded-lg border transition-colors ${isAvail ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}">
@@ -707,20 +707,49 @@
         // --- GLOBAL SAVE ALL CHANGES ---
         function saveAllAdminChanges() {
             try {
-                var waNum = document.getElementById("input-wa-number");
-                var waChan = document.getElementById("input-wa-channel");
-                var ruleImg = document.getElementById("input-rule-img");
-                var pointsImg = document.getElementById("input-points-img");
+                // 1. Scrape Match Date
                 var customDate = document.getElementById("input-custom-date");
-
-                if (waNum && waNum.value.trim()) currentConfig.whatsappNumber = waNum.value.trim();
-                if (waChan && waChan.value.trim()) currentConfig.whatsappChannel = waChan.value.trim();
-                if (ruleImg && ruleImg.value.trim()) currentConfig.ruleBookImg = ruleImg.value.trim();
-                if (pointsImg && pointsImg.value.trim()) currentConfig.pointsTableImg = pointsImg.value.trim();
                 if (customDate && customDate.value && currentConfig.matchDate !== "today" && currentConfig.matchDate !== "tomorrow") {
                     currentConfig.matchDate = customDate.value;
                 }
 
+                // 2. Scrape Times & Statuses from DOM
+                var timeInputs = document.querySelectorAll(".admin-time-input");
+                var timeSelects = document.querySelectorAll(".admin-time-select");
+                timeInputs.forEach(function(inp) {
+                    var idx = parseInt(inp.getAttribute("data-index"), 10);
+                    var val = inp.value.trim();
+                    var sel = timeSelects[idx];
+                    var statusVal = sel ? sel.value : "available";
+                    if (val && currentConfig.times[idx] !== undefined) {
+                        currentConfig.times[idx] = { time: val, status: statusVal };
+                    }
+                });
+
+                // 3. Scrape Entry Fee Amounts from DOM
+                var amountInputs = document.querySelectorAll(".admin-amount-input");
+                amountInputs.forEach(function(inp) {
+                    var idx = parseInt(inp.getAttribute("data-index"), 10);
+                    var num = parseInt(inp.value, 10);
+                    if (!isNaN(num) && currentConfig.amounts[idx] !== undefined) {
+                        var isAvail = typeof currentConfig.amounts[idx] === "object" ? currentConfig.amounts[idx].available : true;
+                        currentConfig.amounts[idx] = { amount: num, available: isAvail };
+                    }
+                });
+
+                // 4. Scrape Contact & Channel Links
+                var waNum = document.getElementById("input-wa-number");
+                var waChan = document.getElementById("input-wa-channel");
+                if (waNum && waNum.value.trim()) currentConfig.whatsappNumber = waNum.value.trim();
+                if (waChan && waChan.value.trim()) currentConfig.whatsappChannel = waChan.value.trim();
+
+                // 5. Scrape Images
+                var ruleImg = document.getElementById("input-rule-img");
+                var pointsImg = document.getElementById("input-points-img");
+                if (ruleImg && ruleImg.value.trim()) currentConfig.ruleBookImg = ruleImg.value.trim();
+                if (pointsImg && pointsImg.value.trim()) currentConfig.pointsTableImg = pointsImg.value.trim();
+
+                // 6. Save & Broadcast
                 var success = VoltConfig.save(currentConfig);
                 if (success !== false) {
                     showSaveToast("⚡ Live updates published to all devices!");
