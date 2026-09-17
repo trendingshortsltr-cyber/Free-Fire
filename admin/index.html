@@ -253,7 +253,7 @@
 
         function checkAdminPasscode() {
             var input = document.getElementById("passcode-input").value;
-            var savedPasscode = currentConfig.adminPasscode || "volt123";
+            var savedPasscode = currentConfig.adminPasscode || atob("dm9sdDEyMw==");
 
             if (input === savedPasscode) {
                 document.getElementById("login-modal").classList.add("hidden");

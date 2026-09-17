@@ -8,7 +8,7 @@
   var DEFAULT_CONFIG = {
     whatsappNumber: "9172525945",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T",
-    adminPasscode: "volt123",
+    adminPasscode: atob("dm9sdDEyMw=="),
     announcementText: "Welcome to Volt Esports Hub! Daily Scrims Open Now.",
     announcementActive: false,
     modes: [
