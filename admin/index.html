@@ -33,6 +33,17 @@
         .font-display { font-family: 'Rajdhani', sans-serif; }
         .glass-card { background: rgba(18, 18, 22, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .tab-active { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; }
+
+        /* High Contrast Input & Select Text Styling */
+        input, select, textarea {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #6b7280 !important;
+            font-weight: 500 !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-12">

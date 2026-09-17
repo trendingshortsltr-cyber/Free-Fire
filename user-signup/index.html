@@ -28,19 +28,18 @@
     <style>
         /* OUTFIT FONT FIX */
         .font-display, .font-body, .font-sans { font-family: 'Outfit', sans-serif !important; }
-    </style>
-<style>
-    /* Autofill fix for dark mode */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 30px #111 inset !important;
-        -webkit-text-fill-color: white !important;
-        transition: background-color 5000s ease-in-out 0s;
-        caret-color: white;
-    }
-</style>    <script src="../js/mock-backend.js"></script>
+
+        /* High Contrast Input & Select Text Styling */
+        input, select, textarea {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #6b7280 !important;
+            font-weight: 500 !important;
+        }
+    </style>    <script src="../js/mock-backend.js"></script>
 </head>
 
 
