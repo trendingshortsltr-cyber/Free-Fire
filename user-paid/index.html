@@ -86,9 +86,51 @@
                 <p id="amount-helper-text" class="text-sm text-gray-500 mt-2 text-center font-medium">Select a time
                     first to see prices.</p>
             </section>
+            <section id="team-details-section" class="hidden space-y-4 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide">4. Team & Player Lineup</h3>
+                    <span class="text-[11px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-lg uppercase">4 Players Required</span>
+                </div>
+
+                <div class="bg-[#121216] border border-white/10 rounded-2xl p-4 space-y-3 shadow-xl">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Team Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="input-team-name" placeholder="Enter Team Name (e.g. VOLT TITANS)"
+                            class="w-full bg-[#18181f] border border-white/15 rounded-xl px-4 py-3 text-sm text-white font-bold placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-xs font-bold text-blue-400 uppercase mb-1">Player 1 (Leader) <span class="text-red-400">*</span></label>
+                            <input type="text" id="input-player-1" placeholder="Captain / P1 IGN"
+                                class="w-full bg-[#18181f] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Player 2 <span class="text-red-400">*</span></label>
+                            <input type="text" id="input-player-2" placeholder="Player 2 IGN"
+                                class="w-full bg-[#18181f] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Player 3 <span class="text-red-400">*</span></label>
+                            <input type="text" id="input-player-3" placeholder="Player 3 IGN"
+                                class="w-full bg-[#18181f] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Player 4 <span class="text-red-400">*</span></label>
+                            <input type="text" id="input-player-4" placeholder="Player 4 IGN"
+                                class="w-full bg-[#18181f] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section>
-                <button id="book-slot-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed font-display tracking-wider text-2xl uppercase">Book
-                    Your Slot</button>
+                <button id="book-slot-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:bg-gray-800 disabled:text-gray-500 disabled:border disabled:border-white/5 disabled:cursor-not-allowed font-display tracking-wider text-xl uppercase" disabled>
+                    Book Your Slot → WhatsApp
+                </button>
+                <p id="book-btn-helper" class="text-xs text-yellow-400 font-semibold text-center mt-2">
+                    ⚠️ Select time, price & fill 4 players to enable booking.
+                </p>
             </section>
         </div>
     </main>

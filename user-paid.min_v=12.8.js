@@ -217,25 +217,81 @@ document.addEventListener("DOMContentLoaded", function () {
           return function () {
             selected.amount = a;
             renderAmounts();
-            if (bookBtn) {
-              bookBtn.disabled    = false;
-              bookBtn.textContent = "Book Your Slot → WhatsApp";
-            }
+            if (teamSection) teamSection.classList.remove("hidden");
+            validateForm();
           };
         })(amt));
       }
       amtSelector.appendChild(btn);
     });
 
-    if (!selected.amount && bookBtn) {
+    if (selected.amount && teamSection) {
+      teamSection.classList.remove("hidden");
+    }
+    validateForm();
+  }
+
+  // ─── TEAM & PLAYER INPUT REFS & VALIDATION ─────────────────────────────────
+  var teamSection    = document.getElementById("team-details-section");
+  var teamNameInput  = document.getElementById("input-team-name");
+  var p1Input        = document.getElementById("input-player-1");
+  var p2Input        = document.getElementById("input-player-2");
+  var p3Input        = document.getElementById("input-player-3");
+  var p4Input        = document.getElementById("input-player-4");
+  var bookBtnHelper  = document.getElementById("book-btn-helper");
+
+  function validateForm() {
+    if (!bookBtn) return;
+    
+    var hasTime = !!selected.time;
+    var hasAmt  = !!selected.amount;
+    var tName   = teamNameInput  ? teamNameInput.value.trim()  : "";
+    var p1      = p1Input        ? p1Input.value.trim()        : "";
+    var p2      = p2Input        ? p2Input.value.trim()        : "";
+    var p3      = p3Input        ? p3Input.value.trim()        : "";
+    var p4      = p4Input        ? p4Input.value.trim()        : "";
+
+    var allValid = hasTime && hasAmt && tName && p1 && p2 && p3 && p4;
+
+    if (allValid) {
+      bookBtn.disabled = false;
+      bookBtn.className = "w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-4 rounded-xl shadow-xl shadow-blue-500/40 transition-all font-display tracking-wider text-xl uppercase animate-pulse cursor-pointer";
+      if (bookBtnHelper) {
+        bookBtnHelper.textContent = "✅ All details complete! Click below to send WhatsApp booking.";
+        bookBtnHelper.className = "text-xs text-green-400 font-bold text-center mt-2";
+      }
+    } else {
       bookBtn.disabled = true;
+      bookBtn.className = "w-full bg-gray-800 text-gray-500 border border-white/5 font-bold py-4 rounded-xl cursor-not-allowed font-display tracking-wider text-xl uppercase";
+      if (bookBtnHelper) {
+        if (!hasTime) {
+          bookBtnHelper.textContent = "⚠️ Step 1: Please select a Lobby Time above.";
+        } else if (!hasAmt) {
+          bookBtnHelper.textContent = "⚠️ Step 2: Please select an Entry Fee amount above.";
+        } else {
+          bookBtnHelper.textContent = "⚠️ Step 3: Please enter Team Name and all 4 player names below.";
+        }
+        bookBtnHelper.className = "text-xs text-yellow-400 font-semibold text-center mt-2";
+      }
     }
   }
 
+  [teamNameInput, p1Input, p2Input, p3Input, p4Input].forEach(function(inp) {
+    if (inp) {
+      inp.addEventListener("input", validateForm);
+      inp.addEventListener("change", validateForm);
+    }
+  });
+
   // ─── BOOK SLOT BUTTON ──────────────────────────────────────────────────────
   if (bookBtn) {
-    bookBtn.disabled = true;
     bookBtn.addEventListener("click", function () {
+      var tName = teamNameInput ? teamNameInput.value.trim() : "";
+      var p1    = p1Input       ? p1Input.value.trim()       : "";
+      var p2    = p2Input       ? p2Input.value.trim()       : "";
+      var p3    = p3Input       ? p3Input.value.trim()       : "";
+      var p4    = p4Input       ? p4Input.value.trim()       : "";
+
       if (!selected.time) {
         alert("Please select a lobby time first.");
         return;
@@ -244,13 +300,24 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Please select an entry fee amount first.");
         return;
       }
+      if (!tName || !p1 || !p2 || !p3 || !p4) {
+        alert("Please fill in Team Name and all 4 player names before booking.");
+        return;
+      }
+
       var targetNum = (cfg.whatsappNumber || WA_NUMBER || "919172525945").replace(/\D/g, "");
       var msg =
-        "Hello Volt Esports Hub! I want to book a slot.\n\n" +
-        "🎮 Mode: "       + selected.mode   + "\n" +
-        "⏰ Time: "             + selected.time   + "\n" +
-        "💰 Entry Fee: ₹" + selected.amount + "\n\n" +
-        "Please confirm my slot booking.";
+        "🔥 VOLT ESPORTS HUB - SLOT BOOKING 🔥\n\n" +
+        "🎮 Mode: "        + selected.mode   + "\n" +
+        "⏰ Lobby Time: "  + selected.time   + "\n" +
+        "💰 Entry Fee: ₹"  + selected.amount + "\n\n" +
+        "🛡️ Team Name: "   + tName           + "\n" +
+        "👤 Leader (P1): " + p1              + "\n" +
+        "👤 Player 2: "    + p2              + "\n" +
+        "👤 Player 3: "    + p3              + "\n" +
+        "👤 Player 4: "    + p4              + "\n\n" +
+        "Please confirm our slot booking!";
+
       window.location.href = "https://wa.me/" + targetNum + "?text=" + encodeURIComponent(msg);
     });
   }
