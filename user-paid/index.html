@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-NJ3V3P65HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAILY SCRIMS - Volt Esports Hub</title>
+    <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
+    <!-- Auth Guard: Available but no auto-redirect for guest browsing -->
+    <script src="../auth-guard.min_v%3D12.8.js" data-no-auto-check="true"></script>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <link rel="stylesheet" href="../user-paid_v%3D12.8.css">
+    <!-- Tailwind config moved to tailwind.config.js -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <style>
+        /* Bottom Nav Active State */
+        .bottom-nav-item.active i, .bottom-nav-item.active span { color: #3B82F6 !important; font-weight: 800; }
+        .bottom-nav-item { -webkit-tap-highlight-color: transparent; }
+        .bottom-nav-item.nav-home { order: 1; }
+        .bottom-nav-item.nav-scrims { order: 2; }
+        .bottom-nav-item.nav-profile { order: 3; }
+        .bottom-nav-item.nav-rankings { order: 4; }
+        .bottom-nav-item.nav-tourns { order: 5; }
+        .profile-nav-item { transform: translateY(-5px); }
+        .profile-nav-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background-color: #2563eb; color: #fff !important; box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35); }
+        .profile-nav-item span { color: #60a5fa !important; font-size: 10px; font-weight: 800; }
+        @keyframes profileNavShine { 0%, 55% { transform: translateX(-180%) skewX(-20deg); } 75%, 100% { transform: translateX(360%) skewX(-20deg); } }
+        .profile-nav-item i { position: relative; overflow: hidden; }
+        .profile-nav-item i::after { content: ''; position: absolute; top: -20%; left: -25%; width: 22%; height: 140%; background: rgba(255,255,255,.7); filter: blur(2px); pointer-events: none; animation: profileNavShine 3.2s ease-in-out infinite; }
+    </style>
+    <script src="../js/mock-backend.js"></script>
+</head>
+
+<body class="bg-[#0a0a0a] text-gray-200 font-body min-h-screen flex flex-col antialiased pb-20">
+
+    <nav class="sticky top-0 z-50 bg-[#111111]/95 backdrop-blur-md border-b border-white/5 h-16 flex items-center px-4 justify-center shadow-sm">
+        <h1 class="text-xl font-display font-bold uppercase tracking-wide text-white">VOLT <span class="text-blue-500">ESPORTS HUB</span></h1>
+    </nav>
+
+    <div id="live-clock-container" class="bg-[#111111] text-white text-center py-2 shadow-md border-b border-white/5">
+        <p class="text-sm font-bold tracking-wider font-display">-- LOADING TIME --</p>
+    </div>
+
+    <main class="flex-grow pt-5 pb-10">
+        <!-- Lobby Off Popup Banner -->
+        <div id="lobby-off-banner" class="hidden px-4 max-w-lg mx-auto mb-6 animate-fade-in">
+            <div class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-2xl p-5 text-center shadow-lg">
+                <div class="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-shut-down-line text-3xl text-red-400"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold text-red-400 uppercase tracking-wide mb-1">Lobbies Off</h3>
+                <p id="lobby-off-banner-message" class="text-sm text-gray-300 font-medium"></p>
+            </div>
+        </div>
+
+        <div id="paid-content" class="px-4 max-w-lg mx-auto space-y-8 animate-fade-in">
+            <section>
+                <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">1. Select Mode
+                </h3>
+                <div class="grid grid-cols-1 gap-3">
+                    <button class="selection-card border-2 rounded-xl p-3 bg-blue-500/10 border-blue-500 text-blue-400 font-display font-bold text-xl uppercase tracking-wide shadow-lg shadow-blue-500/10 flex items-center justify-center">
+                        <span>Squad Mode</span>
+                    </button>
+                </div>
+            </section>
+            <section>
+                <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">2. Select Lobby
+                    Time</h3>
+                <div id="lobby-time-selector" class="grid grid-cols-3 gap-3"></div>
+            </section>
+            <section>
+                <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">3. Select Lobby
+                    Amount</h3>
+                <div id="lobby-amount-selector" class="grid grid-cols-2 gap-3"></div>
+                <p id="amount-helper-text" class="text-sm text-gray-500 mt-2 text-center font-medium">Select a time
+                    first to see prices.</p>
+            </section>
+            <section>
+                <button id="book-slot-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed font-display tracking-wider text-2xl uppercase">Book
+                    Your Slot</button>
+            </section>
+        </div>
+    </main>
+
+    <!-- NEW MODAL DESIGN -->
+    <div id="team-name-modal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
+            <form id="team-name-form" class="p-6 space-y-5">
+                <div class="text-center">
+                    <h3 class="text-xl font-extrabold text-white">Enter Details</h3>
+                    <p class="text-sm text-gray-400 font-medium">This name will be used in the tournament.</p>
+                </div>
+
+                <!-- Step 1: Phone Input -->
+                <div id="phone-step">
+                    <input id="customer-phone-input" type="tel" placeholder="Enter Registered WhatsApp Number" class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 block p-4 font-bold outline-none transition-all placeholder-gray-600 text-center" required="" maxlength="10">
+                    <p class="text-xs text-center text-gray-400 mt-2">Not registered? <a href="../user-signup/index.html" class="text-blue-500 font-bold">Create a team account.</a></p>
+                </div>
+
+                <!-- Step 2: Fetched Data (hidden by default) -->
+                <div id="details-step" class="hidden space-y-5">
+                    <input id="team-name-input" type="text" placeholder="Team Name" class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl block p-4 font-bold outline-none placeholder-gray-600 text-center" readonly="">
+
+                    <!-- Player lineup selection removed - registration only requires team name -->
+                </div>
+
+                <!-- DISCOUNT BANNER (NEW) -->
+                <div id="discount-banner" class="hidden bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/30 rounded-xl p-3 flex items-center justify-between animate-fade-in shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg shadow-purple-600/30">
+                            <i class="ri-gift-2-fill"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Offer Applied
+                            </p>
+                            <p id="discount-msg" class="text-xs font-bold text-white">First Time User Discount</p>
+                        </div>
+                    </div>
+                    <span id="discount-amount-display" class="text-lg font-black text-purple-400">-₹0</span>
+                </div>
+
+                <p id="form-error" class="text-red-500 text-xs text-center font-bold hidden bg-red-50 p-2 rounded-lg">
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="pt-2 space-y-3">
+                    <button type="submit" id="proceed-to-pay-btn" class="w-full text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 font-extrabold rounded-xl text-sm px-5 py-4 text-center shadow-lg shadow-green-500/30 transition-all active:scale-95 disabled:opacity-50" disabled="">Proceed to Pay</button>
+                    <button id="close-modal-btn" type="button" class="w-full text-gray-500 bg-transparent hover:bg-gray-100 font-bold rounded-xl text-sm px-5 py-2.5 text-center transition-all">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-xs p-6 text-center shadow-xl">
+            <div id="custom-alert-icon-bg" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-100"><i id="custom-alert-icon" class="ri-error-warning-line text-3xl text-red-600"></i></div>
+            <h3 id="custom-alert-title" class="text-lg font-bold text-secondary mb-2">Error</h3>
+            <p id="custom-alert-message" class="text-sm text-gray-600 mb-6 font-medium">Something went wrong.</p>
+            <button id="custom-alert-btn" class="w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition-colors">OK</button>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script defer="" src="../js/xss-guard.min_v%3D12.8.js"></script>
+    <script defer="" src="../user-paid.min_v%3D12.8.js"></script>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav-container">
+        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#0d0d0d] border-t border-white/10 shadow-2xl" style="padding-bottom: env(safe-area-inset-bottom);">
+            <div class="grid grid-cols-5 h-16 items-center max-w-lg mx-auto px-1">
+
+                <!-- Support -->
+                <a href="../contact/index.html" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-customer-service-2-line text-2xl text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-blue-400 transition-colors uppercase">Support</span>
+                </a>
+
+                <!-- Point Table -->
+                <button type="button" onclick="openPointsTableModal()" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-trophy-line text-2xl text-gray-500 group-hover:text-yellow-400 transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-yellow-400 transition-colors uppercase">Point Table</span>
+                </button>
+
+                <!-- Book (center elevated) -->
+                <a href="index.html" class="flex flex-col items-center justify-center gap-1 group transition-all -mt-5">
+                    <div class="w-13 h-13 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/40 group-hover:bg-blue-500 transition-all group-hover:scale-105 p-3">
+                        <i class="ri-ticket-2-fill text-2xl text-white"></i>
+                    </div>
+                    <span class="text-[9px] font-bold tracking-wide text-blue-400 uppercase">Book</span>
+                </a>
+
+                <!-- WhatsApp Channel -->
+                <a href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-whatsapp-line text-2xl text-gray-500 group-hover:text-green-400 transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-green-400 transition-colors uppercase">Channel</span>
+                </a>
+
+                <!-- Rule Book -->
+                <button type="button" onclick="openRuleBookModal()" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-book-read-line text-2xl text-gray-500 group-hover:text-amber-400 transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-amber-400 transition-colors uppercase">Rule Book</span>
+                </button>
+
+            </div>
+        </nav>
+    </div>
+
+    <!-- Points Table Image Modal -->
+    <div id="points-table-modal" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
+        <div class="relative max-w-lg w-full bg-[#121216] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="px-4 py-3 bg-[#18181f] border-b border-white/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="ri-trophy-fill text-yellow-400 text-lg"></i>
+                    <h3 class="font-display font-bold text-white text-base tracking-wide uppercase">Free Fire Points System</h3>
+                </div>
+                <button type="button" onclick="closePointsTableModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <!-- Image Container -->
+            <div class="p-2 overflow-y-auto flex justify-center bg-[#0a0a0c]">
+                <img id="modal-points-table-img" src="../assets/points-table.jpg" alt="Free Fire Points System Table" class="w-full h-auto rounded-xl object-contain shadow-lg" />
+            </div>
+            <!-- Footer -->
+            <div class="p-3 bg-[#18181f] border-t border-white/10 flex items-center justify-between">
+                <span class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Volt Esports Hub</span>
+                <button type="button" onclick="closePointsTableModal()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition-colors uppercase">
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rule Book Image Modal -->
+    <div id="rule-book-modal" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
+        <div class="relative max-w-lg w-full bg-[#121216] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="px-4 py-3 bg-[#18181f] border-b border-white/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="ri-book-read-fill text-amber-400 text-lg"></i>
+                    <h3 class="font-display font-bold text-white text-base tracking-wide uppercase">Scrims Rules & Regulations</h3>
+                </div>
+                <button type="button" onclick="closeRuleBookModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <!-- Image Container -->
+            <div class="p-2 overflow-y-auto flex justify-center bg-[#0a0a0c]">
+                <img id="modal-rule-book-img" src="../assets/rule-book.jpg" alt="Free Fire Scrims Rules and Regulations" class="w-full h-auto rounded-xl object-contain shadow-lg" />
+            </div>
+            <!-- Footer -->
+            <div class="p-3 bg-[#18181f] border-t border-white/10 flex items-center justify-between">
+                <span class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Volt Esports Hub</span>
+                <button type="button" onclick="closeRuleBookModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition-colors uppercase">
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openPointsTableModal() {
+        var m = document.getElementById('points-table-modal');
+        var img = document.getElementById('modal-points-table-img');
+        if (window.VoltConfig && img) {
+            img.src = window.VoltConfig.get().pointsTableImg || '../assets/points-table.jpg';
+        }
+        if (m) {
+            m.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    function closePointsTableModal() {
+        var m = document.getElementById('points-table-modal');
+        if (m) {
+            m.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+    function openRuleBookModal() {
+        var m = document.getElementById('rule-book-modal');
+        var img = document.getElementById('modal-rule-book-img');
+        if (window.VoltConfig && img) {
+            img.src = window.VoltConfig.get().ruleBookImg || '../assets/rule-book.jpg';
+        }
+        if (m) {
+            m.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    function closeRuleBookModal() {
+        var m = document.getElementById('rule-book-modal');
+        if (m) {
+            m.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+    </script>
+
+
+    <!-- Firebase Push Notifications -->
+    <script src="../js/firebase-notifications_v%3D12.8.js"></script>
+
+
+
+</body></html>

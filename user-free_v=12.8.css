@@ -1,0 +1,90 @@
+/* GLOBAL SETTINGS */
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: #0a0a0a;
+    color: #e5e7eb;
+    /* gray-200 */
+    overflow-x: hidden;
+}
+
+/* CUSTOM SCROLLBAR (Dark Theme) */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 3px;
+    border: 1px solid #222222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+    /* Blue-500 */
+}
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #333333 #111111;
+}
+
+/* UTILITY EFFECTS */
+
+/* Soft Shadows for dark theme */
+.shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+.shadow-soft:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Fade Animation */
+.animate-fade-in {
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #111111;
+}
+
+/* Member Selection Button Active State */
+.member-btn.selected {
+    background-color: rgba(37, 99, 235, 0.15);
+    color: #60A5FA;
+    /* Blue-400 */
+    border-color: #2563EB;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}

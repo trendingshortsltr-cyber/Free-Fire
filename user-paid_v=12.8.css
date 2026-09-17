@@ -1,0 +1,80 @@
+body {
+    /* Font handled by Tailwind classes in HTML */
+    background-color: #0a0a0a;
+}
+
+/* Fade Animation */
+.animate-fade-in {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Selection Cards (Time & Amount) */
+.selection-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    color: #d1d5db;
+    /* gray-300 */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.selection-card:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.selection-card.selected {
+    border-color: #2563EB;
+    /* Primary Blue */
+    background-color: rgba(37, 99, 235, 0.15);
+    color: #60A5FA;
+    /* Blue-400 */
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.selection-card:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #111111;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Specific layout for Amount Cards (Horizontal) */
+.selection-card.amount-card {
+    flex-direction: row;
+    white-space: nowrap;
+}
+
+/* Loader Box */
+.active-lobby-card {
+    background-color: rgba(37, 99, 235, 0.1);
+    border: 2px dashed #2563EB;
+    /* Blue-600 */
+    color: #60A5FA;
+    /* Blue-400 */
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

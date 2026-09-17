@@ -1,0 +1,759 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-NJ3V3P65HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Volt Esports Hub</title>
+    <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <!-- Tailwind config moved to tailwind.config.js -->
+    <style>
+        body {
+            background-color: #0a0a0a;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-pill {
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #94A3B8;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            cursor: pointer;
+            position: relative;
+            z-index: 20;
+        }
+
+        .nav-pill.active {
+            background-color: #2563EB;
+            color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .floating-support-button {
+            position: fixed;
+            right: 1rem;
+            bottom: calc(5.5rem + env(safe-area-inset-bottom));
+            z-index: 55;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+            border-radius: 6px;
+            background-color: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 10px 18px rgba(30, 27, 75, 0.4);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .floating-support-button:hover {
+            background-color: #6366f1;
+        }
+
+        .floating-support-button:focus-visible {
+            outline: 2px solid #a5b4fc;
+            outline-offset: 2px;
+        }
+
+        .floating-support-button:active {
+            transform: scale(0.95);
+        }
+
+        .floating-payout-button {
+            position: fixed;
+            right: 1rem;
+            bottom: calc(8.25rem + env(safe-area-inset-bottom));
+            z-index: 55;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid rgba(96, 165, 250, 0.7);
+            border-radius: 6px;
+            background-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 10px 18px rgba(30, 64, 175, 0.4);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .floating-payout-button:hover {
+            background-color: #3b82f6;
+        }
+
+        .floating-payout-button:focus-visible {
+            outline: 2px solid #93c5fd;
+            outline-offset: 2px;
+        }
+
+        .floating-payout-button:active {
+            transform: scale(0.95);
+        }
+
+        .notification-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-shrink: 0;
+            padding: 0.35rem 0.55rem;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+            border-radius: 6px;
+            background: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 8px 14px rgba(30, 27, 75, 0.35);
+            font-size: 9px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .notification-trigger:hover { background: #6366f1; }
+        .notification-trigger:focus-visible { outline: 2px solid #a5b4fc; outline-offset: 2px; }
+        .notification-trigger:active { transform: scale(0.95); }
+
+        .profile-nav-item {
+            transform: translateY(-5px);
+        }
+
+        .profile-nav-item i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+        }
+
+        .profile-nav-item span {
+            color: #60a5fa !important;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        @keyframes profileNavShine {
+            0%, 55% { transform: translateX(-180%) skewX(-20deg); }
+            75%, 100% { transform: translateX(360%) skewX(-20deg); }
+        }
+
+        .profile-nav-item i { position: relative; overflow: hidden; }
+        .profile-nav-item i::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -25%;
+            width: 22%;
+            height: 140%;
+            background: rgba(255, 255, 255, 0.7);
+            filter: blur(2px);
+            pointer-events: none;
+            animation: profileNavShine 3.2s ease-in-out infinite;
+        }
+
+        .header-tools-row { flex-wrap: nowrap; min-width: 0; }
+        #header-invite-container { min-width: 0; max-width: calc(100% - 58px); }
+        #header-invite-code { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .team-dashboard-header {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            overflow: hidden;
+        }
+
+        .filter-pill {
+            flex: 1;
+            text-align: center;
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94A3B8;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .filter-pill.active {
+            background-color: #1a1a1a;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* Bottom Nav Active State */
+        .bottom-nav-item.active i, .bottom-nav-item.active span { color: #3B82F6 !important; font-weight: 800; }
+        .bottom-nav-item { -webkit-tap-highlight-color: transparent; }
+    </style>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+
+    <style>
+        /* OUTFIT FONT FIX */
+        .font-display, .font-body, .font-sans { font-family: 'Outfit', sans-serif !important; }
+    </style>
+    <script src="../js/mock-backend.js"></script>
+</head>
+
+<body class="text-gray-200 font-sans antialiased min-h-screen flex flex-col pb-24">
+
+    <!-- Navbar: matches the logged-in homepage navbar -->
+    <nav id="top-navbar" class="sticky top-0 z-50 bg-dark/95 backdrop-blur-md border-b border-white/10 shadow-lg transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index/index.html" class="flex items-center gap-3 group">
+                    <!-- Replaced Icon with Logo Image -->
+                    <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+
+                    <span class="font-display font-bold text-xl tracking-wide text-white">VOLT<span class="text-primary">ESPORTS HUB</span></span>
+                </a>
+                <button id="logout-btn" type="button" onclick="performLogout()" aria-label="Log out" class="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-400 transition-colors rounded-lg hover:bg-white/5">
+                    <i class="ri-logout-box-r-line text-xl" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- NO TEAM VIEW -->
+    <main id="no-team-view" class="flex-grow px-6 py-8 max-w-lg mx-auto w-full hidden space-y-6 relative z-10">
+
+        <!-- Previous Team Performance Stats -->
+        <div class="w-full grid grid-cols-2 gap-3 mb-2">
+            <div class="bg-[#1a1a1a] p-4 rounded-2xl shadow-sm border border-white/5 flex flex-col items-center justify-center">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Matches</p>
+                <p id="no-team-matches" class="text-2xl font-black text-white">0</p>
+            </div>
+            <div class="bg-[#1a1a1a] p-4 rounded-2xl shadow-sm border border-white/5 flex flex-col items-center justify-center">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Booyahs</p>
+                <p id="no-team-booyahs" class="text-2xl font-black text-green-400">0</p>
+            </div>
+            <div class="bg-[#1a1a1a] p-4 rounded-2xl shadow-sm border border-white/5 flex flex-col items-center justify-center">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Kills</p>
+                <p id="no-team-kills" class="text-2xl font-black text-red-400">0</p>
+            </div>
+            <div class="bg-[#1a1a1a] p-4 rounded-2xl shadow-sm border border-white/5 flex flex-col items-center justify-center">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Points</p>
+                <p id="no-team-points" class="text-2xl font-black text-primary">0</p>
+            </div>
+        </div>
+
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-black text-white">Setup Profile</h2>
+            <p class="text-sm text-gray-500">Join a squad or start your own.</p>
+        </div>
+
+        <div class="bg-[#1a1a1a] p-6 rounded-3xl shadow-lg border border-white/5">
+            <div class="w-12 h-12 bg-orange-900/30 rounded-xl flex items-center justify-center mb-4 text-primary text-2xl">
+                <i class="ri-add-circle-fill"></i>
+            </div>
+            <h3 class="text-lg font-black text-white mb-1">Create New Team</h3>
+            <p class="text-xs text-gray-500 mb-4">Become a Leader.</p>
+            <form id="create-team-form" class="space-y-3">
+                <input type="text" id="new-team-name" placeholder="Enter Team Name" class="w-full p-3 bg-[#111111] border border-white/10 rounded-xl font-bold text-sm outline-none focus:border-primary text-white placeholder-gray-500" required="">
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-all cursor-pointer">Create
+                    Team</button>
+            </form>
+        </div>
+
+        <div class="flex items-center justify-center text-gray-600 text-xs font-bold uppercase tracking-widest">- OR -
+        </div>
+
+        <div class="bg-[#1a1a1a] p-6 rounded-3xl shadow-lg border border-white/5">
+            <div class="w-12 h-12 bg-blue-900/30 rounded-xl flex items-center justify-center mb-4 text-blue-400 text-2xl">
+                <i class="ri-team-fill"></i>
+            </div>
+            <h3 class="text-lg font-black text-white mb-1">Join Existing Team</h3>
+            <p class="text-xs text-gray-500 mb-4">Enter invite code.</p>
+            <form id="join-team-form" class="space-y-3">
+                <input type="text" id="invite-code-input" placeholder="INVITE CODE (e.g. VOLT-123)" class="w-full p-3 bg-[#111111] border border-white/10 rounded-xl font-bold text-sm outline-none focus:border-blue-500 uppercase text-white placeholder-gray-500" required="">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all cursor-pointer">Join
+                    Team</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- TEAM DASHBOARD VIEW -->
+    <div id="team-view" class="hidden w-full h-full flex flex-col relative z-10">
+
+        <!-- Header Section -->
+        <header class="team-dashboard-header bg-[#111111] pt-6 pb-2 border-b border-white/5 shadow-sm relative z-30">
+            <div class="max-w-lg mx-auto">
+                <!-- Profile Info -->
+                <div class="flex items-center gap-5 mb-6 px-6">
+                    <div class="relative group cursor-pointer">
+                        <div id="logo-container" class="w-20 h-20 bg-[#1a1a1a] rounded-3xl shadow-sm flex items-center justify-center overflow-hidden border border-white/10 relative">
+                            <div id="logo-initials" class="absolute inset-0 flex items-center justify-center bg-[#1a1a1a] text-gray-500 font-black text-2xl z-0">
+                                EE</div>
+                            <img id="team-logo" src="" class="w-full h-full object-cover relative z-10 hidden" alt="Logo" onerror="this.classList.add('hidden')">
+                        </div>
+                        <div id="logo-edit-icon" class="hidden absolute -bottom-2 -right-2 bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-[#111111] shadow-md z-20 transition-transform active:scale-95">
+                            <i class="ri-camera-fill text-xs"></i>
+                        </div>
+                        <input type="file" id="logo-upload" class="hidden" accept="image/*">
+                    </div>
+
+                    <div class="text-left w-full">
+                        <div class="flex items-center gap-2">
+                            <h2 id="team-name" class="text-2xl font-black text-white tracking-tight leading-none">
+                                Loading...</h2>
+                            <button id="edit-name-btn" type="button" class="hidden text-gray-500 hover:text-primary transition-colors p-1 cursor-pointer"><i class="ri-pencil-fill text-lg"></i></button>
+                        </div>
+
+                        <!-- IGN with Edit Button -->
+                        <div class="flex items-center gap-2 mt-1">
+                            <p id="user-ign" class="text-sm font-bold text-gray-500">...</p>
+                            <button id="edit-ign-header-btn" type="button" class="text-gray-500 hover:text-primary transition-colors p-1 -m-1 cursor-pointer"><i class="ri-pencil-fill text-base"></i></button>
+                        </div>
+
+                        <!-- Invite Code and Notification Action -->
+                        <div class="header-tools-row flex items-center gap-2 mt-2 max-w-full">
+                            <div id="header-invite-container" class="hidden flex items-center gap-1.5 bg-primary/10 w-fit px-2 py-1 rounded-md border border-primary/20 shadow-sm">
+                                <span class="text-[9px] font-bold text-primary uppercase tracking-wider">Invite:</span>
+                                <span id="header-invite-code" class="text-[10px] font-black text-white select-all font-mono">...</span>
+                                <button id="header-copy-btn" type="button" class="text-primary hover:text-orange-400 active:scale-90 transition-transform ml-0.5 cursor-pointer" aria-label="Copy invite link"><i class="ri-file-copy-line text-xs"></i></button>
+                            </div>
+                            <div id="notification-permission-container" class="hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Pills -->
+                <div class="relative w-full">
+                    <!-- Scroll Indicator (Fades out when scrolled, but simple CSS visual cue) -->
+                    <div class="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-[#111111] to-transparent pointer-events-none flex items-center justify-end pr-2 z-[60]">
+                        <i class="ri-arrow-right-s-line text-gray-400 opacity-60 text-xl animate-pulse"></i>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar pb-4 px-6 relative z-50" id="nav-tabs-container">
+                        <button type="button" class="nav-pill active" onclick="switchTab('joined')">Joined</button>
+                        <button type="button" class="nav-pill" onclick="switchTab('overview')">Overview</button>
+                        <button type="button" class="nav-pill" onclick="switchTab('history')">History</button>
+                        <button type="button" class="nav-pill" onclick="switchTab('squad')">Squad</button>
+                        <button type="button" class="nav-pill" onclick="switchTab('rank')">Rank</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow px-6 py-4 max-w-lg mx-auto w-full relative z-10">
+
+            <!-- TAB: JOINED MATCHES -->
+            <div id="view-joined" class="animate-fade-in">
+                <h3 class="text-lg font-black text-white mb-4">Joined Matches</h3>
+                <div id="upcoming-list" class="space-y-3"></div>
+            </div>
+
+            <!-- TAB: OVERVIEW -->
+            <div id="view-overview" class="hidden animate-fade-in">
+                <div class="bg-[#1a1a1a] p-1 rounded-xl flex gap-1 mb-6 border border-white/5">
+                    <button type="button" class="filter-pill active" id="stat-btn-week" onclick="setStatPeriod('weekly')">Weekly</button>
+                    <button type="button" class="filter-pill" id="stat-btn-month" onclick="setStatPeriod('monthly')">Monthly</button>
+                    <button type="button" class="filter-pill" id="stat-btn-all" onclick="setStatPeriod('all_time')">All
+                        Time</button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-[#1a1a1a] p-5 rounded-[2rem] shadow-soft flex flex-col items-center justify-center h-32 relative overflow-hidden border border-white/5">
+                        <div class="absolute top-0 right-0 w-8 h-8 bg-red-900/20 rounded-bl-xl"></div>
+                        <p id="stat-kills" class="text-3xl font-black text-white mb-1">0</p>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">KILLS</p>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-5 rounded-[2rem] shadow-soft flex flex-col items-center justify-center h-32 relative overflow-hidden border border-white/5">
+                        <div class="absolute top-0 right-0 w-8 h-8 bg-orange-900/20 rounded-bl-xl"></div>
+                        <p id="stat-points" class="text-3xl font-black text-primary mb-1">0</p>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">POINTS</p>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-5 rounded-[2rem] shadow-soft flex flex-col items-center justify-center h-32 relative overflow-hidden border border-white/5">
+                        <div class="absolute top-0 right-0 w-8 h-8 bg-green-900/20 rounded-bl-xl"></div>
+                        <p id="stat-wins" class="text-3xl font-black text-green-400 mb-1">0</p>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">BOOYAHS</p>
+                    </div>
+                </div>
+
+                <div onclick="window.location.href='user-paid.html'" class="w-full h-36 rounded-[2rem] shadow-lg relative overflow-hidden cursor-pointer group bg-gradient-to-r from-[#C2410C] via-[#9333EA] to-[#7C3AED]">
+                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-white">
+                        <h3 class="text-2xl font-black leading-tight">Play Scrims</h3>
+                        <p class="text-xs font-medium text-white/80 mt-1">Compete &amp; Earn Respect</p>
+                    </div>
+                    <div class="absolute right-6 top-1/2 -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <i class="ri-arrow-right-line text-primary font-bold"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: HISTORY -->
+            <div id="view-history" class="hidden animate-fade-in space-y-4">
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest pl-1">Match History</h3>
+                <div id="matches-list" class="space-y-3 pb-8"></div>
+            </div>
+
+            <!-- TAB: SQUAD -->
+            <div id="view-squad" class="hidden animate-fade-in space-y-4">
+                <div>
+                    <div class="flex justify-between items-end mb-3 px-1">
+                        <h4 class="font-black text-white">ACTIVE ROSTER</h4>
+                        <span class="text-[10px] bg-green-900/30 text-green-400 px-2 py-0.5 rounded font-bold">OFFICIAL</span>
+                    </div>
+                    <div id="roster-list" class="space-y-2"></div>
+
+                    <div id="team-actions-container" class="mt-8 pt-4 border-t border-white/10 space-y-3">
+                        <!-- Buttons injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: RANK -->
+            <div id="view-rank" class="hidden animate-fade-in space-y-4">
+                <div class="text-center mb-2">
+                    <h2 class="text-xl font-black text-white">Top Teams</h2>
+                </div>
+                <div id="leaderboard-list" class="space-y-3 pb-8"></div>
+            </div>
+
+        </main>
+
+        <!-- Floating support trigger; the existing support modal remains the single support workflow. -->
+        <button id="floating-support-button" type="button" aria-haspopup="dialog" aria-controls="support-mail-modal" onclick="document.getElementById('support-mail-modal').classList.remove('hidden')" class="floating-support-button">
+            <i class="ri-customer-service-2-line text-sm" aria-hidden="true"></i>
+            <span>Support</span>
+        </button>
+
+        <button id="payout-details-action-btn" type="button" aria-label="Open payout and UPI settings" class="floating-payout-button">
+            <i class="ri-wallet-3-line text-sm" aria-hidden="true"></i>
+            <span id="payout-details-action-label">UPI</span>
+        </button>
+    </div>
+
+    <!-- Notification information and permission action -->
+    <div id="notification-info-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-5 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="notification-info-title">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h3 id="notification-info-title" class="text-lg font-black text-white">Get Notified 🔔</h3>
+                    <p class="text-xs text-gray-400 mt-1">Don't miss match updates and results.</p>
+                </div>
+                <button id="close-notification-info" type="button" aria-label="Close notification information" class="w-8 h-8 rounded-md bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 flex items-center justify-center">
+                    <i class="ri-close-line text-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed mt-5">Enable notifications to receive important room updates, result announcements, and match reminders.</p>
+            <button id="notification-modal-action" type="button" class="w-full mt-5 bg-indigo-600 text-white font-black text-xs uppercase tracking-wide py-3 rounded-md hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 active:scale-95 transition-all">
+                Enable Notifications
+            </button>
+        </div>
+    </div>
+
+    <!-- Payout UPI Modal -->
+    <div id="payout-upi-modal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                    <h3 class="text-xl font-black text-white">Prize Payment UPI</h3>
+                    <p id="payout-upi-modal-help" class="text-xs text-gray-400 mt-1">Only the current team leader can update this.</p>
+                </div>
+                <button id="close-payout-upi-modal" type="button" class="w-9 h-9 rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 flex items-center justify-center">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <form id="payout-upi-form" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">UPI ID or UPI Mobile Number</label>
+                    <input type="text" id="payout-upi-input" class="w-full p-4 bg-[#111] border border-white/10 rounded-xl font-bold text-white outline-none focus:border-emerald-500 placeholder-gray-600" placeholder="example@upi or 9876543210" autocomplete="off" inputmode="text">
+                    <p id="payout-upi-readonly" class="hidden w-full p-4 bg-[#111] border border-white/10 rounded-xl font-bold text-white break-all"></p>
+                </div>
+                <p id="payout-upi-updated-at" class="text-[10px] text-gray-500 font-bold"></p>
+                <p id="payout-upi-error" class="hidden text-xs text-red-400 font-bold"></p>
+                <div id="payout-upi-leader-actions" class="flex gap-3">
+                    <button type="button" id="delete-payout-upi-btn" class="flex-1 bg-red-900/20 text-red-400 border border-red-800/30 font-bold py-3 rounded-xl cursor-pointer hover:bg-red-900/30 transition-colors">Delete</button>
+                    <button type="submit" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl cursor-pointer hover:bg-emerald-700 shadow-lg shadow-emerald-600/20">Save</button>
+                </div>
+                <button type="button" id="copy-payout-upi-btn" class="hidden w-full bg-white/5 text-white font-bold py-3 rounded-xl hover:bg-white/10 transition-colors">
+                    <i class="ri-file-copy-line mr-1"></i> Copy UPI
+                </button>
+                <p class="text-[10px] text-gray-500 leading-relaxed">Confirm this UPI belongs to your team leader. Volt Esports Hub will use it for prize payments.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Team Name Modal -->
+    <div id="edit-name-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <h3 class="text-xl font-black text-white mb-4">Edit Team Name</h3>
+            <form id="edit-name-form" class="space-y-4">
+                <input type="text" id="edit-team-name-input" class="w-full p-4 bg-[#111] border border-white/10 rounded-xl font-bold text-white outline-none focus:border-blue-500 placeholder-gray-600" placeholder="New Name">
+                <div class="flex gap-3">
+                    <button type="button" id="close-edit-name-modal" class="flex-1 bg-white/5 text-gray-400 font-bold py-3 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl cursor-pointer hover:bg-blue-700 shadow-lg shadow-blue-600/20">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit IGN Modal -->
+    <div id="edit-ign-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <h3 class="text-xl font-black text-white mb-4">Update In-Game Name</h3>
+            <form id="edit-ign-form" class="space-y-4">
+                <input type="text" id="edit-ign-input" class="w-full p-4 bg-[#111] border border-white/10 rounded-xl font-bold text-white outline-none focus:border-blue-500 placeholder-gray-600" placeholder="New IGN">
+                <div class="flex gap-3">
+                    <button type="button" id="close-edit-ign-modal" class="flex-1 bg-white/5 text-gray-400 font-bold py-3 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl cursor-pointer hover:bg-blue-700 shadow-lg shadow-blue-600/20">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transfer Leadership Modal (NEW FEATURE) -->
+    <div id="transfer-leadership-modal" class="fixed inset-0 bg-black/80 z-[65] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <h3 class="text-xl font-black text-white mb-2">Transfer Leadership</h3>
+            <p class="text-sm text-gray-400 mb-4">Select a new leader. You will become a normal member.</p>
+            <form id="transfer-leader-form" class="space-y-4">
+                <select id="new-leader-select" class="w-full p-4 bg-[#111] border border-white/10 rounded-xl font-bold text-white outline-none focus:border-blue-500">
+                    <!-- Members injected via JS -->
+                </select>
+                <div class="flex gap-3">
+                    <button type="button" id="close-transfer-modal" class="flex-1 bg-white/5 text-gray-400 font-bold py-3 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-xl cursor-pointer hover:bg-indigo-700 shadow-lg shadow-indigo-600/20">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (Reusable) -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/80 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm p-6 text-center shadow-xl transform transition-all scale-100">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-indigo-900/20">
+                <i class="ri-question-mark text-3xl text-indigo-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Confirm Action</h3>
+            <p id="confirmation-message" class="text-sm text-gray-400 mb-6">Are you sure you want to proceed?</p>
+            <div class="flex gap-3">
+                <button id="cancel-confirm-btn" class="flex-1 bg-white/5 text-gray-400 font-bold py-3 rounded-xl hover:bg-white/10 transition-colors">Cancel</button>
+                <button id="proceed-confirm-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-600/20">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Instructions Modal (One-Time Popup) -->
+    <div id="team-instructions-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-[2rem] w-full max-w-sm p-6 relative shadow-2xl animate-fade-in">
+            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center border-4 border-[#1a1a1a] shadow-lg text-white text-3xl">
+                <i class="ri-team-fill"></i>
+            </div>
+
+            <div class="mt-8 text-center space-y-4">
+                <h3 class="text-2xl font-black text-white leading-tight">Team Created<br>Successfully!</h3>
+
+                <div class="bg-[#111] rounded-2xl p-4 text-left space-y-3 border border-white/5">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-blue-900/30 rounded-full flex items-center justify-center text-blue-400 flex-shrink-0 mt-0.5">
+                            <span class="text-xs font-bold">1</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-medium">You need <span class="text-white font-bold">4
+                                players</span> minimum to register for any tournament or scrim.</p>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-orange-900/30 rounded-full flex items-center justify-center text-orange-400 flex-shrink-0 mt-0.5">
+                            <span class="text-xs font-bold">2</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-medium">Tap the <span class="inline-block bg-white/10 px-1 rounded text-white"><i class="ri-file-copy-line"></i></span>
+                            icon above to copy &amp; share the invite link.</p>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-green-900/30 rounded-full flex items-center justify-center text-green-400 flex-shrink-0 mt-0.5">
+                            <span class="text-xs font-bold">3</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-medium">Players will auto-join when they click your link!
+                        </p>
+                    </div>
+                </div>
+
+                <button id="close-instructions-btn" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition-transform active:scale-95 shadow-blue-600/20">
+                    GOT IT, LET'S GO!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Mail Modal -->
+    <div id="support-mail-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="bg-[#1a1a1a] border border-white/10 rounded-[2rem] w-full max-w-sm p-6 relative shadow-2xl animate-fade-in flex flex-col max-h-[85vh]">
+            <div class="text-center flex-shrink-0">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-indigo-900/20">
+                    <i class="ri-mail-send-line text-3xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-xl font-black text-white leading-tight mb-2">Live Support</h3>
+                <p class="text-sm text-gray-400 mb-6">Choose a support category to email us.</p>
+            </div>
+
+            <div class="space-y-3 overflow-y-auto no-scrollbar flex-grow pb-2">
+                    <div class="flex gap-3">
+                        <a href="../../_/accounts.google.com/v3/signin/identifier/continue%3Dhttps_/mail.google.com/mail/_view%253Dcm%2526fs%253D1%2526to%253Dtournament.support%40eagleesport.com%26emr%3D1%26ltmpl%3Ddefault%26ltmplcache%3D2%26osid%3D1%26passive%3Dtrue%26scc%3D1%26service%3Dmail%26flowName%3DGlifWebSignIn%26flowEntry%3DServiceLogin%26dsh%3DS957943721_1789069607070543.html" target="_blank" class="flex-1 bg-white/5 border border-white/10 px-2 py-2 rounded-xl hover:bg-white/10 transition-colors flex flex-col items-center text-center gap-1">
+                            <div class="w-8 h-8 rounded-lg bg-orange-900/30 text-orange-400 flex items-center justify-center mb-1">
+                                <i class="ri-trophy-line text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white text-[11px] leading-tight">Tournament Support</p>
+                                <p class="text-[9px] text-gray-500 mt-0.5">Email Us</p>
+                            </div>
+                        </a>
+
+                        <a href="https://discord.gg/kXmyzKrVvr" target="_blank" class="flex-1 bg-white/5 border border-white/10 px-2 py-2 rounded-xl hover:bg-white/10 transition-colors flex flex-col items-center text-center gap-1">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-900/30 text-indigo-400 flex items-center justify-center mb-1">
+                                <i class="ri-discord-fill text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white text-[11px] leading-tight">Live Voice Support</p>
+                                <p class="text-[9px] text-gray-500 mt-0.5">Join Discord</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Help Desk WhatsApp Options (dynamically populated) -->
+                    <a id="helpdesk-payment-link" href="#" target="_blank" class="hidden w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors text-left flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-900/30 text-green-400 flex items-center justify-center">
+                            <i class="ri-money-dollar-circle-line text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Payment Help Desk</p>
+                            <p class="text-[10px] text-gray-500">Chat on WhatsApp</p>
+                        </div>
+                    </a>
+
+                    <a id="helpdesk-roomhost-link" href="#" target="_blank" class="hidden w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors text-left flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-900/30 text-cyan-400 flex items-center justify-center">
+                            <i class="ri-home-wifi-line text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Room Host Related Issue</p>
+                            <p class="text-[10px] text-gray-500">Chat on WhatsApp</p>
+                        </div>
+                    </a>
+
+                    <a id="helpdesk-other-link" href="#" target="_blank" class="hidden w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors text-left flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-900/30 text-amber-400 flex items-center justify-center">
+                            <i class="ri-question-line text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Other Related Issue</p>
+                            <p class="text-[10px] text-gray-500">Chat on WhatsApp</p>
+                        </div>
+                    </a>
+            </div>
+
+            <div class="flex-shrink-0 mt-4">
+                <button onclick="document.getElementById('support-mail-modal').classList.add('hidden')" class="w-full bg-white/5 text-white font-bold py-3 rounded-xl hover:bg-white/10 transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/xss-guard.min_v%3D12.8.js"></script>
+    <script src="../auth-guard.min_v%3D12.8.js"></script>
+    <script src="../user-dashboard.min_v%3D12.8.js"></script>
+
+    <!-- STICKY RANK FOOTER (Hidden by default) -->
+    <div id="user-rank-footer" class="fixed bottom-[85px] left-4 right-4 z-40 hidden animate-fade-in">
+        <!-- Injected via JS -->
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav-container">
+<!-- Inlined bottom-nav (eliminates extra network request) -->
+            <nav class="fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-white/10 shadow-lg" style="padding-bottom: env(safe-area-inset-bottom);">
+                <div class="grid grid-cols-5 h-16 items-center max-w-lg mx-auto">
+                    <a href="../index/index.html" class="bottom-nav-item nav-home flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-home-5-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Home</span>
+                    </a>
+                    <a href="../user-paid/index.html" class="bottom-nav-item nav-scrims flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-vip-crown-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Scrims</span>
+                    </a>
+                        <a href="index.html" class="bottom-nav-item nav-profile profile-nav-item flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-user-3-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Profile</span>
+                    </a>
+                    <a href="../user-rankings/index.html" class="bottom-nav-item nav-rankings flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-bar-chart-grouped-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Rankings</span>
+                    </a>
+                    <a href="../user-free/index.html" class="bottom-nav-item nav-tourns flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-trophy-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Tourns</span>
+                    </a>
+                </div>
+            </nav>
+    </div>
+
+    <script>
+        // Highlight active bottom nav item
+        (function () {
+            var p = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.bottom-nav-item').forEach(function(item) {
+                var h = item.getAttribute('href');
+                if (h && (h === p || h.startsWith(p))) item.classList.add('active');
+            });
+        })();
+    </script>
+
+    <!-- Firebase Push Notifications -->
+    <script src="../js/firebase-notifications_v%3D12.8.js"></script>
+
+
+
+</body></html>

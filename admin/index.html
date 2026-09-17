@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel - Volt Esports Hub</title>
+    <link rel="stylesheet" href="../tailwind-built_v=12.8.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <script src="../js/config.js"></script>
+    <style>
+        body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Rajdhani', sans-serif; }
+        .glass-card { background: rgba(18, 18, 22, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .tab-active { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+    <!-- LOGIN SCREEN MODAL -->
+    <div id="login-modal" class="fixed inset-0 z-[500] bg-[#09090b] flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-white/10 text-center space-y-5">
+            <div class="w-16 h-16 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto text-3xl">
+                <i class="ri-shield-keyhole-line"></i>
+            </div>
+            <div>
+                <h2 class="text-2xl font-display font-black uppercase text-white tracking-wide">Admin Access</h2>
+                <p class="text-xs text-gray-400 mt-1">Enter Admin Passcode to edit site configuration</p>
+            </div>
+            <div>
+                <input type="password" id="passcode-input" placeholder="Enter Passcode (Default: volt123)"
+                    class="w-full bg-[#121216] border border-white/15 rounded-xl px-4 py-3 text-center text-white text-lg font-mono focus:outline-none focus:border-blue-500 transition-colors" />
+                <p id="login-error" class="text-xs text-red-400 font-bold mt-2 hidden">Incorrect passcode! Try again.</p>
+            </div>
+            <button onclick="checkAdminPasscode()"
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 uppercase tracking-wide text-sm flex items-center justify-center gap-2">
+                <i class="ri-lock-unlock-line"></i> Unlock Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN DASHBOARD (Hidden until logged in) -->
+    <div id="admin-dashboard" class="hidden min-h-screen flex flex-col">
+
+        <!-- HEADER -->
+        <header class="bg-[#121216] border-b border-white/10 sticky top-0 z-40 px-4 py-3.5 backdrop-blur-md">
+            <div class="max-w-5xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md">
+                        V
+                    </div>
+                    <div>
+                        <h1 class="text-base font-display font-bold text-white leading-tight uppercase tracking-wider">Volt Admin Panel</h1>
+                        <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping"></span> Live Control Center
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <a href="../user-paid/index.html" target="_blank"
+                        class="text-xs font-bold text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5">
+                        <i class="ri-external-link-line"></i> View Site
+                    </a>
+                    <button onclick="lockDashboard()"
+                        class="text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1">
+                        <i class="ri-logout-box-r-line"></i> Lock
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTAINER -->
+        <main class="max-w-5xl mx-auto px-4 py-6 w-full space-y-6 flex-1">
+
+            <!-- TOAST ALERT -->
+            <div id="save-toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce">
+                <i class="ri-checkbox-circle-fill text-lg"></i>
+                <span id="save-toast-text">Settings saved successfully!</span>
+            </div>
+
+            <!-- TAB NAVIGATION -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-2">
+                <button onclick="switchTab('times')" id="tab-btn-times" class="tab-btn tab-active px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-time-line"></i> Lobby Times
+                </button>
+                <button onclick="switchTab('amounts')" id="tab-btn-amounts" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-money-rupee-circle-line"></i> Entry Fees
+                </button>
+                <button onclick="switchTab('modes')" id="tab-btn-modes" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-gamepad-line"></i> Game Modes
+                </button>
+                <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-whatsapp-line"></i> WhatsApp & Links
+                </button>
+                <button onclick="switchTab('images')" id="tab-btn-images" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-image-line"></i> Rules & Images
+                </button>
+                <button onclick="switchTab('security')" id="tab-btn-security" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                    <i class="ri-lock-line"></i> Security
+                </button>
+            </div>
+
+            <!-- TAB 1: LOBBY TIMES -->
+            <section id="tab-times" class="tab-content space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide">Manage Lobby Times</h2>
+                            <p class="text-xs text-gray-400">Add, remove, or edit time slots shown on the booking page</p>
+                        </div>
+                        <button onclick="addNewTimeSlot()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
+                            <i class="ri-add-line text-sm"></i> Add Time Slot
+                        </button>
+                    </div>
+
+                    <div id="times-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <!-- Dynamic list of times injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: ENTRY FEES -->
+            <section id="tab-amounts" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide">Manage Entry Fees (₹)</h2>
+                            <p class="text-xs text-gray-400">Set available prices or mark prices as Unavailable</p>
+                        </div>
+                        <button onclick="addNewAmountSlot()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
+                            <i class="ri-add-line text-sm"></i> Add New Amount
+                        </button>
+                    </div>
+
+                    <div id="amounts-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <!-- Dynamic list of amounts injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: GAME MODES -->
+            <section id="tab-modes" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                    <div class="border-b border-white/10 pb-3">
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">Game Modes Control</h2>
+                        <p class="text-xs text-gray-400">Enable or disable game modes (Solo, Duo, Squad)</p>
+                    </div>
+
+                    <div id="modes-list-container" class="space-y-3">
+                        <!-- Dynamic list of modes injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: WHATSAPP & LINKS -->
+            <section id="tab-links" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-5">
+                    <div class="border-b border-white/10 pb-3">
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">WhatsApp & Contact Settings</h2>
+                        <p class="text-xs text-gray-400">Update support phone number and official WhatsApp Channel URL</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">WhatsApp Booking / Support Phone Number</label>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-[#18181f] border border-white/10 text-gray-400 px-3 py-2.5 rounded-xl text-sm font-mono">+</span>
+                                <input type="text" id="input-wa-number" placeholder="919172525945"
+                                    class="flex-1 bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-1">Format: Country code + number without spaces (e.g. 919172525945)</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Official WhatsApp Channel URL</label>
+                            <input type="text" id="input-wa-channel" placeholder="https://whatsapp.com/channel/..."
+                                class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-white/10">
+                        <button onclick="saveContactSettings()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
+                            Save Contact Links
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: RULES & IMAGES -->
+            <section id="tab-images" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-5">
+                    <div class="border-b border-white/10 pb-3">
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">Rule Book & Points Table Image URLs</h2>
+                        <p class="text-xs text-gray-400">Update image URLs displayed in the bottom navigation popups</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Rule Book Image URL</label>
+                            <input type="text" id="input-rule-img" placeholder="/assets/rule-book.jpg"
+                                class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Points Table Image URL</label>
+                            <input type="text" id="input-points-img" placeholder="/assets/points-table.jpg"
+                                class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-white/10">
+                        <button onclick="saveImageSettings()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
+                            Save Image Settings
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: SECURITY -->
+            <section id="tab-security" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-5 max-w-md">
+                    <div class="border-b border-white/10 pb-3">
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">Change Admin Passcode</h2>
+                        <p class="text-xs text-gray-400">Update the passcode required to log into this panel</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">New Admin Passcode</label>
+                            <input type="password" id="input-new-passcode" placeholder="Enter new passcode"
+                                class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-white/10">
+                        <button onclick="changePasscode()" class="bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-red-600/20 uppercase tracking-wide">
+                            Update Passcode
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ADMIN LOGIC SCRIPT -->
+    <script>
+        var currentConfig = VoltConfig.get();
+
+        function checkAdminPasscode() {
+            var input = document.getElementById("passcode-input").value;
+            var savedPasscode = currentConfig.adminPasscode || "volt123";
+
+            if (input === savedPasscode) {
+                document.getElementById("login-modal").classList.add("hidden");
+                document.getElementById("admin-dashboard").classList.remove("hidden");
+                sessionStorage.setItem("voltAdminLoggedIn", "true");
+                loadDashboardData();
+            } else {
+                document.getElementById("login-error").classList.remove("hidden");
+            }
+        }
+
+        // Auto login if already unlocked in current tab session
+        if (sessionStorage.getItem("voltAdminLoggedIn") === "true") {
+            document.getElementById("login-modal").classList.add("hidden");
+            document.getElementById("admin-dashboard").classList.remove("hidden");
+            document.addEventListener("DOMContentLoaded", loadDashboardData);
+        }
+
+        function lockDashboard() {
+            sessionStorage.removeItem("voltAdminLoggedIn");
+            window.location.reload();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("tab-active");
+                btn.classList.add("text-gray-400", "bg-white/5");
+            });
+
+            document.getElementById("tab-" + tabName).classList.remove("hidden");
+            var targetBtn = document.getElementById("tab-btn-" + tabName);
+            if (targetBtn) {
+                targetBtn.classList.add("tab-active");
+                targetBtn.classList.remove("text-gray-400", "bg-white/5");
+            }
+        }
+
+        function showSaveToast(msg) {
+            var toast = document.getElementById("save-toast");
+            var toastText = document.getElementById("save-toast-text");
+            if (toastText) toastText.textContent = msg || "Settings saved successfully!";
+            toast.classList.remove("hidden");
+            setTimeout(() => toast.classList.add("hidden"), 3000);
+        }
+
+        function loadDashboardData() {
+            currentConfig = VoltConfig.get();
+
+            // Load Times
+            renderTimesList();
+
+            // Load Amounts
+            renderAmountsList();
+
+            // Load Modes
+            renderModesList();
+
+            // Load Links
+            document.getElementById("input-wa-number").value = currentConfig.whatsappNumber || "919172525945";
+            document.getElementById("input-wa-channel").value = currentConfig.whatsappChannel || "";
+
+            // Load Images
+            document.getElementById("input-rule-img").value = currentConfig.ruleBookImg || "/assets/rule-book.jpg";
+            document.getElementById("input-points-img").value = currentConfig.pointsTableImg || "/assets/points-table.jpg";
+        }
+
+        // --- TIMES MANAGER ---
+        function renderTimesList() {
+            var container = document.getElementById("times-list-container");
+            container.innerHTML = "";
+            var times = currentConfig.times || [];
+
+            times.forEach((t, index) => {
+                var div = document.createElement("div");
+                div.className = "bg-[#16161c] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3";
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="ri-time-line text-blue-400 text-lg"></i>
+                        <input type="text" value="${t}" onchange="updateTimeSlot(${index}, this.value)"
+                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-32 text-center focus:outline-none focus:border-blue-500" />
+                    </div>
+                    <button onclick="deleteTimeSlot(${index})" class="text-red-400 hover:text-red-300 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors">
+                        <i class="ri-delete-bin-line text-base"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateTimeSlot(index, val) {
+            if (!val.trim()) return;
+            currentConfig.times[index] = val.trim();
+            VoltConfig.save(currentConfig);
+            showSaveToast("Time slot updated!");
+        }
+
+        function addNewTimeSlot() {
+            var newTime = prompt("Enter new time slot (e.g., 08:00 PM):", "08:00 PM");
+            if (newTime && newTime.trim()) {
+                currentConfig.times.push(newTime.trim());
+                VoltConfig.save(currentConfig);
+                renderTimesList();
+                showSaveToast("Added new time slot: " + newTime);
+            }
+        }
+
+        function deleteTimeSlot(index) {
+            if (confirm("Delete this time slot?")) {
+                currentConfig.times.splice(index, 1);
+                VoltConfig.save(currentConfig);
+                renderTimesList();
+                showSaveToast("Time slot deleted.");
+            }
+        }
+
+        // --- AMOUNTS MANAGER ---
+        function renderAmountsList() {
+            var container = document.getElementById("amounts-list-container");
+            container.innerHTML = "";
+            var amounts = currentConfig.amounts || [];
+
+            amounts.forEach((amtObj, index) => {
+                var amt = typeof amtObj === "object" ? amtObj.amount : amtObj;
+                var isAvail = typeof amtObj === "object" ? amtObj.available : true;
+
+                var div = document.createElement("div");
+                div.className = "bg-[#16161c] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3";
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-yellow-400 font-bold text-base">₹</span>
+                        <input type="number" value="${amt}" onchange="updateAmountValue(${index}, this.value)"
+                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-24 text-center focus:outline-none focus:border-blue-500" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleAmountStatus(${index})" class="text-xs font-bold px-3 py-1 rounded-lg border transition-colors ${isAvail ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}">
+                            ${isAvail ? 'Available' : 'Unavailable'}
+                        </button>
+                        <button onclick="deleteAmountSlot(${index})" class="text-red-400 hover:text-red-300 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors">
+                            <i class="ri-delete-bin-line text-base"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateAmountValue(index, val) {
+            var num = parseInt(val, 10);
+            if (isNaN(num)) return;
+            if (typeof currentConfig.amounts[index] === "object") {
+                currentConfig.amounts[index].amount = num;
+            } else {
+                currentConfig.amounts[index] = { amount: num, available: true };
+            }
+            VoltConfig.save(currentConfig);
+            showSaveToast("Entry fee updated!");
+        }
+
+        function toggleAmountStatus(index) {
+            var item = currentConfig.amounts[index];
+            if (typeof item === "object") {
+                item.available = !item.available;
+            } else {
+                currentConfig.amounts[index] = { amount: item, available: false };
+            }
+            VoltConfig.save(currentConfig);
+            renderAmountsList();
+            showSaveToast("Amount status updated!");
+        }
+
+        function addNewAmountSlot() {
+            var val = prompt("Enter new Entry Fee amount in ₹:", "60");
+            var num = parseInt(val, 10);
+            if (!isNaN(num) && num > 0) {
+                currentConfig.amounts.push({ amount: num, available: true });
+                VoltConfig.save(currentConfig);
+                renderAmountsList();
+                showSaveToast("Added ₹" + num + " entry fee.");
+            }
+        }
+
+        function deleteAmountSlot(index) {
+            if (confirm("Delete this entry fee amount?")) {
+                currentConfig.amounts.splice(index, 1);
+                VoltConfig.save(currentConfig);
+                renderAmountsList();
+                showSaveToast("Entry fee deleted.");
+            }
+        }
+
+        // --- MODES MANAGER ---
+        function renderModesList() {
+            var container = document.getElementById("modes-list-container");
+            container.innerHTML = "";
+            var modes = currentConfig.modes || [];
+
+            modes.forEach((mode, index) => {
+                var div = document.createElement("div");
+                div.className = "bg-[#16161c] border border-white/10 rounded-xl p-4 flex items-center justify-between";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i class="ri-gamepad-line text-blue-400 text-xl"></i>
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase">${mode.name}</p>
+                            <p class="text-[11px] text-gray-400">${mode.available ? 'Active & Selectable' : 'Marked as Unavailable'}</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleModeStatus(${index})" class="text-xs font-bold px-4 py-2 rounded-xl border transition-colors ${mode.available ? 'bg-blue-600 text-white border-blue-500' : 'bg-red-500/10 text-red-400 border-red-500/20'}">
+                        ${mode.available ? 'Enabled' : 'Disabled'}
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleModeStatus(index) {
+            currentConfig.modes[index].available = !currentConfig.modes[index].available;
+            VoltConfig.save(currentConfig);
+            renderModesList();
+            showSaveToast(currentConfig.modes[index].name + " mode updated!");
+        }
+
+        // --- SAVE CONTACT SETTINGS ---
+        function saveContactSettings() {
+            var num = document.getElementById("input-wa-number").value.trim();
+            var ch = document.getElementById("input-wa-channel").value.trim();
+
+            if (num) currentConfig.whatsappNumber = num;
+            if (ch) currentConfig.whatsappChannel = ch;
+
+            VoltConfig.save(currentConfig);
+            showSaveToast("WhatsApp & Contact settings saved!");
+        }
+
+        // --- SAVE IMAGE SETTINGS ---
+        function saveImageSettings() {
+            var rule = document.getElementById("input-rule-img").value.trim();
+            var points = document.getElementById("input-points-img").value.trim();
+
+            if (rule) currentConfig.ruleBookImg = rule;
+            if (points) currentConfig.pointsTableImg = points;
+
+            VoltConfig.save(currentConfig);
+            showSaveToast("Image settings saved!");
+        }
+
+        // --- CHANGE PASSCODE ---
+        function changePasscode() {
+            var pass = document.getElementById("input-new-passcode").value.trim();
+            if (!pass) {
+                alert("Passcode cannot be empty.");
+                return;
+            }
+            currentConfig.adminPasscode = pass;
+            VoltConfig.save(currentConfig);
+            showSaveToast("Admin Passcode updated to: " + pass);
+            document.getElementById("input-new-passcode").value = "";
+        }
+    </script>
+</body>
+</html>

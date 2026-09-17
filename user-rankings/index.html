@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NJ3V3P65HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rankings - Volt Esports Hub</title>
+    <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <style>
+        /* Bottom Nav Active State */
+        .bottom-nav-item.active i, .bottom-nav-item.active span { color: #3B82F6 !important; font-weight: 800; }
+        .bottom-nav-item { -webkit-tap-highlight-color: transparent; }
+        .bottom-nav-item.nav-home { order: 1; }
+        .bottom-nav-item.nav-scrims { order: 2; }
+        .bottom-nav-item.nav-profile { order: 3; }
+        .bottom-nav-item.nav-rankings { order: 4; }
+        .bottom-nav-item.nav-tourns { order: 5; }
+        .profile-nav-item { transform: translateY(-5px); }
+        .profile-nav-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background-color: #2563eb; color: #fff !important; box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35); }
+        .profile-nav-item span { color: #60a5fa !important; font-size: 10px; font-weight: 800; }
+        @keyframes profileNavShine { 0%, 55% { transform: translateX(-180%) skewX(-20deg); } 75%, 100% { transform: translateX(360%) skewX(-20deg); } }
+        .profile-nav-item i { position: relative; overflow: hidden; }
+        .profile-nav-item i::after { content: ''; position: absolute; top: -20%; left: -25%; width: 22%; height: 140%; background: rgba(255,255,255,.7); filter: blur(2px); pointer-events: none; animation: profileNavShine 3.2s ease-in-out infinite; }
+    </style>
+
+    <style>
+        /* OUTFIT FONT FIX */
+        .font-display, .font-body, .font-sans { font-family: 'Outfit', sans-serif !important; }
+    </style>
+    <script src="../js/mock-backend.js"></script>
+</head>
+
+<body class="bg-[#0a0a0a] text-gray-200 font-sans antialiased min-h-screen flex flex-col pb-24">
+
+    <!-- Global navbar: same structure as the homepage, with no right-side action -->
+    <nav id="top-navbar" class="sticky top-0 z-50 bg-dark/95 backdrop-blur-md border-b border-white/10 shadow-lg transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index/index.html" class="flex items-center gap-3 group">
+                    <!-- Replaced Icon with Logo Image -->
+                    <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+
+                    <span class="font-display font-bold text-xl tracking-wide text-white">VOLT<span class="text-primary">ESPORTS HUB</span></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow px-6 py-6 max-w-lg mx-auto w-full">
+
+        <!-- Period Filters -->
+        <div class="bg-[#1a1a1a] p-1 rounded-xl flex gap-1 mb-6 shadow-sm border border-white/5">
+            <button onclick="loadLeaderboard('week')" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400 bg-transparent hover:bg-white/5 filter-btn" data-period="week">Weekly</button>
+            <button onclick="loadLeaderboard('month')" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-white bg-blue-600 filter-btn" data-period="month">Monthly</button>
+            <button onclick="loadLeaderboard('all')" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400 bg-transparent hover:bg-white/5 filter-btn" data-period="all">All Time</button>
+        </div>
+
+        <!-- Leaderboard List -->
+        <div id="leaderboard-list" class="space-y-3">
+            <!-- Items injected by JS -->
+        </div>
+
+    </main>
+
+    <!-- Rankings JS (inline since this page has no external JS file) -->
+    <script>
+        const WORKER_URL = 'https://eagleesport.com/api/index.php';
+
+        // Load Leaderboard
+        async function loadLeaderboard(period) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.period === period) {
+                    btn.classList.remove('bg-transparent', 'text-gray-400', 'hover:bg-white/5');
+                    btn.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    btn.classList.add('bg-transparent', 'text-gray-400', 'hover:bg-white/5');
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                }
+            });
+
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>`;
+
+            try {
+                const res = await fetch(`${WORKER_URL}?action=getLeaderboard&period=${period}`);
+                const data = await res.json();
+
+                if (!data.data || data.data.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center py-12">
+                            <i class="ri-trophy-line text-4xl text-gray-300 mb-2"></i>
+                            <p class="text-gray-400 text-sm font-bold">No rankings available yet.</p>
+                        </div>`;
+                    return;
+                }
+
+                list.innerHTML = '';
+                data.data.forEach((row, i) => {
+                    const rank = i + 1;
+                    const isTop = rank === 1;
+                    const div = document.createElement('div');
+
+                    const bgClass = isTop ? "bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg text-white border-none" : "bg-[#1a1a1a] text-white border border-white/5 shadow-sm";
+                    const rankBadge = isTop ? 'bg-[#FFD700] text-gray-900' : 'bg-white/10 text-gray-400';
+                    const textCol = isTop ? 'text-white' : 'text-white';
+                    const subTextCol = isTop ? 'text-white/60' : 'text-gray-500';
+                    const ptsCol = isTop ? 'text-white' : 'text-white';
+
+                    div.className = `${bgClass} rounded-2xl p-4 flex items-center justify-between transition-transform active:scale-[0.98]`;
+
+                    div.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 ${rankBadge} rounded-full flex items-center justify-center font-black text-lg shadow-sm font-display relative">
+                                ${rank}
+                                ${isTop ? '<i class="ri-vip-crown-fill absolute -top-3 text-2xl text-[#FFD700]"></i>' : ''}
+                            </div>
+                            <div>
+                                <h4 class="font-black ${textCol} text-base tracking-tight leading-none mb-1">${row.team_name}</h4>
+                                <p class="text-[10px] ${subTextCol} font-bold uppercase tracking-wider flex items-center gap-2">
+                                    <span><i class="ri-sword-fill"></i> ${row.kills} Kills</span>
+                                    <span><i class="ri-trophy-fill"></i> ${row.booyahs} Booyahs</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-black ${ptsCol} leading-none tracking-tighter">${row.points}</p>
+                            <p class="text-[9px] ${subTextCol} font-black uppercase tracking-widest">PTS</p>
+                        </div>`;
+                    list.appendChild(div);
+                });
+
+            } catch (e) {
+                list.innerHTML = '<p class="text-center text-red-400 text-sm py-8 font-bold">Error loading rankings.</p>';
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLeaderboard('month');
+        });
+    </script>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav-container">
+        <!-- Inlined bottom-nav (eliminates extra network request) -->
+        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-white/10 shadow-lg" style="padding-bottom: env(safe-area-inset-bottom);">
+            <div class="grid grid-cols-5 h-16 items-center max-w-lg mx-auto">
+                <a href="../index/index.html" class="bottom-nav-item nav-home flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-home-5-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Home</span>
+                </a>
+                <a href="../user-free/index.html" class="bottom-nav-item nav-tourns flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-trophy-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Tourns</span>
+                </a>
+                <a href="index.html" class="bottom-nav-item nav-rankings flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-bar-chart-grouped-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Rankings</span>
+                </a>
+                <a href="../user-paid/index.html" class="bottom-nav-item nav-scrims flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-vip-crown-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Scrims</span>
+                </a>
+                <a href="../user-dashboard/index.html" class="bottom-nav-item nav-profile profile-nav-item flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i class="ri-user-3-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Profile</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <script>
+        // Highlight active bottom nav item
+        (function () {
+            var p = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.bottom-nav-item').forEach(function(item) {
+                var h = item.getAttribute('href');
+                if (h && (h === p || h.startsWith(p))) item.classList.add('active');
+            });
+        })();
+    </script>
+
+
+
+</body></html>

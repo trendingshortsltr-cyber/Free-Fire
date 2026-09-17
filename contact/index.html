@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NJ3V3P65HS');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support – Volt Esports Hub</title>
+  <meta name="description" content="Get WhatsApp support for payment issues, slot problems, room issues and more on Volt Esports Hub.">
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+
+  <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap"></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+
+  <style>
+    body { background: #060608; font-family: 'Inter', sans-serif; }
+    .font-gaming { font-family: 'Orbitron', sans-serif; }
+
+    /* Issue card animation */
+    #issue-panel { display: none; }
+    #issue-panel.open {
+      display: block;
+      animation: slideDown 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .issue-card {
+      position: relative;
+      background: #111114;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      overflow: hidden;
+    }
+    .issue-card:hover {
+      border-color: rgba(74, 222, 128, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(74, 222, 128, 0.08);
+    }
+    .issue-card:active { transform: scale(0.98); }
+    .issue-card .glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at left 50%, rgba(74,222,128,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .issue-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .wa-btn {
+      background: #16a34a;
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .wa-btn:hover { background: #15803d; transform: translateY(-1px); }
+    .wa-btn:active { transform: scale(0.98); }
+
+    .chevron-icon {
+      transition: transform 0.3s ease;
+    }
+    .chevron-icon.rotated { transform: rotate(180deg); }
+  </style>
+
+  <script src="../js/mock-backend.js"></script>
+</head>
+
+<body class="min-h-screen">
+
+  <!-- NAV -->
+  <nav class="sticky top-0 w-full bg-[#0d0d0f]/95 backdrop-blur-md border-b border-white/10 z-50">
+    <div class="px-4 py-4 flex items-center justify-between max-w-lg mx-auto">
+      <a href="../user-paid/index.html" class="flex items-center gap-2 group">
+        <img src="../assets/logo.png" alt="Logo" class="w-8 h-8 object-contain">
+        <span class="font-gaming font-bold tracking-widest text-base text-white">VOLT<span class="text-blue-500">ESPORTS HUB</span></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="py-10 px-4 max-w-lg mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-green-500/20">
+        <i class="ri-customer-service-2-line text-3xl text-green-400"></i>
+      </div>
+      <h1 class="text-2xl font-gaming font-bold text-white mb-2 uppercase tracking-wide">Support</h1>
+      <p class="text-gray-400 text-sm">Select your issue — we'll connect you on WhatsApp instantly.</p>
+    </div>
+
+    <!-- WhatsApp Support Card (toggle trigger) -->
+    <button id="wa-toggle" class="wa-btn mb-4" onclick="toggleIssues()">
+      <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="ri-whatsapp-line text-2xl text-green-300"></i>
+      </div>
+      <div class="flex-1 text-left">
+        <p class="text-white font-bold text-sm">WhatsApp Support</p>
+        <p class="text-green-200/60 text-xs font-medium">Tap to choose your issue</p>
+      </div>
+      <i id="chevron" class="ri-arrow-down-s-line text-xl text-green-300 chevron-icon"></i>
+    </button>
+
+    <!-- Issue Picker Panel -->
+    <div id="issue-panel">
+      <div class="space-y-3 mb-5">
+
+        <!-- 1. Payment Issue -->
+        <div class="issue-card" onclick="openWhatsApp('payment')">
+          <div class="glow"></div>
+          <div class="issue-icon bg-yellow-500/10 border border-yellow-500/20">
+            <i class="ri-bank-card-line text-yellow-400"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white font-bold text-sm">Payment Issue</p>
+            <p class="text-gray-500 text-xs mt-0.5">Payment deducted but slot not confirmed</p>
+          </div>
+          <i class="ri-arrow-right-s-line text-gray-600 text-xl flex-shrink-0"></i>
+        </div>
+
+        <!-- 2. Slot Issue -->
+        <div class="issue-card" onclick="openWhatsApp('slot')">
+          <div class="glow"></div>
+          <div class="issue-icon bg-blue-500/10 border border-blue-500/20">
+            <i class="ri-ticket-2-line text-blue-400"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white font-bold text-sm">Slot Issue</p>
+            <p class="text-gray-500 text-xs mt-0.5">Slot not booked or wrong time selected</p>
+          </div>
+          <i class="ri-arrow-right-s-line text-gray-600 text-xl flex-shrink-0"></i>
+        </div>
+
+        <!-- 3. Room Kick / Unable to Join -->
+        <div class="issue-card" onclick="openWhatsApp('room')">
+          <div class="glow"></div>
+          <div class="issue-icon bg-red-500/10 border border-red-500/20">
+            <i class="ri-door-lock-line text-red-400"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white font-bold text-sm">Room Kick / Unable to Join</p>
+            <p class="text-gray-500 text-xs mt-0.5">Kicked from room or can't enter the match</p>
+          </div>
+          <i class="ri-arrow-right-s-line text-gray-600 text-xl flex-shrink-0"></i>
+        </div>
+
+        <!-- 4. Other -->
+        <div class="issue-card" onclick="openWhatsApp('other')">
+          <div class="glow"></div>
+          <div class="issue-icon bg-purple-500/10 border border-purple-500/20">
+            <i class="ri-question-answer-line text-purple-400"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white font-bold text-sm">Other Issue</p>
+            <p class="text-gray-500 text-xs mt-0.5">Any other query or complaint</p>
+          </div>
+          <i class="ri-arrow-right-s-line text-gray-600 text-xl flex-shrink-0"></i>
+        </div>
+
+      </div>
+
+      <!-- Support Hours note -->
+      <div class="flex items-center gap-3 bg-white/3 border border-white/5 rounded-xl px-4 py-3">
+        <i class="ri-time-line text-gray-500 text-lg"></i>
+        <p class="text-xs text-gray-500">Support available <span class="text-gray-300 font-bold">10:00 AM – 10:00 PM IST</span></p>
+      </div>
+    </div>
+
+    <!-- WhatsApp Channel -->
+    <div class="mt-5 bg-[#111114] border border-white/5 rounded-2xl p-5 flex items-center gap-4">
+      <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-500/15">
+        <i class="ri-broadcast-line text-2xl text-blue-400"></i>
+      </div>
+      <div class="flex-1">
+        <p class="text-white font-bold text-sm">Join Our WhatsApp Channel</p>
+        <p class="text-gray-500 text-xs mt-0.5">Updates, schedules & announcements</p>
+      </div>
+      <a href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener"
+         class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors flex-shrink-0">
+        Join
+      </a>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="text-center text-xs text-gray-600 mt-8 leading-relaxed max-w-sm mx-auto">
+      Volt Esports Hub organizes skill-based esports tournaments. This platform does not support gambling or betting.
+    </p>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 bg-[#020203] py-6 mt-8">
+    <div class="max-w-lg mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <img src="../assets/logo.png" alt="Logo" class="w-6 h-6 object-contain">
+        <span class="font-gaming font-bold text-sm tracking-wider text-white">VOLT<span class="text-blue-500">ESPORTS HUB</span></span>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4 text-[10px] font-bold text-gray-600 uppercase tracking-wider">
+        <a href="../about-us/index.html" class="hover:text-white transition">About</a>
+        <a href="../terms/index.html" class="hover:text-white transition">Terms</a>
+        <a href="../privacy/index.html" class="hover:text-white transition">Privacy</a>
+        <a href="../refunds/index.html" class="hover:text-white transition">Refunds</a>
+        <a href="index.html" class="text-white">Contact</a>
+      </div>
+      <p class="text-[10px] text-gray-700">© 2025 Volt Esports Hub. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const WA_NUMBER = '919172525945';
+
+    const MESSAGES = {
+      payment: `Hello Volt Esports Hub! 👋\n\nI have a *Payment Issue* and need your help.\n\n💳 Issue: Payment was deducted but my slot was not confirmed.\n\nPlease assist me.`,
+      slot:    `Hello Volt Esports Hub! 👋\n\nI have a *Slot Issue* and need your help.\n\n🎫 Issue: My slot was not booked or the wrong time was selected.\n\nPlease assist me.`,
+      room:    `Hello Volt Esports Hub! 👋\n\nI have a *Room Issue* and need your help.\n\n🚪 Issue: I was kicked from the room or I am unable to join the match.\n\nPlease assist me.`,
+      other:   `Hello Volt Esports Hub! 👋\n\nI have a query/complaint and need your help.\n\n❓ Issue: (Please describe your issue here)\n\nPlease assist me.`
+    };
+
+    function openWhatsApp(type) {
+      const msg = MESSAGES[type] || MESSAGES.other;
+      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank', 'noopener');
+    }
+
+    function toggleIssues() {
+      const panel   = document.getElementById('issue-panel');
+      const chevron = document.getElementById('chevron');
+      const isOpen  = panel.classList.contains('open');
+
+      if (isOpen) {
+        panel.classList.remove('open');
+        panel.style.display = 'none';
+        chevron.classList.remove('rotated');
+      } else {
+        panel.style.display = 'block';
+        // Trigger reflow before adding class for animation
+        panel.offsetHeight;
+        panel.classList.add('open');
+        chevron.classList.add('rotated');
+      }
+    }
+  </script>
+
+</body>
+</html>

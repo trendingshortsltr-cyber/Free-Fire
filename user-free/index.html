@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-NJ3V3P65HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Tournaments - Volt Esports Hub</title>
+    <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
+    <!-- Auth Guard: Available but no auto-redirect for guest browsing -->
+    <script src="../auth-guard.min_v%3D12.8.js" data-no-auto-check="true"></script>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"></noscript>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <link rel="stylesheet" href="../user-free_v%3D12.8.css">
+    <!-- Tailwind config moved to tailwind.config.js -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <style>
+        /* Bottom Nav Active State */
+        .bottom-nav-item.active i, .bottom-nav-item.active span { color: #3B82F6 !important; font-weight: 800; }
+        .bottom-nav-item { -webkit-tap-highlight-color: transparent; }
+        .bottom-nav-item.nav-home { order: 1; }
+        .bottom-nav-item.nav-scrims { order: 2; }
+        .bottom-nav-item.nav-profile { order: 3; }
+        .bottom-nav-item.nav-rankings { order: 4; }
+        .bottom-nav-item.nav-tourns { order: 5; }
+        .profile-nav-item { transform: translateY(-5px); }
+        .profile-nav-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background-color: #2563eb; color: #fff !important; box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35); }
+        .profile-nav-item span { color: #60a5fa !important; font-size: 10px; font-weight: 800; }
+        @keyframes profileNavShine { 0%, 55% { transform: translateX(-180%) skewX(-20deg); } 75%, 100% { transform: translateX(360%) skewX(-20deg); } }
+        .profile-nav-item i { position: relative; overflow: hidden; }
+        .profile-nav-item i::after { content: ''; position: absolute; top: -20%; left: -25%; width: 22%; height: 140%; background: rgba(255,255,255,.7); filter: blur(2px); pointer-events: none; animation: profileNavShine 3.2s ease-in-out infinite; }
+    </style>
+    <script src="../js/mock-backend.js"></script>
+</head>
+
+<body class="bg-[#0a0a0a] text-gray-200 font-body min-h-screen flex flex-col transition-colors duration-300 pb-20">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-[#111111]/95 backdrop-blur-md border-b border-white/5 h-16 flex items-center px-4 justify-between shadow-sm">
+        <div class="flex items-center space-x-4">
+            <a href="../index/index.html" class="flex items-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons">arrow_back</span>
+            </a>
+            <h1 class="text-xl font-display font-bold uppercase tracking-wide text-white">Volt Esports Hub</h1>
+        </div>
+
+        <div id="live-clock-container" class="hidden md:block bg-white/5 px-4 py-1 rounded-full border border-white/10">
+            <p class="text-sm font-mono text-primary font-bold">--:--:--</p>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-7xl">
+
+        <!-- Lobby Off Popup Banner -->
+        <div id="lobby-off-banner" class="hidden mb-6 animate-fade-in">
+            <div class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-2xl p-5 text-center shadow-lg">
+                <div class="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-shut-down-line text-3xl text-red-400"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold text-red-400 uppercase tracking-wide mb-1">Tournaments Off
+                </h3>
+                <p id="lobby-off-banner-message" class="text-sm text-gray-300 font-medium"></p>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="lobby-time-loader" class="text-center py-20">
+            <div class="inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin">
+            </div>
+            <p class="mt-4 text-primary font-display text-xl tracking-widest animate-pulse">Scanning Lobbies...</p>
+        </div>
+
+        <!-- LIVE TOURNAMENTS SECTION -->
+        <div id="live-section" class="hidden mb-12">
+            <div class="flex items-end justify-between mb-6 border-b-2 border-white/10 pb-2">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-white uppercase tracking-wide">Live Tournaments
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-1">Register for today's matches</p>
+                </div>
+            </div>
+            <div id="tournament-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                <!-- Live Cards injected here -->
+            </div>
+        </div>
+
+        <!-- UPCOMING TOURNAMENTS SECTION -->
+        <div id="upcoming-section" class="hidden mb-12">
+            <div class="flex items-end justify-between mb-6 border-b-2 border-white/10 pb-2">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-white uppercase tracking-wide">Upcoming
+                        Tournaments</h2>
+                    <p class="text-white text-sm mt-1">Plan ahead for future battles</p>
+                </div>
+            </div>
+            <div id="upcoming-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                <!-- Upcoming Cards injected here -->
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div id="no-tournaments-msg" class="hidden text-center py-20 bg-[#1a1a1a] rounded-2xl border border-white/5 shadow-sm">
+            <span class="material-icons text-6xl text-gray-600 mb-4">sports_esports</span>
+            <h3 class="text-2xl font-display text-gray-300">No Tournaments Active</h3>
+            <p class="text-gray-500">Check back later for new schedules.</p>
+        </div>
+
+    </main>
+
+
+
+    <!-- REGISTRATION MODAL -->
+    <div id="team-name-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-[#1a1a1a] rounded-2xl w-full max-w-sm p-0 shadow-2xl border border-white/10 transform transition-all scale-100 overflow-hidden relative">
+            <div class="bg-gradient-to-r from-blue-900/40 to-blue-800/40 p-4 border-b border-white/5">
+                <h3 class="text-2xl font-display font-bold text-white uppercase tracking-wider text-center">Team
+                    Registration</h3>
+                <p class="text-blue-200 text-center text-xs font-mono">SECURE YOUR SLOT</p>
+            </div>
+            <form id="team-name-form" class="p-6 space-y-5">
+                <div class="space-y-4">
+                    <div class="relative group">
+                        <span class="material-icons absolute left-3 top-3 text-gray-500 group-focus-within:text-blue-500 transition-colors">groups</span>
+                        <input id="team-name-input" type="text" placeholder="Team Name" class="w-full bg-[#111] border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block pl-10 p-3 font-bold outline-none transition-all placeholder-gray-600" required="">
+                    </div>
+                    <div class="relative group">
+                        <span class="material-icons absolute left-3 top-3 text-gray-500 group-focus-within:text-blue-500 transition-colors">phone</span>
+                        <input id="customer-phone-input" type="tel" placeholder="WhatsApp Number" class="w-full bg-[#111] border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block pl-10 p-3 font-bold outline-none transition-all placeholder-gray-600" required="" maxlength="10">
+                    </div>
+                </div>
+                <!-- Squad size selection and player inputs removed - registration only requires team name -->
+                <p id="form-error" class="text-red-400 text-xs text-center font-bold hidden bg-red-900/20 p-2 rounded border border-red-800/30">
+                </p>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button id="close-modal-btn" type="button" class="w-full text-gray-400 bg-transparent hover:bg-white/5 border border-white/10 font-bold rounded-xl text-sm px-5 py-3 transition-all uppercase font-display">Cancel</button>
+                    <button type="submit" id="proceed-btn" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-xl text-sm px-5 py-3 shadow-lg shadow-blue-500/30 transition-all uppercase font-display tracking-wide">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT MODAL -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] rounded-2xl w-full max-w-xs p-6 text-center shadow-2xl border border-white/10 relative overflow-hidden">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-900/20 text-red-500">
+                <span class="material-icons text-3xl">error_outline</span>
+            </div>
+            <h3 class="text-xl font-display font-bold text-white mb-2 tracking-wide">SYSTEM ALERT</h3>
+            <p id="custom-alert-message" class="text-sm text-gray-400 mb-6 font-mono">Something went wrong.</p>
+            <button id="custom-alert-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-xl transition-colors font-display tracking-wider shadow-lg shadow-red-600/20">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <script defer="" src="../user-free.min_v%3D12.8.js"></script>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav-container">
+<!-- Inlined bottom-nav (eliminates extra network request) -->
+            <nav class="fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-white/10 shadow-lg" style="padding-bottom: env(safe-area-inset-bottom);">
+                <div class="grid grid-cols-5 h-16 items-center max-w-lg mx-auto">
+                    <a href="../index/index.html" class="bottom-nav-item nav-home flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-home-5-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Home</span>
+                    </a>
+                    <a href="index.html" class="bottom-nav-item nav-tourns flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-trophy-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Tourns</span>
+                    </a>
+                    <a href="../user-rankings/index.html" class="bottom-nav-item nav-rankings flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-bar-chart-grouped-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Rankings</span>
+                    </a>
+                    <a href="../user-paid/index.html" class="bottom-nav-item nav-scrims flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-vip-crown-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Scrims</span>
+                    </a>
+                    <a href="../user-dashboard/index.html" class="bottom-nav-item nav-profile profile-nav-item flex flex-col items-center justify-center gap-1 group transition-colors">
+                        <i class="ri-user-3-line text-xl text-gray-500 group-hover:text-white transition-colors"></i>
+                        <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-white transition-colors">Profile</span>
+                    </a>
+                </div>
+            </nav>
+    </div>
+
+    <script>
+        // Highlight active bottom nav item
+        (function () {
+            var p = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.bottom-nav-item').forEach(function(item) {
+                var h = item.getAttribute('href');
+                if (h && (h === p || h.startsWith(p))) item.classList.add('active');
+            });
+        })();
+    </script>
+
+
+
+</body></html>
