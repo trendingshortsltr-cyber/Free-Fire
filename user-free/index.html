@@ -191,6 +191,26 @@
             </nav>
     </div>
 
+    <!-- Firebase SDKs for Real-Time Cloud Sync -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const FIREBASE_CONFIG = {
+            apiKey: atob("QUl6YVN5Q2Fqc0pSSEpBMUpXQ0VxYzV5WFdDZzdSUVE4SnM2RHRR"),
+            authDomain: "freefire-8d87b.firebaseapp.com",
+            projectId: "freefire-8d87b",
+            storageBucket: "freefire-8d87b.firebasestorage.app",
+            messagingSenderId: "838166280757",
+            appId: "1:838166280757:web:aa4f042abff7569b32cf7c",
+            measurementId: "G-YBQ3RE6EVL"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        window.db = firebase.firestore();
+    </script>
+    <script src="../js/config.js"></script>
+
     <script>
         // Highlight active bottom nav item
         (function () {
@@ -202,6 +222,4 @@
         })();
     </script>
 
-
-
-</body></html>
+</body></html>

@@ -70,34 +70,58 @@
     return DEFAULT_CONFIG;
   }
 
-  // Real-time Listener for Firebase Cloud Updates
+  var isCloudSyncInitialized = false;
+
+  // Real-time Listener for Firebase Cloud Updates with Retry Loop
   function initCloudSync() {
-    try {
-      if (window.firebase && window.firebase.firestore) {
-        var firestore = window.db || window.firebase.firestore();
-        firestore.collection("system_settings").doc("app_config")
-          .onSnapshot(function(doc) {
-            if (doc.exists) {
-              var cloudData = doc.data();
-              if (cloudData) {
-                var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
-                if (Array.isArray(merged.amounts)) {
-                  merged.amounts = merged.amounts.filter(function(a) {
-                    var val = typeof a === "object" ? a.amount : a;
-                    return val !== 50 && val !== 100;
-                  });
+    if (isCloudSyncInitialized) return;
+
+    var attempts = 0;
+    var maxAttempts = 25;
+
+    function attemptSync() {
+      attempts++;
+      try {
+        var firestore = window.db || (window.firebase && window.firebase.firestore ? window.firebase.firestore() : null);
+        if (firestore) {
+          isCloudSyncInitialized = true;
+          console.log("[VoltConfig] Subscribing to Firestore system_settings/app_config...");
+          
+          firestore.collection("system_settings").doc("app_config")
+            .onSnapshot(function(doc) {
+              if (doc.exists) {
+                var cloudData = doc.data();
+                if (cloudData) {
+                  var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
+                  if (Array.isArray(merged.amounts)) {
+                    merged.amounts = merged.amounts.filter(function(a) {
+                      var val = typeof a === "object" ? a.amount : a;
+                      return val !== 50 && val !== 100;
+                    });
+                  }
+                  localStorage.setItem("volt_app_config", JSON.stringify(merged));
+                  window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
                 }
-                localStorage.setItem("volt_app_config", JSON.stringify(merged));
-                window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
+              } else {
+                // Initial creation of cloud config document
+                firestore.collection("system_settings").doc("app_config").set(DEFAULT_CONFIG)
+                  .catch(function(e) { console.warn("[VoltConfig] Init cloud doc error:", e); });
               }
-            }
-          }, function(err) {
-            console.warn("[VoltConfig] Firestore Listener Warning:", err);
-          });
+            }, function(err) {
+              console.warn("[VoltConfig] Firestore Listener Warning:", err);
+            });
+          return;
+        }
+      } catch(e) {
+        console.warn("[VoltConfig] Cloud sync attempt failed:", e);
       }
-    } catch(e) {
-      console.warn("[VoltConfig] Cloud init skipped:", e);
+
+      if (attempts < maxAttempts) {
+        setTimeout(attemptSync, 200);
+      }
     }
+
+    attemptSync();
   }
 
   // Listen for storage changes across tabs
@@ -108,7 +132,7 @@
     }
   });
 
-  // Init cloud sync when DOM is ready
+  // Init cloud sync when DOM is ready or immediately
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initCloudSync);
   } else {
@@ -119,7 +143,16 @@
     get: loadConfig,
     save: saveConfig,
     reset: resetConfig,
+    initCloudSync: initCloudSync,
+    subscribe: function(cb) {
+      if (typeof cb === "function") {
+        window.addEventListener("voltConfigUpdated", function(e) {
+          cb(e.detail);
+        });
+      }
+    },
     defaults: DEFAULT_CONFIG
   };
 
 })();
+

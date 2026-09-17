@@ -206,7 +206,7 @@
         <p class="text-white font-bold text-sm">Join Our WhatsApp Channel</p>
         <p class="text-gray-500 text-xs mt-0.5">Updates, schedules & announcements</p>
       </div>
-      <a href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener"
+      <a id="contact-wa-channel" href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener"
          class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors flex-shrink-0">
         Join
       </a>
@@ -237,8 +237,28 @@
     </div>
   </footer>
 
+  <!-- Firebase SDKs for Real-Time Cloud Sync -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script>
-    const WA_NUMBER = '919172525945';
+      const FIREBASE_CONFIG = {
+          apiKey: atob("QUl6YVN5Q2Fqc0pSSEpBMUpXQ0VxYzV5WFdDZzdSUVE4SnM2RHRR"),
+          authDomain: "freefire-8d87b.firebaseapp.com",
+          projectId: "freefire-8d87b",
+          storageBucket: "freefire-8d87b.firebasestorage.app",
+          messagingSenderId: "838166280757",
+          appId: "1:838166280757:web:aa4f042abff7569b32cf7c",
+          measurementId: "G-YBQ3RE6EVL"
+      };
+      if (!firebase.apps.length) {
+          firebase.initializeApp(FIREBASE_CONFIG);
+      }
+      window.db = firebase.firestore();
+  </script>
+  <script src="../js/config.js"></script>
+
+  <script>
+    var DEFAULT_WA_NUM = '919172525945';
 
     const MESSAGES = {
       payment: `Hello Volt Esports Hub! 👋\n\nI have a *Payment Issue* and need your help.\n\n💳 Issue: Payment was deducted but my slot was not confirmed.\n\nPlease assist me.`,
@@ -248,9 +268,19 @@
     };
 
     function openWhatsApp(type) {
+      var cfg = window.VoltConfig ? window.VoltConfig.get() : {};
+      var num = (cfg.whatsappNumber || DEFAULT_WA_NUM).replace(/\D/g, "");
       const msg = MESSAGES[type] || MESSAGES.other;
-      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+      const url = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank', 'noopener');
+    }
+
+    function syncContactConfig(cfg) {
+      if (!cfg) cfg = window.VoltConfig ? window.VoltConfig.get() : {};
+      var channelBtn = document.getElementById("contact-wa-channel");
+      if (channelBtn && cfg.whatsappChannel) {
+        channelBtn.href = cfg.whatsappChannel;
+      }
     }
 
     function toggleIssues() {
@@ -270,6 +300,11 @@
         chevron.classList.add('rotated');
       }
     }
+
+    syncContactConfig();
+    window.addEventListener("voltConfigUpdated", function(e) {
+      syncContactConfig(e.detail);
+    });
   </script>
 
 </body>

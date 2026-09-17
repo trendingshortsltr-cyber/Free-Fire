@@ -196,7 +196,7 @@
                     PAID SCRIM</p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank"
+                <a id="match-room-wa-channel" href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank"
                     class="flex items-center gap-1 bg-green-900/20 hover:bg-green-900/30 text-green-400 px-2 py-1 rounded-lg border border-green-500/20 transition-colors">
                     <i class="ri-whatsapp-line text-sm"></i>
                     <span class="text-[9px] font-bold uppercase tracking-wider">Join Channel</span>
@@ -471,8 +471,42 @@
         })();
     </script>
 
+    <!-- Firebase SDKs for Real-Time Cloud Sync -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const FIREBASE_CONFIG = {
+            apiKey: atob("QUl6YVN5Q2Fqc0pSSEpBMUpXQ0VxYzV5WFdDZzdSUVE4SnM2RHRR"),
+            authDomain: "freefire-8d87b.firebaseapp.com",
+            projectId: "freefire-8d87b",
+            storageBucket: "freefire-8d87b.firebasestorage.app",
+            messagingSenderId: "838166280757",
+            appId: "1:838166280757:web:aa4f042abff7569b32cf7c",
+            measurementId: "G-YBQ3RE6EVL"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        window.db = firebase.firestore();
+    </script>
+    <script src="js/config.js"></script>
+    <script>
+        function syncMatchRoomConfig(cfg) {
+            if (!cfg) cfg = window.VoltConfig ? window.VoltConfig.get() : {};
+            var channelBtn = document.getElementById("match-room-wa-channel");
+            if (channelBtn && cfg.whatsappChannel) {
+                channelBtn.href = cfg.whatsappChannel;
+            }
+        }
+        syncMatchRoomConfig();
+        window.addEventListener("voltConfigUpdated", function(e) {
+            syncMatchRoomConfig(e.detail);
+        });
+    </script>
+
     <!-- Firebase Push Notifications -->
     <script src="js/firebase-notifications.js?v=12.8"></script>
 </body>
 
 </html>
+

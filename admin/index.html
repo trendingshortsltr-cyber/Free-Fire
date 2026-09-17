@@ -356,6 +356,14 @@
             setTimeout(() => toast.classList.add("hidden"), 3000);
         }
 
+        // Listen for real-time config updates (from Firestore or local changes)
+        window.addEventListener("voltConfigUpdated", function (e) {
+            currentConfig = e.detail;
+            if (sessionStorage.getItem("voltAdminLoggedIn") === "true") {
+                loadDashboardData();
+            }
+        });
+
         function loadDashboardData() {
             currentConfig = VoltConfig.get();
 
@@ -371,14 +379,19 @@
             // Load Modes
             renderModesList();
 
-            // Load Links
-            document.getElementById("input-wa-number").value = currentConfig.whatsappNumber || "919172525945";
-            document.getElementById("input-wa-channel").value = currentConfig.whatsappChannel || "";
+            // Load Links (only if not actively typing)
+            var waNumEl = document.getElementById("input-wa-number");
+            var waChanEl = document.getElementById("input-wa-channel");
+            if (waNumEl && document.activeElement !== waNumEl) waNumEl.value = currentConfig.whatsappNumber || "919172525945";
+            if (waChanEl && document.activeElement !== waChanEl) waChanEl.value = currentConfig.whatsappChannel || "";
 
-            // Load Images
-            document.getElementById("input-rule-img").value = currentConfig.ruleBookImg || "/assets/rule-book.jpg";
-            document.getElementById("input-points-img").value = currentConfig.pointsTableImg || "/assets/points-table.jpg";
+            // Load Images (only if not actively typing)
+            var ruleImgEl = document.getElementById("input-rule-img");
+            var pointsImgEl = document.getElementById("input-points-img");
+            if (ruleImgEl && document.activeElement !== ruleImgEl) ruleImgEl.value = currentConfig.ruleBookImg || "/assets/rule-book.jpg";
+            if (pointsImgEl && document.activeElement !== pointsImgEl) pointsImgEl.value = currentConfig.pointsTableImg || "/assets/points-table.jpg";
         }
+
 
         // --- MATCH DATE MANAGER ---
         function updateDateUI() {

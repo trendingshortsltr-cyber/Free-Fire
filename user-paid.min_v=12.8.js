@@ -354,11 +354,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function updateChannelLink() {
+    var channelEl = document.getElementById("bottom-nav-wa-channel");
+    if (channelEl && cfg.whatsappChannel) {
+      channelEl.href = cfg.whatsappChannel;
+    }
+  }
+
   // ─── INITIALISE ────────────────────────────────────────────────────────────
   renderMatchDateBadge();
   renderModes();
   renderTimes();
   renderAmounts();
+  updateChannelLink();
 
   // Listen for admin config updates in real-time
   window.addEventListener("voltConfigUpdated", function (e) {
@@ -369,6 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
     renderModes();
     renderTimes();
     renderAmounts();
+    updateChannelLink();
   });
 
 });
