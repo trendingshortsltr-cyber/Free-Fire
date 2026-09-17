@@ -44,6 +44,7 @@
 
   function saveConfig(newConfig) {
     try {
+      newConfig.lastUpdated = Date.now();
       localStorage.setItem("volt_app_config", JSON.stringify(newConfig));
       window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: newConfig }));
       if (bc) {
@@ -54,7 +55,7 @@
       if (window.db || (window.firebase && window.firebase.firestore)) {
         var firestore = window.db || window.firebase.firestore();
         firestore.collection("system_settings").doc("app_config").set(newConfig)
-          .then(function() { console.log("[VoltConfig] Synced to Firebase Cloud"); })
+          .then(function() { console.log("[VoltConfig] Synced to Firebase Cloud (t=" + newConfig.lastUpdated + ")"); })
           .catch(function(err) { console.warn("[VoltConfig] Firebase Cloud Sync Error:", err); });
       }
       return true;
@@ -71,7 +72,7 @@
 
   var isCloudSyncInitialized = false;
 
-  // Real-time Listener for Firebase Cloud Updates with Retry Loop
+  // Real-time Listener for Firebase Cloud Updates with Conflict Resolution
   function initCloudSync() {
     if (isCloudSyncInitialized) return;
 
@@ -88,16 +89,28 @@
           
           firestore.collection("system_settings").doc("app_config")
             .onSnapshot(function(doc) {
+              var localConfig = loadConfig();
+              var localTime = localConfig.lastUpdated || 0;
+
               if (doc.exists) {
                 var cloudData = doc.data();
                 if (cloudData) {
-                  var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
-                  localStorage.setItem("volt_app_config", JSON.stringify(merged));
-                  window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
+                  var cloudTime = cloudData.lastUpdated || 0;
+
+                  if (localTime > cloudTime) {
+                    console.log("[VoltConfig] Local data is newer than Cloud (" + localTime + " > " + cloudTime + "). Syncing Local -> Cloud...");
+                    firestore.collection("system_settings").doc("app_config").set(localConfig)
+                      .catch(function(e) { console.warn("[VoltConfig] Self-heal cloud set error:", e); });
+                  } else {
+                    var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
+                    localStorage.setItem("volt_app_config", JSON.stringify(merged));
+                    window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
+                  }
                 }
               } else {
-                // Initial creation of cloud config document
-                firestore.collection("system_settings").doc("app_config").set(DEFAULT_CONFIG)
+                // Initial creation of cloud config document using local or default config
+                var initialPayload = Object.assign({ lastUpdated: Date.now() }, localConfig);
+                firestore.collection("system_settings").doc("app_config").set(initialPayload)
                   .catch(function(e) { console.warn("[VoltConfig] Init cloud doc error:", e); });
               }
             }, function(err) {
