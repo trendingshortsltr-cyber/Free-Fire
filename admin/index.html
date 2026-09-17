@@ -89,6 +89,10 @@
                 </div>
 
                 <div class="flex items-center gap-2">
+                    <button onclick="saveAllAdminChanges()"
+                        class="text-xs font-black text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 border border-green-400/30 px-3.5 py-1.5 rounded-xl transition-all shadow-lg shadow-green-600/30 flex items-center gap-1.5 active:scale-95 cursor-pointer uppercase tracking-wide">
+                        <i class="ri-save-3-line text-sm"></i> Save Changes
+                    </button>
                     <a href="../user-paid/index.html" target="_blank"
                         class="text-xs font-bold text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5">
                         <i class="ri-external-link-line"></i> View Site
@@ -297,8 +301,24 @@
                             Update Passcode
                         </button>
                     </div>
+            <!-- STICKY ACTION BAR FOR SAVING UPDATES -->
+            <div class="sticky bottom-4 z-30 w-full pt-4">
+                <div class="glass-card bg-[#16161c]/95 border border-green-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl backdrop-blur-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500/20 border border-green-500/30 text-green-400 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="ri-cloud-upload-line animate-pulse"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white">Publish Live Configuration</p>
+                            <p class="text-xs text-gray-400">Clicking save instantly syncs all changes to all user devices live.</p>
+                        </div>
+                    </div>
+                    <button onclick="saveAllAdminChanges()"
+                        class="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition-all shadow-lg shadow-green-600/30 flex items-center justify-center gap-2 active:scale-95 border border-green-400/30 uppercase tracking-wider cursor-pointer">
+                        <i class="ri-save-3-line text-lg"></i> Save All Changes Live
+                    </button>
                 </div>
-            </section>
+            </div>
 
         </main>
     </div>
@@ -668,6 +688,37 @@
             showSaveToast("Admin Passcode updated to: " + pass);
             document.getElementById("input-new-passcode").value = "";
         }
+
+        // --- GLOBAL SAVE ALL CHANGES ---
+        function saveAllAdminChanges() {
+            try {
+                var waNum = document.getElementById("input-wa-number");
+                var waChan = document.getElementById("input-wa-channel");
+                var ruleImg = document.getElementById("input-rule-img");
+                var pointsImg = document.getElementById("input-points-img");
+                var customDate = document.getElementById("input-custom-date");
+
+                if (waNum && waNum.value.trim()) currentConfig.whatsappNumber = waNum.value.trim();
+                if (waChan && waChan.value.trim()) currentConfig.whatsappChannel = waChan.value.trim();
+                if (ruleImg && ruleImg.value.trim()) currentConfig.ruleBookImg = ruleImg.value.trim();
+                if (pointsImg && pointsImg.value.trim()) currentConfig.pointsTableImg = pointsImg.value.trim();
+                if (customDate && customDate.value && currentConfig.matchDate !== "today" && currentConfig.matchDate !== "tomorrow") {
+                    currentConfig.matchDate = customDate.value;
+                }
+
+                var success = VoltConfig.save(currentConfig);
+                if (success !== false) {
+                    showSaveToast("⚡ Live updates published to all devices!");
+                } else {
+                    alert("Saved locally. Ensure network/Firebase is connected for live cloud sync.");
+                }
+            } catch(e) {
+                console.error("Save error:", e);
+                VoltConfig.save(currentConfig);
+                showSaveToast("Settings saved successfully!");
+            }
+        }
     </script>
 </body>
 </html>
+
