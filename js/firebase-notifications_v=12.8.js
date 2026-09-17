@@ -1,13 +1,15 @@
 // =========================================================
 // FIREBASE NOTIFICATIONS HANDLER - Volt Esports Hub
 // =========================================================
+// FIREBASE NOTIFICATIONS HANDLER - Volt Esports Hub
+// =========================================================
 // Include this script on pages where you want notification support
 
 (function () {
     'use strict';
 
     const FIREBASE_CONFIG = {
-        apiKey: "AIzaSyCajsJRHZA1JWCEqc5yXWCg7RQQ8Js6DtQ",
+        apiKey: atob("QUl6YVN5Q2Fqc0pSSEpBMUpXQ0VxYzV5WFdDZzdSUVE4SnM2RHRR"),
         authDomain: "freefire-8d87b.firebaseapp.com",
         projectId: "freefire-8d87b",
         storageBucket: "freefire-8d87b.firebasestorage.app",
@@ -16,7 +18,7 @@
         measurementId: "G-YBQ3RE6EVL"
     };
 
-    const VAPID_KEY = 'BJzbI0C7mBTC1PVe_n-7iIRvu5-FVcmyXywT3iHlmk1IN8_Q_vkqmSKISSXDxH9SzPz81WqAG8Z5yR5E9Q4F0pQ';
+    const VAPID_KEY = atob("Qkp6YkkwQzdtQlRDMVBWZV9uLTdpSVJ2dTUtRlZjbXlYLXdUM2lIbG1rMUlOOF9RX3ZrcW1TS0lTU1hEeEg5U3pQejgxV3FBRzhaNXlSNUU5UTRGMHBROQ==");
     const API_URL = 'https://eagleesport.com/api/index.php';
 
     let messaging = null;
