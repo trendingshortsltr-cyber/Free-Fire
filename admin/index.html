@@ -60,6 +60,7 @@
             </div>
             <div>
                 <input type="password" id="passcode-input" placeholder="Enter Passcode (Default: volt123)"
+                    onkeyup="if(event.key==='Enter') checkAdminPasscode()"
                     class="w-full bg-[#121216] border border-white/15 rounded-xl px-4 py-3 text-center text-white text-lg font-mono focus:outline-none focus:border-blue-500 transition-colors" />
                 <p id="login-error" class="text-xs text-red-400 font-bold mt-2 hidden">Incorrect passcode! Try again.</p>
             </div>
@@ -325,27 +326,41 @@
 
     <!-- ADMIN LOGIC SCRIPT -->
     <script>
-        var currentConfig = VoltConfig.get();
+        var currentConfig = window.VoltConfig ? VoltConfig.get() : {};
 
         function checkAdminPasscode() {
-            var input = document.getElementById("passcode-input").value;
+            var inputVal = document.getElementById("passcode-input");
+            var input = inputVal ? inputVal.value : "";
+            currentConfig = window.VoltConfig ? VoltConfig.get() : currentConfig;
             var savedPasscode = currentConfig.adminPasscode || atob("dm9sdDEyMw==");
 
             if (input === savedPasscode) {
-                document.getElementById("login-modal").classList.add("hidden");
-                document.getElementById("admin-dashboard").classList.remove("hidden");
+                var loginModal = document.getElementById("login-modal");
+                var dashboard = document.getElementById("admin-dashboard");
+                if (loginModal) loginModal.classList.add("hidden");
+                if (dashboard) dashboard.classList.remove("hidden");
                 sessionStorage.setItem("voltAdminLoggedIn", "true");
                 loadDashboardData();
             } else {
-                document.getElementById("login-error").classList.remove("hidden");
+                var errEl = document.getElementById("login-error");
+                if (errEl) errEl.classList.remove("hidden");
             }
         }
 
-        // Auto login if already unlocked in current tab session
-        if (sessionStorage.getItem("voltAdminLoggedIn") === "true") {
-            document.getElementById("login-modal").classList.add("hidden");
-            document.getElementById("admin-dashboard").classList.remove("hidden");
-            document.addEventListener("DOMContentLoaded", loadDashboardData);
+        function initAdminDashboard() {
+            if (sessionStorage.getItem("voltAdminLoggedIn") === "true") {
+                var loginModal = document.getElementById("login-modal");
+                var dashboard = document.getElementById("admin-dashboard");
+                if (loginModal) loginModal.classList.add("hidden");
+                if (dashboard) dashboard.classList.remove("hidden");
+                loadDashboardData();
+            }
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initAdminDashboard);
+        } else {
+            initAdminDashboard();
         }
 
         function lockDashboard() {
