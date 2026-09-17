@@ -49,6 +49,14 @@
     try {
       localStorage.setItem("volt_app_config", JSON.stringify(newConfig));
       window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: newConfig }));
+      
+      // Real-time Cloud Sync with Firebase Firestore if initialized
+      if (window.db || (window.firebase && window.firebase.firestore)) {
+        var firestore = window.db || window.firebase.firestore();
+        firestore.collection("system_settings").doc("app_config").set(newConfig)
+          .then(function() { console.log("[VoltConfig] Synced to Firebase Cloud"); })
+          .catch(function(err) { console.warn("[VoltConfig] Firebase Cloud Sync Error:", err); });
+      }
       return true;
     } catch (e) {
       console.error("[VoltConfig] Failed to save config:", e);
@@ -61,6 +69,36 @@
     return DEFAULT_CONFIG;
   }
 
+  // Real-time Listener for Firebase Cloud Updates
+  function initCloudSync() {
+    try {
+      if (window.firebase && window.firebase.firestore) {
+        var firestore = window.db || window.firebase.firestore();
+        firestore.collection("system_settings").doc("app_config")
+          .onSnapshot(function(doc) {
+            if (doc.exists) {
+              var cloudData = doc.data();
+              if (cloudData) {
+                var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
+                if (Array.isArray(merged.amounts)) {
+                  merged.amounts = merged.amounts.filter(function(a) {
+                    var val = typeof a === "object" ? a.amount : a;
+                    return val !== 50 && val !== 100;
+                  });
+                }
+                localStorage.setItem("volt_app_config", JSON.stringify(merged));
+                window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
+              }
+            }
+          }, function(err) {
+            console.warn("[VoltConfig] Firestore Listener Warning:", err);
+          });
+      }
+    } catch(e) {
+      console.warn("[VoltConfig] Cloud init skipped:", e);
+    }
+  }
+
   // Listen for storage changes across tabs
   window.addEventListener("storage", function (e) {
     if (e.key === "volt_app_config") {
@@ -68,6 +106,13 @@
       window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: updatedConfig }));
     }
   });
+
+  // Init cloud sync when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCloudSync);
+  } else {
+    initCloudSync();
+  }
 
   window.VoltConfig = {
     get: loadConfig,
