@@ -11,6 +11,7 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
         const FIREBASE_CONFIG = {
@@ -24,6 +25,9 @@
         };
         if (!firebase.apps.length) {
             firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        if (firebase.auth) {
+            firebase.auth().signInAnonymously().catch(function(e) { console.warn("[Firebase] Auth notice:", e); });
         }
         window.db = firebase.firestore();
     </script>
