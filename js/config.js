@@ -61,6 +61,14 @@
     return DEFAULT_CONFIG;
   }
 
+  // Listen for storage changes across tabs
+  window.addEventListener("storage", function (e) {
+    if (e.key === "volt_app_config") {
+      var updatedConfig = loadConfig();
+      window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: updatedConfig }));
+    }
+  });
+
   window.VoltConfig = {
     get: loadConfig,
     save: saveConfig,
