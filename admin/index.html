@@ -123,6 +123,34 @@
 
             <!-- TAB 1: LOBBY TIMES -->
             <section id="tab-times" class="tab-content space-y-4">
+                <!-- MATCH DATE SELECTOR CARD -->
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide flex items-center gap-2">
+                                <i class="ri-calendar-event-line text-blue-400"></i> Tournament Schedule Date
+                            </h2>
+                            <p class="text-xs text-gray-400">Set date for open lobby bookings (Today, Tomorrow, or Custom Date)</p>
+                        </div>
+                        <span id="admin-date-badge" class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
+                            Today
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button onclick="setMatchDate('today')" id="date-btn-today" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                            📅 Today's Match
+                        </button>
+                        <button onclick="setMatchDate('tomorrow')" id="date-btn-tomorrow" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                            🌅 Tomorrow's Match
+                        </button>
+                        <div class="flex items-center gap-2 bg-[#14141a] border border-white/10 rounded-xl px-3 py-2">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase whitespace-nowrap">Custom:</span>
+                            <input type="date" id="input-custom-date" onchange="setMatchDate('custom')" class="bg-transparent text-white font-mono text-xs focus:outline-none w-full cursor-pointer" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
                     <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div>
@@ -320,6 +348,9 @@
         function loadDashboardData() {
             currentConfig = VoltConfig.get();
 
+            // Load Match Date
+            updateDateUI();
+
             // Load Times
             renderTimesList();
 
@@ -336,6 +367,56 @@
             // Load Images
             document.getElementById("input-rule-img").value = currentConfig.ruleBookImg || "/assets/rule-book.jpg";
             document.getElementById("input-points-img").value = currentConfig.pointsTableImg || "/assets/points-table.jpg";
+        }
+
+        // --- MATCH DATE MANAGER ---
+        function updateDateUI() {
+            var dateVal = currentConfig.matchDate || "today";
+            var badge = document.getElementById("admin-date-badge");
+            var btnToday = document.getElementById("date-btn-today");
+            var btnTomorrow = document.getElementById("date-btn-tomorrow");
+            var inputCustom = document.getElementById("input-custom-date");
+
+            // Reset buttons
+            [btnToday, btnTomorrow].forEach(b => {
+                if (b) {
+                    b.classList.remove("bg-blue-600", "border-blue-500", "text-white");
+                    b.classList.add("bg-[#14141a]", "border-white/10", "text-gray-300");
+                }
+            });
+
+            if (dateVal === "today") {
+                if (badge) badge.textContent = "Today";
+                if (btnToday) {
+                    btnToday.classList.add("bg-blue-600", "border-blue-500", "text-white");
+                    btnToday.classList.remove("bg-[#14141a]", "border-white/10", "text-gray-300");
+                }
+                if (inputCustom) inputCustom.value = "";
+            } else if (dateVal === "tomorrow") {
+                if (badge) badge.textContent = "Tomorrow";
+                if (btnTomorrow) {
+                    btnTomorrow.classList.add("bg-blue-600", "border-blue-500", "text-white");
+                    btnTomorrow.classList.remove("bg-[#14141a]", "border-white/10", "text-gray-300");
+                }
+                if (inputCustom) inputCustom.value = "";
+            } else {
+                if (badge) badge.textContent = dateVal;
+                if (inputCustom) inputCustom.value = dateVal;
+            }
+        }
+
+        function setMatchDate(type) {
+            if (type === "custom") {
+                var customVal = document.getElementById("input-custom-date").value;
+                if (!customVal) return;
+                currentConfig.matchDate = customVal;
+                showSaveToast("Tournament date set to: " + customVal);
+            } else {
+                currentConfig.matchDate = type;
+                showSaveToast("Tournament date set to: " + type.toUpperCase());
+            }
+            VoltConfig.save(currentConfig);
+            updateDateUI();
         }
 
         // --- TIMES MANAGER ---

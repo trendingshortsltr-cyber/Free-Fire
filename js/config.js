@@ -21,6 +21,7 @@
       { amount: 25, available: true },
       { amount: 40, available: true }
     ],
+    matchDate: "today",
     ruleBookImg: "/assets/rule-book.jpg",
     pointsTableImg: "/assets/points-table.jpg"
   };

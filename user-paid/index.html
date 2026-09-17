@@ -48,8 +48,11 @@
         <h1 class="text-xl font-display font-bold uppercase tracking-wide text-white">VOLT <span class="text-blue-500">ESPORTS HUB</span></h1>
     </nav>
 
-    <div id="live-clock-container" class="bg-[#111111] text-white text-center py-2 shadow-md border-b border-white/5">
+    <div id="live-clock-container" class="bg-[#111111] text-white text-center py-2 shadow-md border-b border-white/5 flex flex-wrap items-center justify-center gap-3 px-4">
         <p class="text-sm font-bold tracking-wider font-display">-- LOADING TIME --</p>
+        <span id="match-date-badge" class="bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-0.5 rounded-full flex items-center gap-1 font-mono">
+            <i class="ri-calendar-check-line text-xs text-blue-400"></i> <span id="match-date-label">Tournament Date: Today</span>
+        </span>
     </div>
 
     <main class="flex-grow pt-5 pb-10">

@@ -76,7 +76,37 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (e) { return 0; }
   }
 
+  // ─── MATCH DATE HELPERS ───────────────────────────────────────────────────
+  function getMatchDateInfo() {
+    var mDate = cfg.matchDate || "today";
+    var now = new Date();
+
+    if (mDate === "tomorrow") {
+      var tom = new Date(now);
+      tom.setDate(tom.getDate() + 1);
+      var tomStr = tom.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      return { text: "Tomorrow (" + tomStr + ")", isFuture: true, fullDate: tomStr };
+    } else if (mDate === "today") {
+      var todStr = now.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      return { text: "Today (" + todStr + ")", isFuture: false, fullDate: todStr };
+    } else {
+      // Custom date string
+      return { text: mDate, isFuture: true, fullDate: mDate };
+    }
+  }
+
+  function renderMatchDateBadge() {
+    var labelEl = document.getElementById("match-date-label");
+    if (labelEl) {
+      var info = getMatchDateInfo();
+      labelEl.textContent = "Tournament Date: " + info.text;
+    }
+  }
+
   function isPast(t) {
+    var dateInfo = getMatchDateInfo();
+    if (dateInfo.isFuture) return false; // Future dates are never past!
+
     var now = new Date();
     var cur = now.getHours() * 60 + now.getMinutes();
     return cur > timeToMin(t);
@@ -306,8 +336,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       var targetNum = (cfg.whatsappNumber || WA_NUMBER || "919172525945").replace(/\D/g, "");
+      var dateInfo  = getMatchDateInfo();
       var msg =
         "🔥 VOLT ESPORTS HUB - SLOT BOOKING 🔥\n\n" +
+        "📅 Match Date: "  + dateInfo.text   + "\n" +
         "🎮 Mode: "        + selected.mode   + "\n" +
         "⏰ Lobby Time: "  + selected.time   + "\n" +
         "💰 Entry Fee: ₹"  + selected.amount + "\n\n" +
@@ -323,6 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ─── INITIALISE ────────────────────────────────────────────────────────────
+  renderMatchDateBadge();
   renderModes();
   renderTimes();
   renderAmounts();
@@ -332,6 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cfg = e.detail;
     WA_NUMBER = cfg.whatsappNumber || "919172525945";
     schedule = buildScheduleFromConfig(cfg);
+    renderMatchDateBadge();
     renderModes();
     renderTimes();
     renderAmounts();
