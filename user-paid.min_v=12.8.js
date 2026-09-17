@@ -20,8 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var sch = {};
     var times = c.times || ["01:00 PM", "03:00 PM", "05:00 PM", "07:00 PM", "10:00 PM"];
     var amts = c.amounts || [{ amount: 25, available: true }, { amount: 40, available: true }];
-    times.forEach(function (t) {
-      sch[t] = amts;
+    times.forEach(function (tItem) {
+      var tStr = typeof tItem === "object" ? tItem.time : tItem;
+      var status = typeof tItem === "object" ? (tItem.status || "available") : "available";
+      sch[tStr] = {
+        amounts: amts,
+        status: status
+      };
     });
     return sch;
   }
@@ -138,14 +143,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     times.forEach(function (t) {
-      var past  = isPast(t);
+      var slotData = schedule[t] || {};
+      var status = slotData.status || "available";
+      var past = isPast(t) || status === "expired";
+      var isFull = status === "full";
       var isSel = t === selected.time;
-      var btn   = document.createElement("button");
+      var btn = document.createElement("button");
 
       if (past) {
-        btn.disabled  = true;
+        btn.disabled = true;
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-40 cursor-not-allowed bg-[#111] border-white/5 rounded-xl border-2";
-        btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-400">' + t + '</span><span class="text-[9px] text-red-500 font-bold uppercase mt-0.5">Expired</span></div>';
+        btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-400">' + t + '</span><span class="text-[9px] text-yellow-500 font-bold uppercase mt-0.5">Expired</span></div>';
+        btn.addEventListener("click", function() {
+          showUnavailableToast("This lobby (" + t + ") has EXPIRED.");
+        });
+      } else if (isFull) {
+        btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-75 cursor-not-allowed bg-red-950/20 border-red-500/30 rounded-xl border-2";
+        btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-300">' + t + '</span><span class="text-[9px] text-red-400 font-extrabold uppercase mt-0.5 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> FULL</span></div>';
+        btn.addEventListener("click", function() {
+          showUnavailableToast("This lobby (" + t + ") is FULL! Please select another time.");
+        });
       } else {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold transition-all time-btn rounded-xl border-2 " + (isSel ? SEL : UNSEL);
         btn.innerHTML = "<span>" + t + "</span>";
@@ -173,7 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (amtHelper) amtHelper.classList.add("hidden");
 
-    var amounts = schedule[selected.time] || [];
+    var slotObj = schedule[selected.time];
+    var amounts = Array.isArray(slotObj) ? slotObj : (slotObj ? slotObj.amounts || [] : []);
     if (amounts.length === 0) {
       amtSelector.innerHTML = '<p class="col-span-2 text-center text-gray-500 text-sm py-4">No amounts for this time.</p>';
       return;

@@ -344,34 +344,67 @@
             container.innerHTML = "";
             var times = currentConfig.times || [];
 
-            times.forEach((t, index) => {
+            times.forEach((tObj, index) => {
+                var timeStr = typeof tObj === "object" ? tObj.time : tObj;
+                var status = typeof tObj === "object" ? (tObj.status || "available") : "available";
+
+                var statusBadgeClass = "bg-green-500/10 text-green-400 border-green-500/20";
+                var statusText = "Available";
+                if (status === "full") {
+                    statusBadgeClass = "bg-red-500/10 text-red-400 border-red-500/20";
+                    statusText = "FULL";
+                } else if (status === "expired") {
+                    statusBadgeClass = "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
+                    statusText = "Expired";
+                }
+
                 var div = document.createElement("div");
-                div.className = "bg-[#16161c] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3";
+                div.className = "bg-[#16161c] border border-white/10 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3";
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
                         <i class="ri-time-line text-blue-400 text-lg"></i>
-                        <input type="text" value="${t}" onchange="updateTimeSlot(${index}, this.value)"
-                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-32 text-center focus:outline-none focus:border-blue-500" />
+                        <input type="text" value="${timeStr}" onchange="updateTimeSlotText(${index}, this.value)"
+                            class="bg-[#101014] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-mono w-28 text-center focus:outline-none focus:border-blue-500" />
                     </div>
-                    <button onclick="deleteTimeSlot(${index})" class="text-red-400 hover:text-red-300 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors">
-                        <i class="ri-delete-bin-line text-base"></i>
-                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <select onchange="updateTimeSlotStatus(${index}, this.value)" class="bg-[#101014] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-bold text-white outline-none cursor-pointer focus:border-blue-500">
+                            <option value="available" ${status === 'available' ? 'selected' : ''}>🟢 Available</option>
+                            <option value="full" ${status === 'full' ? 'selected' : ''}>🔴 Slot Full</option>
+                            <option value="expired" ${status === 'expired' ? 'selected' : ''}>⏰ Expired</option>
+                        </select>
+
+                        <button onclick="deleteTimeSlot(${index})" class="text-red-400 hover:text-red-300 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors">
+                            <i class="ri-delete-bin-line text-base"></i>
+                        </button>
+                    </div>
                 `;
                 container.appendChild(div);
             });
         }
 
-        function updateTimeSlot(index, val) {
+        function updateTimeSlotText(index, val) {
             if (!val.trim()) return;
-            currentConfig.times[index] = val.trim();
+            var currentObj = currentConfig.times[index];
+            var currentStatus = typeof currentObj === "object" ? currentObj.status : "available";
+            currentConfig.times[index] = { time: val.trim(), status: currentStatus };
             VoltConfig.save(currentConfig);
             showSaveToast("Time slot updated!");
+        }
+
+        function updateTimeSlotStatus(index, newStatus) {
+            var currentObj = currentConfig.times[index];
+            var timeStr = typeof currentObj === "object" ? currentObj.time : currentObj;
+            currentConfig.times[index] = { time: timeStr, status: newStatus };
+            VoltConfig.save(currentConfig);
+            renderTimesList();
+            showSaveToast(timeStr + " marked as " + newStatus.toUpperCase() + "!");
         }
 
         function addNewTimeSlot() {
             var newTime = prompt("Enter new time slot (e.g., 08:00 PM):", "08:00 PM");
             if (newTime && newTime.trim()) {
-                currentConfig.times.push(newTime.trim());
+                currentConfig.times.push({ time: newTime.trim(), status: "available" });
                 VoltConfig.save(currentConfig);
                 renderTimesList();
                 showSaveToast("Added new time slot: " + newTime);
