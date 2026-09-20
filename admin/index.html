@@ -546,7 +546,7 @@
         }
 
         function addNewTimeSlot() {
-            var newTime = prompt("Enter new time slot (e.g., 08:00 PM):", "08:00 PM");
+            var newTime = prompt("Enter new time slot (e.g., 09:00 PM):", "09:00 PM");
             if (newTime && newTime.trim()) {
                 currentConfig.times.push({ time: newTime.trim(), status: "available" });
                 VoltConfig.save(currentConfig);
@@ -620,7 +620,7 @@
         }
 
         function addNewAmountSlot() {
-            var val = prompt("Enter new Entry Fee amount in ₹:", "60");
+            var val = prompt("Enter new Entry Fee amount in ₹:", "50");
             var num = parseInt(val, 10);
             if (!isNaN(num) && num > 0) {
                 currentConfig.amounts.push({ amount: num, available: true });

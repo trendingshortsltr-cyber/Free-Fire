@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
       : {
           whatsappNumber: "919172525945",
           modes: [{ name: "Squad", available: true }],
-          times: ["01:00 PM", "03:00 PM", "05:00 PM", "07:00 PM", "10:00 PM"],
-          amounts: [{ amount: 25, available: true }, { amount: 40, available: true }]
+          times: ["09:00 PM"],
+          amounts: [{ amount: 50, available: true }, { amount: 100, available: true }]
         };
   }
 
@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Build schedule object from config
   function buildScheduleFromConfig(c) {
     var sch = {};
-    var times = c.times || ["01:00 PM", "03:00 PM", "05:00 PM", "07:00 PM", "10:00 PM"];
-    var amts = c.amounts || [{ amount: 25, available: true }, { amount: 40, available: true }];
+    var times = c.times || ["09:00 PM"];
+    var amts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: true }];
     times.forEach(function (tItem) {
       var tStr = typeof tItem === "object" ? tItem.time : tItem;
       var status = typeof tItem === "object" ? (tItem.status || "available") : "available";

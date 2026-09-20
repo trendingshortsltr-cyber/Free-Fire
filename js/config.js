@@ -16,10 +16,10 @@
       { name: "Duo", available: false },
       { name: "Squad", available: true }
     ],
-    times: ["01:00 PM", "03:00 PM", "05:00 PM", "07:00 PM", "10:00 PM"],
+    times: ["09:00 PM"],
     amounts: [
-      { amount: 25, available: true },
-      { amount: 40, available: true }
+      { amount: 50, available: true },
+      { amount: 100, available: true }
     ],
     matchDate: "today",
     ruleBookImg: "/assets/rule-book.jpg",
@@ -33,6 +33,34 @@
       var saved = localStorage.getItem("volt_app_config");
       if (saved) {
         var parsed = JSON.parse(saved);
+        var needsSave = false;
+
+        // Force time slots to only 09:00 PM
+        parsed.times = ["09:00 PM"];
+        needsSave = true;
+
+        // Remove price 25 if present
+        if (parsed.amounts && Array.isArray(parsed.amounts)) {
+          var filtered = parsed.amounts.filter(function(a) {
+            var val = typeof a === "object" ? a.amount : a;
+            return val !== 25;
+          });
+          if (filtered.length === 0) {
+            filtered = [
+              { amount: 50, available: true },
+              { amount: 100, available: true }
+            ];
+          }
+          if (filtered.length !== parsed.amounts.length) {
+            parsed.amounts = filtered;
+            needsSave = true;
+          }
+        }
+
+        if (needsSave) {
+          parsed.lastUpdated = Date.now();
+          localStorage.setItem("volt_app_config", JSON.stringify(parsed));
+        }
         var merged = Object.assign({}, DEFAULT_CONFIG, parsed);
         return merged;
       }
