@@ -19,7 +19,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildScheduleFromConfig(c) {
     var sch = {};
     var times = c.times || ["09:00 PM"];
-    var amts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: true }];
+    var rawAmts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: true }];
+    var amts = rawAmts.filter(function(a) {
+      var val = typeof a === "object" ? a.amount : a;
+      return val === 50 || val === 100;
+    });
+    if (amts.length === 0) {
+      amts = [{ amount: 50, available: true }, { amount: 100, available: true }];
+    }
     times.forEach(function (tItem) {
       var tStr = typeof tItem === "object" ? tItem.time : tItem;
       var status = typeof tItem === "object" ? (tItem.status || "available") : "available";

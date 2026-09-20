@@ -28,54 +28,48 @@
 
   var bc = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel("volt_config_channel") : null;
 
+  function sanitizeConfig(cfg) {
+    if (!cfg) cfg = {};
+    cfg.matchDate = "tuesday";
+    cfg.times = ["09:00 PM"];
+
+    var validAmounts = [
+      { amount: 50, available: true },
+      { amount: 100, available: true }
+    ];
+
+    if (!cfg.amounts || !Array.isArray(cfg.amounts)) {
+      cfg.amounts = validAmounts;
+    } else {
+      var currentValues = cfg.amounts.map(function(a) { return typeof a === "object" ? a.amount : a; });
+      var isExactMatch = currentValues.length === 2 && currentValues.includes(50) && currentValues.includes(100);
+      if (!isExactMatch) {
+        cfg.amounts = validAmounts;
+      }
+    }
+    return cfg;
+  }
+
   function loadConfig() {
     try {
       var saved = localStorage.getItem("volt_app_config");
       if (saved) {
         var parsed = JSON.parse(saved);
-        var needsSave = false;
-
-        // Force match date to tuesday for new schedule start
-        parsed.matchDate = "tuesday";
-        needsSave = true;
-
-        // Force time slots to only 09:00 PM
-        parsed.times = ["09:00 PM"];
-        needsSave = true;
-
-        // Remove price 25 if present
-        if (parsed.amounts && Array.isArray(parsed.amounts)) {
-          var filtered = parsed.amounts.filter(function(a) {
-            var val = typeof a === "object" ? a.amount : a;
-            return val !== 25;
-          });
-          if (filtered.length === 0) {
-            filtered = [
-              { amount: 50, available: true },
-              { amount: 100, available: true }
-            ];
-          }
-          if (filtered.length !== parsed.amounts.length) {
-            parsed.amounts = filtered;
-            needsSave = true;
-          }
-        }
-
-        if (needsSave) {
-          parsed.lastUpdated = Date.now();
-          localStorage.setItem("volt_app_config", JSON.stringify(parsed));
-        }
         var merged = Object.assign({}, DEFAULT_CONFIG, parsed);
+        merged = sanitizeConfig(merged);
+        merged.lastUpdated = Date.now();
+        localStorage.setItem("volt_app_config", JSON.stringify(merged));
         return merged;
       }
     } catch (e) {
       console.warn("[VoltConfig] Failed to load config from storage:", e);
     }
-    return DEFAULT_CONFIG;
+    return sanitizeConfig(Object.assign({}, DEFAULT_CONFIG));
   }
 
   function saveConfig(newConfig) {
     try {
+      newConfig = sanitizeConfig(newConfig);
       newConfig.lastUpdated = Date.now();
       localStorage.setItem("volt_app_config", JSON.stringify(newConfig));
       window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: newConfig }));
@@ -99,7 +93,7 @@
 
   function resetConfig() {
     localStorage.removeItem("volt_app_config");
-    return DEFAULT_CONFIG;
+    return sanitizeConfig(Object.assign({}, DEFAULT_CONFIG));
   }
 
   var isCloudSyncInitialized = false;
@@ -135,7 +129,15 @@
                       .catch(function(e) { console.warn("[VoltConfig] Self-heal cloud set error:", e); });
                   } else {
                     var merged = Object.assign({}, DEFAULT_CONFIG, cloudData);
+                    merged = sanitizeConfig(merged);
                     localStorage.setItem("volt_app_config", JSON.stringify(merged));
+                    
+                    var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function(a){return typeof a==='object'?a.amount:a;}) : [];
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2) {
+                      firestore.collection("system_settings").doc("app_config").set(merged)
+                        .catch(function(e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
+                    }
+
                     window.dispatchEvent(new CustomEvent("voltConfigUpdated", { detail: merged }));
                   }
                 }
