@@ -78,10 +78,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ─── MATCH DATE HELPERS ───────────────────────────────────────────────────
   function getMatchDateInfo() {
-    var mDate = cfg.matchDate || "today";
+    var mDate = cfg.matchDate || "tuesday";
     var now = new Date();
 
-    if (mDate === "tomorrow") {
+    if (mDate === "tuesday") {
+      var d = new Date(now);
+      var day = d.getDay();
+      var diff = (2 - day + 7) % 7;
+      d.setDate(d.getDate() + diff);
+      var tueStr = d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      var isFuture = diff > 0;
+      return { text: "Tuesday (" + tueStr + ")", isFuture: isFuture, fullDate: tueStr };
+    } else if (mDate === "tomorrow") {
       var tom = new Date(now);
       tom.setDate(tom.getDate() + 1);
       var tomStr = tom.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });

@@ -157,12 +157,15 @@
                         </span>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <button onclick="setMatchDate('today')" id="date-btn-today" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
-                            📅 Today's Match
+                            📅 Today
                         </button>
                         <button onclick="setMatchDate('tomorrow')" id="date-btn-tomorrow" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
-                            🌅 Tomorrow's Match
+                            🌅 Tomorrow
+                        </button>
+                        <button onclick="setMatchDate('tuesday')" id="date-btn-tuesday" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                            ⚡ Tuesday
                         </button>
                         <div class="flex items-center gap-2 bg-[#14141a] border border-white/10 rounded-xl px-3 py-2">
                             <span class="text-[10px] text-gray-400 font-bold uppercase whitespace-nowrap">Custom:</span>
@@ -434,21 +437,29 @@
 
         // --- MATCH DATE MANAGER ---
         function updateDateUI() {
-            var dateVal = currentConfig.matchDate || "today";
+            var dateVal = currentConfig.matchDate || "tuesday";
             var badge = document.getElementById("admin-date-badge");
             var btnToday = document.getElementById("date-btn-today");
             var btnTomorrow = document.getElementById("date-btn-tomorrow");
+            var btnTuesday = document.getElementById("date-btn-tuesday");
             var inputCustom = document.getElementById("input-custom-date");
 
             // Reset buttons
-            [btnToday, btnTomorrow].forEach(b => {
+            [btnToday, btnTomorrow, btnTuesday].forEach(b => {
                 if (b) {
                     b.classList.remove("bg-blue-600", "border-blue-500", "text-white");
                     b.classList.add("bg-[#14141a]", "border-white/10", "text-gray-300");
                 }
             });
 
-            if (dateVal === "today") {
+            if (dateVal === "tuesday") {
+                if (badge) badge.textContent = "Tuesday";
+                if (btnTuesday) {
+                    btnTuesday.classList.add("bg-blue-600", "border-blue-500", "text-white");
+                    btnTuesday.classList.remove("bg-[#14141a]", "border-white/10", "text-gray-300");
+                }
+                if (inputCustom) inputCustom.value = "";
+            } else if (dateVal === "today") {
                 if (badge) badge.textContent = "Today";
                 if (btnToday) {
                     btnToday.classList.add("bg-blue-600", "border-blue-500", "text-white");

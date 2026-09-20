@@ -21,7 +21,7 @@
       { amount: 50, available: true },
       { amount: 100, available: true }
     ],
-    matchDate: "today",
+    matchDate: "tuesday",
     ruleBookImg: "/assets/rule-book.jpg",
     pointsTableImg: "/assets/points-table.jpg"
   };
@@ -34,6 +34,10 @@
       if (saved) {
         var parsed = JSON.parse(saved);
         var needsSave = false;
+
+        // Force match date to tuesday for new schedule start
+        parsed.matchDate = "tuesday";
+        needsSave = true;
 
         // Force time slots to only 09:00 PM
         parsed.times = ["09:00 PM"];
