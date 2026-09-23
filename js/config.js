@@ -6,7 +6,7 @@
   'use strict';
 
   var DEFAULT_CONFIG = {
-    whatsappNumber: "9172525945",
+    whatsappNumber: "918087361230",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T",
     adminPasscode: atob("dm9sdDEyMw=="),
     announcementText: "Welcome to Volt Esports Hub! Daily Scrims Open Now.",
@@ -30,6 +30,10 @@
 
   function sanitizeConfig(cfg) {
     if (!cfg) cfg = {};
+    if (!cfg.whatsappNumber || cfg.whatsappNumber.includes("72525945") || cfg.whatsappNumber.includes("9172525945") || !cfg.v8087_updated) {
+      cfg.whatsappNumber = "918087361230";
+      cfg.v8087_updated = true;
+    }
     if (!cfg.matchDate || cfg.matchDate === "tuesday") {
       cfg.matchDate = "today";
     }
@@ -139,7 +143,7 @@
                     localStorage.setItem("volt_app_config", JSON.stringify(merged));
                     
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function(a){return typeof a==='object'?a.amount:a;}) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday") {
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945")) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function(e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }

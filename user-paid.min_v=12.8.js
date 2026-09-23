@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return (window.VoltConfig && window.VoltConfig.get)
       ? window.VoltConfig.get()
       : {
-          whatsappNumber: "919172525945",
+          whatsappNumber: "918087361230",
           modes: [{ name: "Squad", available: true }],
           times: ["09:00 PM"],
           amounts: [{ amount: 50, available: true }, { amount: 100, available: false }]
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var cfg = getConfig();
-  var WA_NUMBER = cfg.whatsappNumber || "919172525945";
+  var WA_NUMBER = cfg.whatsappNumber || "918087361230";
 
   // Build schedule object from config
   function buildScheduleFromConfig(c) {
@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      var targetNum = (cfg.whatsappNumber || WA_NUMBER || "919172525945").replace(/\D/g, "");
+      var targetNum = (cfg.whatsappNumber || WA_NUMBER || "918087361230").replace(/\D/g, "");
       var dateInfo  = getMatchDateInfo();
       var msg =
         "🔥 VOLT ESPORTS HUB - SLOT BOOKING 🔥\n\n" +
@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Listen for admin config updates in real-time
   window.addEventListener("voltConfigUpdated", function (e) {
     cfg = e.detail;
-    WA_NUMBER = cfg.whatsappNumber || "919172525945";
+    WA_NUMBER = cfg.whatsappNumber || "918087361230";
     schedule = buildScheduleFromConfig(cfg);
     renderMatchDateBadge();
     renderModes();
