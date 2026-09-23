@@ -19,9 +19,9 @@
     times: ["09:00 PM"],
     amounts: [
       { amount: 50, available: true },
-      { amount: 100, available: true }
+      { amount: 100, available: false }
     ],
-    matchDate: "tuesday",
+    matchDate: "today",
     ruleBookImg: "/assets/rule-book.jpg",
     pointsTableImg: "/assets/points-table.jpg"
   };
@@ -30,21 +30,27 @@
 
   function sanitizeConfig(cfg) {
     if (!cfg) cfg = {};
-    cfg.matchDate = "tuesday";
-    cfg.times = ["09:00 PM"];
+    if (!cfg.matchDate || cfg.matchDate === "tuesday") {
+      cfg.matchDate = "today";
+    }
+    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0) {
+      cfg.times = ["09:00 PM"];
+    }
 
     var validAmounts = [
       { amount: 50, available: true },
-      { amount: 100, available: true }
+      { amount: 100, available: false }
     ];
 
     if (!cfg.amounts || !Array.isArray(cfg.amounts)) {
       cfg.amounts = validAmounts;
+      cfg.v100_updated = true;
     } else {
       var currentValues = cfg.amounts.map(function(a) { return typeof a === "object" ? a.amount : a; });
       var isExactMatch = currentValues.length === 2 && currentValues.includes(50) && currentValues.includes(100);
-      if (!isExactMatch) {
+      if (!isExactMatch || !cfg.v100_updated) {
         cfg.amounts = validAmounts;
+        cfg.v100_updated = true;
       }
     }
     return cfg;
@@ -133,7 +139,7 @@
                     localStorage.setItem("volt_app_config", JSON.stringify(merged));
                     
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function(a){return typeof a==='object'?a.amount:a;}) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2) {
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday") {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function(e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }

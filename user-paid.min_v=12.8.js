@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
           whatsappNumber: "919172525945",
           modes: [{ name: "Squad", available: true }],
           times: ["09:00 PM"],
-          amounts: [{ amount: 50, available: true }, { amount: 100, available: true }]
+          amounts: [{ amount: 50, available: true }, { amount: 100, available: false }]
         };
   }
 
@@ -19,13 +19,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildScheduleFromConfig(c) {
     var sch = {};
     var times = c.times || ["09:00 PM"];
-    var rawAmts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: true }];
+    var rawAmts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: false }];
     var amts = rawAmts.filter(function(a) {
       var val = typeof a === "object" ? a.amount : a;
       return val === 50 || val === 100;
     });
     if (amts.length === 0) {
-      amts = [{ amount: 50, available: true }, { amount: 100, available: true }];
+      amts = [{ amount: 50, available: true }, { amount: 100, available: false }];
     }
     times.forEach(function (tItem) {
       var tStr = typeof tItem === "object" ? tItem.time : tItem;
@@ -85,25 +85,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ─── MATCH DATE HELPERS ───────────────────────────────────────────────────
   function getMatchDateInfo() {
-    var mDate = cfg.matchDate || "tuesday";
+    var mDate = cfg.matchDate || "today";
     var now = new Date();
 
-    if (mDate === "tuesday") {
-      var d = new Date(now);
-      var day = d.getDay();
-      var diff = (2 - day + 7) % 7;
-      d.setDate(d.getDate() + diff);
-      var tueStr = d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-      var isFuture = diff > 0;
-      return { text: "Tuesday (" + tueStr + ")", isFuture: isFuture, fullDate: tueStr };
+    if (mDate === "today" || mDate === "tuesday") {
+      var todStr = now.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      return { text: "Today (" + todStr + ")", isFuture: false, fullDate: todStr };
     } else if (mDate === "tomorrow") {
       var tom = new Date(now);
       tom.setDate(tom.getDate() + 1);
       var tomStr = tom.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
       return { text: "Tomorrow (" + tomStr + ")", isFuture: true, fullDate: tomStr };
-    } else if (mDate === "today") {
-      var todStr = now.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-      return { text: "Today (" + todStr + ")", isFuture: false, fullDate: todStr };
     } else {
       // Custom date string
       return { text: mDate, isFuture: true, fullDate: mDate };

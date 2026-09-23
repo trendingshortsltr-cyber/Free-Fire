@@ -437,7 +437,7 @@
 
         // --- MATCH DATE MANAGER ---
         function updateDateUI() {
-            var dateVal = currentConfig.matchDate || "tuesday";
+            var dateVal = currentConfig.matchDate || "today";
             var badge = document.getElementById("admin-date-badge");
             var btnToday = document.getElementById("date-btn-today");
             var btnTomorrow = document.getElementById("date-btn-tomorrow");
@@ -452,14 +452,7 @@
                 }
             });
 
-            if (dateVal === "tuesday") {
-                if (badge) badge.textContent = "Tuesday";
-                if (btnTuesday) {
-                    btnTuesday.classList.add("bg-blue-600", "border-blue-500", "text-white");
-                    btnTuesday.classList.remove("bg-[#14141a]", "border-white/10", "text-gray-300");
-                }
-                if (inputCustom) inputCustom.value = "";
-            } else if (dateVal === "today") {
+            if (dateVal === "today" || dateVal === "tuesday") {
                 if (badge) badge.textContent = "Today";
                 if (btnToday) {
                     btnToday.classList.add("bg-blue-600", "border-blue-500", "text-white");
