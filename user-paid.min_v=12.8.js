@@ -344,20 +344,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
       var targetNum = (cfg.whatsappNumber || WA_NUMBER || "918087361230").replace(/\D/g, "");
       var dateInfo  = getMatchDateInfo();
-      var msg =
-        "🔥 VOLT ESPORTS HUB - SLOT BOOKING 🔥\n\n" +
-        "📅 Match Date: "  + dateInfo.text   + "\n" +
-        "🎮 Mode: "        + selected.mode   + "\n" +
-        "⏰ Lobby Time: "  + selected.time   + "\n" +
-        "💰 Entry Fee: ₹"  + selected.amount + "\n\n" +
-        "🛡️ Team Name: "   + tName           + "\n" +
-        "👤 Leader (P1): " + p1              + "\n" +
-        "👤 Player 2: "    + p2              + "\n" +
-        "👤 Player 3: "    + p3              + "\n" +
-        "👤 Player 4: "    + p4              + "\n\n" +
-        "Please confirm our slot booking!";
+      var safeDate  = (dateInfo.fullDate || "today").replace(/[^a-zA-Z0-9]/g, "_");
+      var safeTime  = (selected.time || "slot").replace(/[^a-zA-Z0-9]/g, "_");
+      var slotKey   = "volt_slot_count_" + safeDate + "_" + safeTime;
 
-      window.location.href = "https://wa.me/" + targetNum + "?text=" + encodeURIComponent(msg);
+      var currentSlot = parseInt(localStorage.getItem(slotKey) || "0", 10) + 1;
+      localStorage.setItem(slotKey, currentSlot);
+
+      function sendWhatsAppBooking(slotNum) {
+        var msg =
+          "slot " + slotNum + "\n\n" +
+          "🛡️ Team Name: "   + tName           + "\n" +
+          "👤 Leader (P1): " + p1              + "\n" +
+          "👤 Player 2: "    + p2              + "\n" +
+          "👤 Player 3: "    + p3              + "\n" +
+          "👤 Player 4: "    + p4;
+
+        window.location.href = "https://wa.me/" + targetNum + "?text=" + encodeURIComponent(msg);
+      }
+
+      var firestore = window.db || (window.firebase && window.firebase.firestore ? window.firebase.firestore() : null);
+      if (firestore) {
+        var docRef = firestore.collection("slot_counters").doc(slotKey);
+        firestore.runTransaction(function(transaction) {
+          return transaction.get(docRef).then(function(doc) {
+            var newCount = 1;
+            if (doc.exists && doc.data() && doc.data().count) {
+              newCount = parseInt(doc.data().count, 10) + 1;
+            }
+            transaction.set(docRef, { count: newCount, updatedAt: Date.now() }, { merge: true });
+            return newCount;
+          });
+        }).then(function(assignedSlot) {
+          localStorage.setItem(slotKey, assignedSlot);
+          sendWhatsAppBooking(assignedSlot);
+        }).catch(function(err) {
+          console.warn("[SlotCounter] Transaction fallback:", err);
+          sendWhatsAppBooking(currentSlot);
+        });
+      } else {
+        sendWhatsAppBooking(currentSlot);
+      }
     });
   }
 
