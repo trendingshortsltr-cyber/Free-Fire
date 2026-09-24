@@ -348,12 +348,15 @@ document.addEventListener("DOMContentLoaded", function () {
       var safeTime  = (selected.time || "slot").replace(/[^a-zA-Z0-9]/g, "_");
       var slotKey   = "volt_slot_count_" + safeDate + "_" + safeTime;
 
-      var currentSlot = parseInt(localStorage.getItem(slotKey) || "0", 10) + 1;
+      var initialOffset = (typeof cfg.initialSlotOffset === "number" && !isNaN(cfg.initialSlotOffset)) ? cfg.initialSlotOffset : 8;
+      var storedVal = localStorage.getItem(slotKey);
+      var currentVal = storedVal !== null ? parseInt(storedVal, 10) : 0;
+      var currentSlot = Math.max(currentVal, initialOffset) + 1;
       localStorage.setItem(slotKey, currentSlot);
 
-      function sendWhatsAppBooking(slotNum) {
+      function sendWhatsAppBooking() {
         var msg =
-          "slot " + slotNum + "\n\n" +
+          "slot\n\n" +
           "🛡️ Team Name: "   + tName           + "\n" +
           "👤 Leader (P1): " + p1              + "\n" +
           "👤 Player 2: "    + p2              + "\n" +
@@ -368,9 +371,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var docRef = firestore.collection("slot_counters").doc(slotKey);
         firestore.runTransaction(function(transaction) {
           return transaction.get(docRef).then(function(doc) {
-            var newCount = 1;
-            if (doc.exists && doc.data() && doc.data().count) {
-              newCount = parseInt(doc.data().count, 10) + 1;
+            var newCount = initialOffset + 1;
+            if (doc.exists && doc.data() && typeof doc.data().count !== "undefined") {
+              var existingCount = parseInt(doc.data().count, 10);
+              newCount = Math.max(isNaN(existingCount) ? 0 : existingCount, initialOffset) + 1;
             }
             transaction.set(docRef, { count: newCount, updatedAt: Date.now() }, { merge: true });
             return newCount;

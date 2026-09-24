@@ -174,6 +174,28 @@
                     </div>
                 </div>
 
+                <!-- STARTING SLOT NUMBER CARD -->
+                <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide flex items-center gap-2">
+                                <i class="ri-hashtag text-blue-400"></i> Starting Slot Number
+                            </h2>
+                            <p class="text-xs text-gray-400">Slots already booked (e.g. 8 means next booking starts from Slot 9)</p>
+                        </div>
+                        <span id="admin-slot-offset-badge" class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
+                            Offset: 8 (Next: Slot 9)
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-3 bg-[#14141a] border border-white/10 rounded-xl p-3">
+                        <label class="text-xs font-bold text-gray-300 uppercase whitespace-nowrap">Booked Slots Count:</label>
+                        <input type="number" id="input-initial-slot-offset" min="0" placeholder="8" onchange="updateInitialSlotOffsetUI()" onkeyup="updateInitialSlotOffsetUI()"
+                            class="bg-white border border-white/10 rounded-xl px-4 py-2 text-sm text-black font-extrabold font-mono w-full sm:w-32 focus:outline-none focus:border-blue-500" />
+                        <span class="text-xs text-green-400 font-bold" id="slot-offset-preview">👉 Next booking will receive: Slot 9</span>
+                    </div>
+                </div>
+
                 <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
                     <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div>
@@ -412,6 +434,13 @@
             // Load Match Date
             updateDateUI();
 
+            // Load Initial Slot Offset
+            var slotOffsetEl = document.getElementById("input-initial-slot-offset");
+            if (slotOffsetEl && document.activeElement !== slotOffsetEl) {
+                slotOffsetEl.value = (currentConfig.initialSlotOffset !== undefined && !isNaN(currentConfig.initialSlotOffset)) ? currentConfig.initialSlotOffset : 8;
+                updateInitialSlotOffsetUI();
+            }
+
             // Load Times
             renderTimesList();
 
@@ -432,6 +461,17 @@
             var pointsImgEl = document.getElementById("input-points-img");
             if (ruleImgEl && document.activeElement !== ruleImgEl) ruleImgEl.value = currentConfig.ruleBookImg || "/assets/rule-book.jpg";
             if (pointsImgEl && document.activeElement !== pointsImgEl) pointsImgEl.value = currentConfig.pointsTableImg || "/assets/points-table.jpg";
+        }
+
+        function updateInitialSlotOffsetUI() {
+            var input = document.getElementById("input-initial-slot-offset");
+            var badge = document.getElementById("admin-slot-offset-badge");
+            var preview = document.getElementById("slot-offset-preview");
+            var val = parseInt(input ? input.value : 8, 10);
+            if (isNaN(val) || val < 0) val = 8;
+            var nextSlot = val + 1;
+            if (badge) badge.textContent = "Offset: " + val + " (Next: Slot " + nextSlot + ")";
+            if (preview) preview.textContent = "👉 Next booking will receive: Slot " + nextSlot;
         }
 
 
@@ -757,7 +797,16 @@
                 if (ruleImg && ruleImg.value.trim()) currentConfig.ruleBookImg = ruleImg.value.trim();
                 if (pointsImg && pointsImg.value.trim()) currentConfig.pointsTableImg = pointsImg.value.trim();
 
-                // 6. Save & Broadcast
+                // 6. Scrape Starting Slot Offset
+                var slotOffsetInp = document.getElementById("input-initial-slot-offset");
+                if (slotOffsetInp) {
+                    var offsetVal = parseInt(slotOffsetInp.value, 10);
+                    if (!isNaN(offsetVal) && offsetVal >= 0) {
+                        currentConfig.initialSlotOffset = offsetVal;
+                    }
+                }
+
+                // 7. Save & Broadcast
                 var success = VoltConfig.save(currentConfig);
                 if (success !== false) {
                     showSaveToast("⚡ Live updates published to all devices!");

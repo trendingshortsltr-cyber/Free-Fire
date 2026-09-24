@@ -11,6 +11,7 @@
     adminPasscode: atob("dm9sdDEyMw=="),
     announcementText: "Welcome to Volt Esports Hub! Daily Scrims Open Now.",
     announcementActive: false,
+    initialSlotOffset: 8,
     modes: [
       { name: "Solo", available: false },
       { name: "Duo", available: false },
@@ -30,6 +31,9 @@
 
   function sanitizeConfig(cfg) {
     if (!cfg) cfg = {};
+    if (typeof cfg.initialSlotOffset !== "number" || isNaN(cfg.initialSlotOffset)) {
+      cfg.initialSlotOffset = 8;
+    }
     if (!cfg.whatsappNumber || cfg.whatsappNumber.includes("72525945") || cfg.whatsappNumber.includes("9172525945") || !cfg.v8087_updated) {
       cfg.whatsappNumber = "918087361230";
       cfg.v8087_updated = true;
