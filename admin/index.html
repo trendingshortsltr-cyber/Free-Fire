@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Control Panel - Volt Esports Hub</title>
     <link rel="stylesheet" href="../tailwind-built_v=12.8.css">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+    </noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+    </noscript>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -27,35 +36,59 @@
             firebase.initializeApp(FIREBASE_CONFIG);
         }
         if (firebase.auth) {
-            firebase.auth().signInAnonymously().catch(function(e) { console.warn("[Firebase] Auth notice:", e); });
+            firebase.auth().signInAnonymously().catch(function (e) { console.warn("[Firebase] Auth notice:", e); });
         }
         window.db = firebase.firestore();
     </script>
     <script src="../js/config.js"></script>
     <style>
-        body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-serif; }
-        .font-display { font-family: 'Rajdhani', sans-serif; }
-        .glass-card { background: rgba(18, 18, 22, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .tab-active { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; }
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(18, 18, 22, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tab-active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
 
         /* High Contrast Input & Select Text Styling */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             color: #000000 !important;
             background-color: #ffffff !important;
             font-weight: 700 !important;
         }
-        input::placeholder, textarea::placeholder {
+
+        input::placeholder,
+        textarea::placeholder {
             color: #6b7280 !important;
             font-weight: 500 !important;
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col pb-12">
 
     <!-- LOGIN SCREEN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-[500] bg-[#09090b] flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-white/10 text-center space-y-5">
-            <div class="w-16 h-16 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto text-3xl">
+        <div
+            class="glass-card rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-white/10 text-center space-y-5">
+            <div
+                class="w-16 h-16 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto text-3xl">
                 <i class="ri-shield-keyhole-line"></i>
             </div>
             <div>
@@ -66,7 +99,8 @@
                 <input type="password" id="passcode-input" placeholder="Enter Passcode (Default: volt123)"
                     onkeyup="if(event.key==='Enter') checkAdminPasscode()"
                     class="w-full bg-[#121216] border border-white/15 rounded-xl px-4 py-3 text-center text-white text-lg font-mono focus:outline-none focus:border-blue-500 transition-colors" />
-                <p id="login-error" class="text-xs text-red-400 font-bold mt-2 hidden">Incorrect passcode! Try again.</p>
+                <p id="login-error" class="text-xs text-red-400 font-bold mt-2 hidden">Incorrect passcode! Try again.
+                </p>
             </div>
             <button onclick="checkAdminPasscode()"
                 class="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 uppercase tracking-wide text-sm flex items-center justify-center gap-2">
@@ -82,9 +116,11 @@
         <header class="bg-[#121216] border-b border-white/10 sticky top-0 z-40 px-4 py-3.5 backdrop-blur-md">
             <div class="max-w-5xl mx-auto flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async" class="h-9 w-auto object-contain">
+                    <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async"
+                        class="h-9 w-auto object-contain">
                     <div>
-                        <h1 class="text-base font-display font-bold text-white leading-tight uppercase tracking-wider">Volt Admin Panel</h1>
+                        <h1 class="text-base font-display font-bold text-white leading-tight uppercase tracking-wider">
+                            Volt Admin Panel</h1>
                         <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping"></span> Live Control Center
                         </p>
@@ -112,29 +148,36 @@
         <main class="max-w-5xl mx-auto px-4 py-6 w-full space-y-6 flex-1">
 
             <!-- TOAST ALERT -->
-            <div id="save-toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce">
+            <div id="save-toast"
+                class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce">
                 <i class="ri-checkbox-circle-fill text-lg"></i>
                 <span id="save-toast-text">Settings saved successfully!</span>
             </div>
 
             <!-- TAB NAVIGATION -->
             <div class="flex gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-2">
-                <button onclick="switchTab('times')" id="tab-btn-times" class="tab-btn tab-active px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('times')" id="tab-btn-times"
+                    class="tab-btn tab-active px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-time-line"></i> Lobby Times
                 </button>
-                <button onclick="switchTab('amounts')" id="tab-btn-amounts" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('amounts')" id="tab-btn-amounts"
+                    class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-money-rupee-circle-line"></i> Entry Fees
                 </button>
-                <button onclick="switchTab('modes')" id="tab-btn-modes" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('modes')" id="tab-btn-modes"
+                    class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-gamepad-line"></i> Game Modes
                 </button>
-                <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('links')" id="tab-btn-links"
+                    class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-whatsapp-line"></i> WhatsApp & Links
                 </button>
-                <button onclick="switchTab('images')" id="tab-btn-images" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('images')" id="tab-btn-images"
+                    class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-image-line"></i> Rules & Images
                 </button>
-                <button onclick="switchTab('security')" id="tab-btn-security" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('security')" id="tab-btn-security"
+                    class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap flex items-center gap-1.5">
                     <i class="ri-lock-line"></i> Security
                 </button>
             </div>
@@ -148,26 +191,32 @@
                             <h2 class="text-base font-bold text-white uppercase tracking-wide flex items-center gap-2">
                                 <i class="ri-calendar-event-line text-blue-400"></i> Tournament Schedule Date
                             </h2>
-                            <p class="text-xs text-gray-400">Set date for open lobby bookings (Today, Tomorrow, or Custom Date)</p>
+                            <p class="text-xs text-gray-400">Set date for open lobby bookings (Today, Tomorrow, or
+                                Custom Date)</p>
                         </div>
-                        <span id="admin-date-badge" class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
+                        <span id="admin-date-badge"
+                            class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
                             Today
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <button onclick="setMatchDate('today')" id="date-btn-today" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                        <button onclick="setMatchDate('today')" id="date-btn-today"
+                            class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
                             📅 Today
                         </button>
-                        <button onclick="setMatchDate('tomorrow')" id="date-btn-tomorrow" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                        <button onclick="setMatchDate('tomorrow')" id="date-btn-tomorrow"
+                            class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
                             🌅 Tomorrow
                         </button>
-                        <button onclick="setMatchDate('tuesday')" id="date-btn-tuesday" class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                        <button onclick="setMatchDate('tuesday')" id="date-btn-tuesday"
+                            class="date-btn border border-white/10 bg-[#14141a] hover:bg-white/5 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
                             ⚡ Tuesday
                         </button>
                         <div class="flex items-center gap-2 bg-[#14141a] border border-white/10 rounded-xl px-3 py-2">
                             <span class="text-[10px] text-gray-400 font-bold uppercase whitespace-nowrap">Custom:</span>
-                            <input type="date" id="input-custom-date" onchange="setMatchDate('custom')" class="bg-transparent text-white font-mono text-xs focus:outline-none w-full cursor-pointer" />
+                            <input type="date" id="input-custom-date" onchange="setMatchDate('custom')"
+                                class="bg-transparent text-white font-mono text-xs focus:outline-none w-full cursor-pointer" />
                         </div>
                     </div>
                 </div>
@@ -179,18 +228,24 @@
                             <h2 class="text-base font-bold text-white uppercase tracking-wide flex items-center gap-2">
                                 <i class="ri-hashtag text-blue-400"></i> Starting Slot Number
                             </h2>
-                            <p class="text-xs text-gray-400">Slots already booked (e.g. 8 means next booking starts from Slot 9)</p>
+                            <p class="text-xs text-gray-400">Slots already booked (e.g. 8 means next booking starts from
+                                Slot 9)</p>
                         </div>
-                        <span id="admin-slot-offset-badge" class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
+                        <span id="admin-slot-offset-badge"
+                            class="text-xs font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-xl font-mono">
                             Offset: 8 (Next: Slot 9)
                         </span>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row items-center gap-3 bg-[#14141a] border border-white/10 rounded-xl p-3">
-                        <label class="text-xs font-bold text-gray-300 uppercase whitespace-nowrap">Booked Slots Count:</label>
-                        <input type="number" id="input-initial-slot-offset" min="0" placeholder="8" onchange="updateInitialSlotOffsetUI()" onkeyup="updateInitialSlotOffsetUI()"
+                    <div
+                        class="flex flex-col sm:flex-row items-center gap-3 bg-[#14141a] border border-white/10 rounded-xl p-3">
+                        <label class="text-xs font-bold text-gray-300 uppercase whitespace-nowrap">Booked Slots
+                            Count:</label>
+                        <input type="number" id="input-initial-slot-offset" min="0" placeholder="8"
+                            onchange="updateInitialSlotOffsetUI()" onkeyup="updateInitialSlotOffsetUI()"
                             class="bg-white border border-white/10 rounded-xl px-4 py-2 text-sm text-black font-extrabold font-mono w-full sm:w-32 focus:outline-none focus:border-blue-500" />
-                        <span class="text-xs text-green-400 font-bold" id="slot-offset-preview">👉 Next booking will receive: Slot 9</span>
+                        <span class="text-xs text-green-400 font-bold" id="slot-offset-preview">👉 Next booking will
+                            receive: Slot 9</span>
                     </div>
                 </div>
 
@@ -198,9 +253,11 @@
                     <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div>
                             <h2 class="text-base font-bold text-white uppercase tracking-wide">Manage Lobby Times</h2>
-                            <p class="text-xs text-gray-400">Add, remove, or edit time slots shown on the booking page</p>
+                            <p class="text-xs text-gray-400">Add, remove, or edit time slots shown on the booking page
+                            </p>
                         </div>
-                        <button onclick="addNewTimeSlot()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
+                        <button onclick="addNewTimeSlot()"
+                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
                             <i class="ri-add-line text-sm"></i> Add Time Slot
                         </button>
                     </div>
@@ -216,10 +273,12 @@
                 <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
                     <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div>
-                            <h2 class="text-base font-bold text-white uppercase tracking-wide">Manage Entry Fees (₹)</h2>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide">Manage Entry Fees (₹)
+                            </h2>
                             <p class="text-xs text-gray-400">Set available prices or mark prices as Unavailable</p>
                         </div>
-                        <button onclick="addNewAmountSlot()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
+                        <button onclick="addNewAmountSlot()"
+                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1 shadow-md shadow-blue-600/20">
                             <i class="ri-add-line text-sm"></i> Add New Amount
                         </button>
                     </div>
@@ -248,30 +307,37 @@
             <section id="tab-links" class="tab-content hidden space-y-4">
                 <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-5">
                     <div class="border-b border-white/10 pb-3">
-                        <h2 class="text-base font-bold text-white uppercase tracking-wide">WhatsApp & Contact Settings</h2>
-                        <p class="text-xs text-gray-400">Update support phone number and official WhatsApp Channel URL</p>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">WhatsApp & Contact Settings
+                        </h2>
+                        <p class="text-xs text-gray-400">Update support phone number and official WhatsApp Channel URL
+                        </p>
                     </div>
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">WhatsApp Booking / Support Phone Number</label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">WhatsApp Booking /
+                                Support Phone Number</label>
                             <div class="flex items-center gap-2">
-                                <span class="bg-[#18181f] border border-white/10 text-gray-400 px-3 py-2.5 rounded-xl text-sm font-mono">+</span>
+                                <span
+                                    class="bg-[#18181f] border border-white/10 text-gray-400 px-3 py-2.5 rounded-xl text-sm font-mono">+</span>
                                 <input type="text" id="input-wa-number" placeholder="918087361230"
                                     class="flex-1 bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
                             </div>
-                            <p class="text-[10px] text-gray-500 mt-1">Format: Country code + number without spaces (e.g. 918087361230)</p>
+                            <p class="text-[10px] text-gray-500 mt-1">Format: Country code + number without spaces (e.g.
+                                918087361230)</p>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Official WhatsApp Channel URL</label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Official WhatsApp
+                                Channel URL</label>
                             <input type="text" id="input-wa-channel" placeholder="https://whatsapp.com/channel/..."
                                 class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-white/10">
-                        <button onclick="saveContactSettings()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
+                        <button onclick="saveContactSettings()"
+                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
                             Save Contact Links
                         </button>
                     </div>
@@ -282,26 +348,30 @@
             <section id="tab-images" class="tab-content hidden space-y-4">
                 <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-5">
                     <div class="border-b border-white/10 pb-3">
-                        <h2 class="text-base font-bold text-white uppercase tracking-wide">Rule Book & Points Table Image URLs</h2>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wide">Rule Book & Points Table
+                            Image URLs</h2>
                         <p class="text-xs text-gray-400">Update image URLs displayed in the bottom navigation popups</p>
                     </div>
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Rule Book Image URL</label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Rule Book Image
+                                URL</label>
                             <input type="text" id="input-rule-img" placeholder="/assets/rule-book.jpg"
                                 class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Points Table Image URL</label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Points Table Image
+                                URL</label>
                             <input type="text" id="input-points-img" placeholder="/assets/points-table.jpg"
                                 class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-white/10">
-                        <button onclick="saveImageSettings()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
+                        <button onclick="saveImageSettings()"
+                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 uppercase tracking-wide">
                             Save Image Settings
                         </button>
                     </div>
@@ -318,35 +388,40 @@
 
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">New Admin Passcode</label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">New Admin
+                                Passcode</label>
                             <input type="password" id="input-new-passcode" placeholder="Enter new passcode"
                                 class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono" />
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-white/10">
-                        <button onclick="changePasscode()" class="bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-red-600/20 uppercase tracking-wide">
+                        <button onclick="changePasscode()"
+                            class="bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold px-5 py-3 rounded-xl transition-all shadow-md shadow-red-600/20 uppercase tracking-wide">
                             Update Passcode
                         </button>
                     </div>
-            <!-- STICKY ACTION BAR FOR SAVING UPDATES -->
-            <div class="sticky bottom-4 z-30 w-full pt-4">
-                <div class="glass-card bg-[#16161c]/95 border border-green-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl backdrop-blur-xl">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-green-500/20 border border-green-500/30 text-green-400 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="ri-cloud-upload-line animate-pulse"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-white">Publish Live Configuration</p>
-                            <p class="text-xs text-gray-400">Clicking save instantly syncs all changes to all user devices live.</p>
+                    <!-- STICKY ACTION BAR FOR SAVING UPDATES -->
+                    <div class="sticky bottom-4 z-30 w-full pt-4">
+                        <div
+                            class="glass-card bg-[#16161c]/95 border border-green-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl backdrop-blur-xl">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-green-500/20 border border-green-500/30 text-green-400 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+                                    <i class="ri-cloud-upload-line animate-pulse"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Publish Live Configuration</p>
+                                    <p class="text-xs text-gray-400">Clicking save instantly syncs all changes to all
+                                        user devices live.</p>
+                                </div>
+                            </div>
+                            <button onclick="saveAllAdminChanges()"
+                                class="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition-all shadow-lg shadow-green-600/30 flex items-center justify-center gap-2 active:scale-95 border border-green-400/30 uppercase tracking-wider cursor-pointer">
+                                <i class="ri-save-3-line text-lg"></i> Save All Changes Live
+                            </button>
                         </div>
                     </div>
-                    <button onclick="saveAllAdminChanges()"
-                        class="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition-all shadow-lg shadow-green-600/30 flex items-center justify-center gap-2 active:scale-95 border border-green-400/30 uppercase tracking-wider cursor-pointer">
-                        <i class="ri-save-3-line text-lg"></i> Save All Changes Live
-                    </button>
-                </div>
-            </div>
 
         </main>
     </div>
@@ -588,7 +663,7 @@
         }
 
         function addNewTimeSlot() {
-            var newTime = prompt("Enter new time slot (e.g., 09:00 PM):", "09:00 PM");
+            var newTime = prompt("Enter new time slot (e.g., 03:00 PM):", "03:00 PM");
             if (newTime && newTime.trim()) {
                 currentConfig.times.push({ time: newTime.trim(), status: "available" });
                 VoltConfig.save(currentConfig);
@@ -762,7 +837,7 @@
                 // 2. Scrape Times & Statuses from DOM
                 var timeInputs = document.querySelectorAll(".admin-time-input");
                 var timeSelects = document.querySelectorAll(".admin-time-select");
-                timeInputs.forEach(function(inp) {
+                timeInputs.forEach(function (inp) {
                     var idx = parseInt(inp.getAttribute("data-index"), 10);
                     var val = inp.value.trim();
                     var sel = timeSelects[idx];
@@ -774,7 +849,7 @@
 
                 // 3. Scrape Entry Fee Amounts from DOM
                 var amountInputs = document.querySelectorAll(".admin-amount-input");
-                amountInputs.forEach(function(inp) {
+                amountInputs.forEach(function (inp) {
                     var idx = parseInt(inp.getAttribute("data-index"), 10);
                     var num = parseInt(inp.value, 10);
                     if (!isNaN(num) && currentConfig.amounts[idx] !== undefined) {
@@ -811,7 +886,7 @@
                 } else {
                     alert("Saved locally. Ensure network/Firebase is connected for live cloud sync.");
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error("Save error:", e);
                 VoltConfig.save(currentConfig);
                 showSaveToast("Settings saved successfully!");
@@ -819,5 +894,5 @@
         }
     </script>
 </body>
-</html>
 
+</html>
