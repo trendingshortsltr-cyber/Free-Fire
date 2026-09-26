@@ -663,7 +663,7 @@
         }
 
         function addNewTimeSlot() {
-            var newTime = prompt("Enter new time slot (e.g., 03:00 PM):", "03:00 PM");
+            var newTime = prompt("Enter new time slot (e.g., 09:00 PM):", "09:00 PM");
             if (newTime && newTime.trim()) {
                 currentConfig.times.push({ time: newTime.trim(), status: "available" });
                 VoltConfig.save(currentConfig);
