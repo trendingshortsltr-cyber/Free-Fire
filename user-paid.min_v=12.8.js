@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
           whatsappNumber: "918087361230",
           modes: [{ name: "Squad", available: true }],
           times: ["09:00 PM"],
-          amounts: [{ amount: 50, available: true }, { amount: 100, available: false }]
+          amounts: [{ amount: 50, available: false }, { amount: 100, available: true }],
+          matchDate: "tomorrow"
         };
   }
 
@@ -19,13 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildScheduleFromConfig(c) {
     var sch = {};
     var times = c.times || ["09:00 PM"];
-    var rawAmts = c.amounts || [{ amount: 50, available: true }, { amount: 100, available: false }];
+    var rawAmts = c.amounts || [{ amount: 50, available: false }, { amount: 100, available: true }];
     var amts = rawAmts.filter(function(a) {
       var val = typeof a === "object" ? a.amount : a;
       return val === 50 || val === 100;
     });
     if (amts.length === 0) {
-      amts = [{ amount: 50, available: true }, { amount: 100, available: false }];
+      amts = [{ amount: 50, available: false }, { amount: 100, available: true }];
     }
     times.forEach(function (tItem) {
       var tStr = typeof tItem === "object" ? tItem.time : tItem;
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ─── MATCH DATE HELPERS ───────────────────────────────────────────────────
   function getMatchDateInfo() {
-    var mDate = cfg.matchDate || "today";
+    var mDate = cfg.matchDate || "tomorrow";
     var now = new Date();
 
     if (mDate === "today" || mDate === "tuesday") {
@@ -117,6 +118,20 @@ document.addEventListener("DOMContentLoaded", function () {
     var now = new Date();
     var cur = now.getHours() * 60 + now.getMinutes();
     return cur > timeToMin(t);
+  }
+
+  // Check and perform automatic rollover if slot time is over
+  function checkAutoRollover() {
+    var mDate = cfg.matchDate || "tomorrow";
+    if (mDate === "today") {
+      var times = Object.keys(schedule);
+      var allExpired = times.length > 0 && times.every(function (t) { return isPast(t); });
+      if (allExpired) {
+        cfg.matchDate = "tomorrow";
+        schedule = buildScheduleFromConfig(cfg);
+        renderMatchDateBadge();
+      }
+    }
   }
 
   // ─── SELECTED STYLE HELPERS ────────────────────────────────────────────────
@@ -166,6 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ─── RENDER TIME BUTTONS ───────────────────────────────────────────────────
   function renderTimes() {
+    checkAutoRollover();
     if (timeLoader) timeLoader.classList.add("hidden");
     timeSelector.classList.remove("hidden");
     timeSelector.innerHTML = "";
@@ -179,11 +195,16 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    var firstAvailableTime = null;
+
     times.forEach(function (t) {
       var slotData = schedule[t] || {};
       var status = slotData.status || "available";
       var past = isPast(t) || status === "expired";
       var isFull = status === "full";
+      if (!past && !isFull && !firstAvailableTime) {
+        firstAvailableTime = t;
+      }
       var isSel = t === selected.time;
       var btn = document.createElement("button");
 
@@ -192,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-40 cursor-not-allowed bg-[#111] border-white/5 rounded-xl border-2";
         btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-400">' + t + '</span><span class="text-[9px] text-yellow-500 font-bold uppercase mt-0.5">Expired</span></div>';
         btn.addEventListener("click", function() {
-          showUnavailableToast("This lobby (" + t + ") has EXPIRED.");
+          showUnavailableToast("This lobby (" + t + ") has EXPIRED. Taking bookings for next slot/tomorrow.");
         });
       } else if (isFull) {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-75 cursor-not-allowed bg-red-950/20 border-red-500/30 rounded-xl border-2";
@@ -214,6 +235,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       timeSelector.appendChild(btn);
     });
+
+    // Auto-select first active available time if none selected or selected is expired/full
+    if ((!selected.time || (schedule[selected.time] && (isPast(selected.time) || schedule[selected.time].status === 'expired'))) && firstAvailableTime) {
+      selected.time = firstAvailableTime;
+      renderTimes();
+      renderAmounts();
+    }
   }
 
   // ─── RENDER AMOUNT BUTTONS ─────────────────────────────────────────────────
@@ -234,9 +262,14 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    var firstAvailableAmount = null;
+
     amounts.forEach(function (raw) {
       var amt     = (typeof raw === "object" && raw !== null) ? raw.amount : raw;
       var isAvail = (typeof raw === "object" && raw !== null) ? raw.available !== false : true;
+      if (isAvail && !firstAvailableAmount) {
+        firstAvailableAmount = amt;
+      }
       var isSel   = amt === selected.amount;
       var btn     = document.createElement("button");
 
@@ -261,6 +294,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       amtSelector.appendChild(btn);
     });
+
+    // Auto select first available amount (e.g. ₹100 if ₹50 is unavailable) if none selected
+    if ((!selected.amount || amounts.some(function(raw) { var amt = typeof raw === "object" ? raw.amount : raw; var isAvail = typeof raw === "object" ? raw.available !== false : true; return amt === selected.amount && !isAvail; })) && firstAvailableAmount) {
+      selected.amount = firstAvailableAmount;
+      renderAmounts();
+      return;
+    }
 
     if (selected.amount && teamSection) {
       teamSection.classList.remove("hidden");
