@@ -5,12 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
     return (window.VoltConfig && window.VoltConfig.get)
       ? window.VoltConfig.get()
       : {
-          whatsappNumber: "918087361230",
-          modes: [{ name: "Squad", available: true }],
-          times: ["03:00 PM"],
-          amounts: [{ amount: 50, available: false }, { amount: 100, available: true }],
-          matchDate: "tomorrow"
-        };
+        whatsappNumber: "918087361230",
+        modes: [{ name: "Squad", available: true }],
+        times: ["09:00 PM"],
+        amounts: [{ amount: 50, available: false }, { amount: 100, available: true }],
+        matchDate: "today"
+      };
   }
 
   var cfg = getConfig();
@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Build schedule object from config
   function buildScheduleFromConfig(c) {
     var sch = {};
-    var times = c.times || ["03:00 PM"];
+    var times = c.times || ["09:00 PM"];
     var rawAmts = c.amounts || [{ amount: 50, available: false }, { amount: 100, available: true }];
-    var amts = rawAmts.filter(function(a) {
+    var amts = rawAmts.filter(function (a) {
       var val = typeof a === "object" ? a.amount : a;
       return val === 50 || val === 100;
     });
@@ -43,14 +43,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var selected = { mode: "Squad", time: null, amount: null };
 
   // ─── DOM REFS ──────────────────────────────────────────────────────────────
-  var clockEl      = document.getElementById("live-clock-container") &&
-                     document.getElementById("live-clock-container").querySelector("p");
-  var modeGrid     = document.querySelector("section:first-of-type .grid");
-  var timeLoader   = document.getElementById("lobby-time-loader");
+  var clockEl = document.getElementById("live-clock-container") &&
+    document.getElementById("live-clock-container").querySelector("p");
+  var modeGrid = document.querySelector("section:first-of-type .grid");
+  var timeLoader = document.getElementById("lobby-time-loader");
   var timeSelector = document.getElementById("lobby-time-selector");
-  var amtSelector  = document.getElementById("lobby-amount-selector");
-  var amtHelper    = document.getElementById("amount-helper-text");
-  var bookBtn      = document.getElementById("book-slot-btn");
+  var amtSelector = document.getElementById("lobby-amount-selector");
+  var amtHelper = document.getElementById("amount-helper-text");
+  var bookBtn = document.getElementById("book-slot-btn");
 
   // Remove legacy modal if present
   var oldModal = document.getElementById("team-name-modal");
@@ -73,12 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function timeToMin(t) {
     try {
       var parts = t.trim().split(" ");
-      var mer   = parts[1];
-      var hm    = parts[0].split(":");
-      var h     = parseInt(hm[0], 10);
-      var m     = parseInt(hm[1], 10);
+      var mer = parts[1];
+      var hm = parts[0].split(":");
+      var h = parseInt(hm[0], 10);
+      var m = parseInt(hm[1], 10);
       if (mer === "PM" && h !== 12) h += 12;
-      if (mer === "AM" && h === 12) h  = 0;
+      if (mer === "AM" && h === 12) h = 0;
       if (h < 5) h += 24;
       return h * 60 + m;
     } catch (e) { return 0; }
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ─── MATCH DATE HELPERS ───────────────────────────────────────────────────
   function getMatchDateInfo() {
-    var mDate = cfg.matchDate || "tomorrow";
+    var mDate = cfg.matchDate || "today";
     var now = new Date();
 
     if (mDate === "today" || mDate === "tuesday") {
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Check and perform automatic rollover if slot time is over
   function checkAutoRollover() {
-    var mDate = cfg.matchDate || "tomorrow";
+    var mDate = cfg.matchDate || "today";
     if (mDate === "today") {
       var times = Object.keys(schedule);
       var allExpired = times.length > 0 && times.every(function (t) { return isPast(t); });
@@ -135,9 +135,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ─── SELECTED STYLE HELPERS ────────────────────────────────────────────────
-  var SEL   = "border-blue-500 bg-blue-500/10 text-blue-400 shadow-sm selected";
+  var SEL = "border-blue-500 bg-blue-500/10 text-blue-400 shadow-sm selected";
   var UNSEL = "border-white/10 bg-[#1a1a1a] hover:bg-[#222] text-gray-300 hover:border-white/30";
-  var BASE  = "border-2 rounded-xl p-3 font-display font-bold text-lg uppercase tracking-wide transition-all ";
+  var BASE = "border-2 rounded-xl p-3 font-display font-bold text-lg uppercase tracking-wide transition-all ";
 
   // ─── TOAST NOTIFICATION FOR UNAVAILABLE ITEMS ──────────────────────────────
   function showUnavailableToast(msg) {
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toast.classList.remove("opacity-0", "pointer-events-none");
     toast.classList.add("opacity-100");
     clearTimeout(toast._timer);
-    toast._timer = setTimeout(function() {
+    toast._timer = setTimeout(function () {
       toast.classList.remove("opacity-100");
       toast.classList.add("opacity-0", "pointer-events-none");
     }, 2500);
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!modeGrid) return;
     modeGrid.innerHTML = "";
 
-    var activeModes = (cfg.modes || []).filter(function(m) { return m.available; });
+    var activeModes = (cfg.modes || []).filter(function (m) { return m.available; });
     var modesToRender = activeModes.length > 0 ? activeModes : (cfg.modes || [{ name: "Squad", available: true }]);
 
     modesToRender.forEach(function (modeObj) {
@@ -212,13 +212,13 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.disabled = true;
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-40 cursor-not-allowed bg-[#111] border-white/5 rounded-xl border-2";
         btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-400">' + t + '</span><span class="text-[9px] text-yellow-500 font-bold uppercase mt-0.5">Expired</span></div>';
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", function () {
           showUnavailableToast("This lobby (" + t + ") has EXPIRED. Taking bookings for next slot/tomorrow.");
         });
       } else if (isFull) {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-75 cursor-not-allowed bg-red-950/20 border-red-500/30 rounded-xl border-2";
         btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-300">' + t + '</span><span class="text-[9px] text-red-400 font-extrabold uppercase mt-0.5 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> FULL</span></div>';
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", function () {
           showUnavailableToast("This lobby (" + t + ") is FULL! Please select another time.");
         });
       } else {
@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.innerHTML = "<span>" + t + "</span>";
         btn.addEventListener("click", (function (time) {
           return function () {
-            selected.time   = time;
+            selected.time = time;
             selected.amount = null;
             renderTimes();
             renderAmounts();
@@ -265,18 +265,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var firstAvailableAmount = null;
 
     amounts.forEach(function (raw) {
-      var amt     = (typeof raw === "object" && raw !== null) ? raw.amount : raw;
+      var amt = (typeof raw === "object" && raw !== null) ? raw.amount : raw;
       var isAvail = (typeof raw === "object" && raw !== null) ? raw.available !== false : true;
       if (isAvail && !firstAvailableAmount) {
         firstAvailableAmount = amt;
       }
-      var isSel   = amt === selected.amount;
-      var btn     = document.createElement("button");
+      var isSel = amt === selected.amount;
+      var btn = document.createElement("button");
 
       if (!isAvail) {
         btn.className = "selection-card border-2 rounded-xl p-2.5 bg-[#121212] border-white/5 opacity-60 cursor-not-allowed flex flex-col items-center justify-center transition-all";
         btn.innerHTML = '<span class="font-extrabold text-base text-gray-400">&#8377;' + amt + '</span>' +
-                        '<span class="text-[8px] font-black text-red-400 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded uppercase mt-0.5">Unavailable</span>';
+          '<span class="text-[8px] font-black text-red-400 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded uppercase mt-0.5">Unavailable</span>';
         btn.addEventListener("click", function () {
           showUnavailableToast("₹" + amt + " lobby is currently unavailable.");
         });
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Auto select first available amount (e.g. ₹100 if ₹50 is unavailable) if none selected
-    if ((!selected.amount || amounts.some(function(raw) { var amt = typeof raw === "object" ? raw.amount : raw; var isAvail = typeof raw === "object" ? raw.available !== false : true; return amt === selected.amount && !isAvail; })) && firstAvailableAmount) {
+    if ((!selected.amount || amounts.some(function (raw) { var amt = typeof raw === "object" ? raw.amount : raw; var isAvail = typeof raw === "object" ? raw.available !== false : true; return amt === selected.amount && !isAvail; })) && firstAvailableAmount) {
       selected.amount = firstAvailableAmount;
       renderAmounts();
       return;
@@ -309,24 +309,24 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ─── TEAM & PLAYER INPUT REFS & VALIDATION ─────────────────────────────────
-  var teamSection    = document.getElementById("team-details-section");
-  var teamNameInput  = document.getElementById("input-team-name");
-  var p1Input        = document.getElementById("input-player-1");
-  var p2Input        = document.getElementById("input-player-2");
-  var p3Input        = document.getElementById("input-player-3");
-  var p4Input        = document.getElementById("input-player-4");
-  var bookBtnHelper  = document.getElementById("book-btn-helper");
+  var teamSection = document.getElementById("team-details-section");
+  var teamNameInput = document.getElementById("input-team-name");
+  var p1Input = document.getElementById("input-player-1");
+  var p2Input = document.getElementById("input-player-2");
+  var p3Input = document.getElementById("input-player-3");
+  var p4Input = document.getElementById("input-player-4");
+  var bookBtnHelper = document.getElementById("book-btn-helper");
 
   function validateForm() {
     if (!bookBtn) return;
-    
+
     var hasTime = !!selected.time;
-    var hasAmt  = !!selected.amount;
-    var tName   = teamNameInput  ? teamNameInput.value.trim()  : "";
-    var p1      = p1Input        ? p1Input.value.trim()        : "";
-    var p2      = p2Input        ? p2Input.value.trim()        : "";
-    var p3      = p3Input        ? p3Input.value.trim()        : "";
-    var p4      = p4Input        ? p4Input.value.trim()        : "";
+    var hasAmt = !!selected.amount;
+    var tName = teamNameInput ? teamNameInput.value.trim() : "";
+    var p1 = p1Input ? p1Input.value.trim() : "";
+    var p2 = p2Input ? p2Input.value.trim() : "";
+    var p3 = p3Input ? p3Input.value.trim() : "";
+    var p4 = p4Input ? p4Input.value.trim() : "";
 
     var allValid = hasTime && hasAmt && tName && p1 && p2 && p3 && p4;
 
@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  [teamNameInput, p1Input, p2Input, p3Input, p4Input].forEach(function(inp) {
+  [teamNameInput, p1Input, p2Input, p3Input, p4Input].forEach(function (inp) {
     if (inp) {
       inp.addEventListener("input", validateForm);
       inp.addEventListener("change", validateForm);
@@ -364,10 +364,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (bookBtn) {
     bookBtn.addEventListener("click", function () {
       var tName = teamNameInput ? teamNameInput.value.trim() : "";
-      var p1    = p1Input       ? p1Input.value.trim()       : "";
-      var p2    = p2Input       ? p2Input.value.trim()       : "";
-      var p3    = p3Input       ? p3Input.value.trim()       : "";
-      var p4    = p4Input       ? p4Input.value.trim()       : "";
+      var p1 = p1Input ? p1Input.value.trim() : "";
+      var p2 = p2Input ? p2Input.value.trim() : "";
+      var p3 = p3Input ? p3Input.value.trim() : "";
+      var p4 = p4Input ? p4Input.value.trim() : "";
 
       if (!selected.time) {
         alert("Please select a lobby time first.");
@@ -383,10 +383,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       var targetNum = (cfg.whatsappNumber || WA_NUMBER || "918087361230").replace(/\D/g, "");
-      var dateInfo  = getMatchDateInfo();
-      var safeDate  = (dateInfo.fullDate || "today").replace(/[^a-zA-Z0-9]/g, "_");
-      var safeTime  = (selected.time || "slot").replace(/[^a-zA-Z0-9]/g, "_");
-      var slotKey   = "volt_slot_count_" + safeDate + "_" + safeTime;
+      var dateInfo = getMatchDateInfo();
+      var safeDate = (dateInfo.fullDate || "today").replace(/[^a-zA-Z0-9]/g, "_");
+      var safeTime = (selected.time || "slot").replace(/[^a-zA-Z0-9]/g, "_");
+      var slotKey = "volt_slot_count_" + safeDate + "_" + safeTime;
 
       var initialOffset = (typeof cfg.initialSlotOffset === "number" && !isNaN(cfg.initialSlotOffset)) ? cfg.initialSlotOffset : 8;
       var storedVal = localStorage.getItem(slotKey);
@@ -397,11 +397,11 @@ document.addEventListener("DOMContentLoaded", function () {
       function sendWhatsAppBooking() {
         var msg =
           "slot\n\n" +
-          "🛡️ Team Name: "   + tName           + "\n" +
-          "👤 Leader (P1): " + p1              + "\n" +
-          "👤 Player 2: "    + p2              + "\n" +
-          "👤 Player 3: "    + p3              + "\n" +
-          "👤 Player 4: "    + p4;
+          "🛡️ Team Name: " + tName + "\n" +
+          "👤 Leader (P1): " + p1 + "\n" +
+          "👤 Player 2: " + p2 + "\n" +
+          "👤 Player 3: " + p3 + "\n" +
+          "👤 Player 4: " + p4;
 
         window.location.href = "https://wa.me/" + targetNum + "?text=" + encodeURIComponent(msg);
       }
@@ -409,8 +409,8 @@ document.addEventListener("DOMContentLoaded", function () {
       var firestore = window.db || (window.firebase && window.firebase.firestore ? window.firebase.firestore() : null);
       if (firestore) {
         var docRef = firestore.collection("slot_counters").doc(slotKey);
-        firestore.runTransaction(function(transaction) {
-          return transaction.get(docRef).then(function(doc) {
+        firestore.runTransaction(function (transaction) {
+          return transaction.get(docRef).then(function (doc) {
             var newCount = initialOffset + 1;
             if (doc.exists && doc.data() && typeof doc.data().count !== "undefined") {
               var existingCount = parseInt(doc.data().count, 10);
@@ -419,10 +419,10 @@ document.addEventListener("DOMContentLoaded", function () {
             transaction.set(docRef, { count: newCount, updatedAt: Date.now() }, { merge: true });
             return newCount;
           });
-        }).then(function(assignedSlot) {
+        }).then(function (assignedSlot) {
           localStorage.setItem(slotKey, assignedSlot);
           sendWhatsAppBooking(assignedSlot);
-        }).catch(function(err) {
+        }).catch(function (err) {
           console.warn("[SlotCounter] Transaction fallback:", err);
           sendWhatsAppBooking(currentSlot);
         });

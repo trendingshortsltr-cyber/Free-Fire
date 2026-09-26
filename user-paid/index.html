@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
     <!-- Google tag (gtag.js) -->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NJ3V3P65HS"></script>
     <script>
@@ -14,10 +17,18 @@
     <link rel="stylesheet" href="../tailwind-built_v%3D12.8.css">
     <!-- Auth Guard: Available but no auto-redirect for guest browsing -->
     <script src="../auth-guard.min_v%3D12.8.js" data-no-auto-check="true"></script>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"></noscript>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"></noscript>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap">
+    </noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+    </noscript>
     <link rel="stylesheet" href="../user-paid_v%3D12.8.css">
     <!-- Tailwind config moved to tailwind.config.js -->
 
@@ -25,27 +36,100 @@
     <link rel="icon" type="image/png" href="../assets/favicon.png">
     <style>
         /* Bottom Nav Active State */
-        .bottom-nav-item.active i, .bottom-nav-item.active span { color: #3B82F6 !important; font-weight: 800; }
-        .bottom-nav-item { -webkit-tap-highlight-color: transparent; }
-        .bottom-nav-item.nav-home { order: 1; }
-        .bottom-nav-item.nav-scrims { order: 2; }
-        .bottom-nav-item.nav-profile { order: 3; }
-        .bottom-nav-item.nav-rankings { order: 4; }
-        .bottom-nav-item.nav-tourns { order: 5; }
-        .profile-nav-item { transform: translateY(-5px); }
-        .profile-nav-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background-color: #2563eb; color: #fff !important; box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35); }
-        .profile-nav-item span { color: #60a5fa !important; font-size: 10px; font-weight: 800; }
-        @keyframes profileNavShine { 0%, 55% { transform: translateX(-180%) skewX(-20deg); } 75%, 100% { transform: translateX(360%) skewX(-20deg); } }
-        .profile-nav-item i { position: relative; overflow: hidden; }
-        .profile-nav-item i::after { content: ''; position: absolute; top: -20%; left: -25%; width: 22%; height: 140%; background: rgba(255,255,255,.7); filter: blur(2px); pointer-events: none; animation: profileNavShine 3.2s ease-in-out infinite; }
-        
+        .bottom-nav-item.active i,
+        .bottom-nav-item.active span {
+            color: #3B82F6 !important;
+            font-weight: 800;
+        }
+
+        .bottom-nav-item {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .bottom-nav-item.nav-home {
+            order: 1;
+        }
+
+        .bottom-nav-item.nav-scrims {
+            order: 2;
+        }
+
+        .bottom-nav-item.nav-profile {
+            order: 3;
+        }
+
+        .bottom-nav-item.nav-rankings {
+            order: 4;
+        }
+
+        .bottom-nav-item.nav-tourns {
+            order: 5;
+        }
+
+        .profile-nav-item {
+            transform: translateY(-5px);
+        }
+
+        .profile-nav-item i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background-color: #2563eb;
+            color: #fff !important;
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+        }
+
+        .profile-nav-item span {
+            color: #60a5fa !important;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        @keyframes profileNavShine {
+
+            0%,
+            55% {
+                transform: translateX(-180%) skewX(-20deg);
+            }
+
+            75%,
+            100% {
+                transform: translateX(360%) skewX(-20deg);
+            }
+        }
+
+        .profile-nav-item i {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-nav-item i::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -25%;
+            width: 22%;
+            height: 140%;
+            background: rgba(255, 255, 255, .7);
+            filter: blur(2px);
+            pointer-events: none;
+            animation: profileNavShine 3.2s ease-in-out infinite;
+        }
+
         /* High Contrast Input Text Styling */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             color: #000000 !important;
             background-color: #ffffff !important;
             font-weight: 700 !important;
         }
-        input::placeholder, textarea::placeholder {
+
+        input::placeholder,
+        textarea::placeholder {
             color: #6b7280 !important;
             font-weight: 500 !important;
         }
@@ -55,27 +139,31 @@
 
 <body class="bg-[#0a0a0a] text-gray-200 font-body min-h-screen flex flex-col antialiased pb-20">
 
-    <nav class="sticky top-0 z-50 bg-[#111111]/95 backdrop-blur-md border-b border-white/5 h-16 flex items-center px-4 justify-center shadow-sm">
+    <nav
+        class="sticky top-0 z-50 bg-[#111111]/95 backdrop-blur-md border-b border-white/5 h-16 flex items-center px-4 justify-center shadow-sm">
         <a href="../index/index.html" class="flex items-center gap-3 group">
-            <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
-            <h1 class="text-xl font-display font-bold uppercase tracking-wide text-white">VOLT <span class="text-blue-500">ESPORTS HUB</span></h1>
+            <img src="../assets/logo.png" alt="Volt Esports Hub Logo" width="150" height="40" decoding="async"
+                class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+            <h1 class="text-xl font-display font-bold uppercase tracking-wide text-white">VOLT <span
+                    class="text-blue-500">ESPORTS HUB</span></h1>
         </a>
     </nav>
 
-    <div id="live-clock-container" class="bg-[#111111] text-white text-center py-2 shadow-md border-b border-white/5 flex flex-wrap items-center justify-center gap-3 px-4">
+    <div id="live-clock-container"
+        class="bg-[#111111] text-white text-center py-2 shadow-md border-b border-white/5 flex flex-wrap items-center justify-center gap-3 px-4">
         <p class="text-sm font-bold tracking-wider font-display">-- LOADING TIME --</p>
-        <span id="match-date-badge" class="bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-0.5 rounded-full flex items-center gap-1 font-mono">
-            <i class="ri-calendar-check-line text-xs text-blue-400"></i> <span id="match-date-label">Tournament Date: Today</span>
-        </span>
-        <span class="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 text-blue-400 border border-blue-500/30 text-xs font-extrabold px-3 py-0.5 rounded-full flex items-center gap-1 font-mono uppercase tracking-wider">
-            <i class="ri-shield-check-fill text-xs text-blue-400"></i> Volt is about trust
+        <span id="match-date-badge"
+            class="bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-0.5 rounded-full flex items-center gap-1 font-mono">
+            <i class="ri-calendar-check-line text-xs text-blue-400"></i> <span id="match-date-label">Tournament Date:
+                Today</span>
         </span>
     </div>
 
     <main class="flex-grow pt-5 pb-10">
         <!-- Lobby Off Popup Banner -->
         <div id="lobby-off-banner" class="hidden px-4 max-w-lg mx-auto mb-6 animate-fade-in">
-            <div class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-2xl p-5 text-center shadow-lg">
+            <div
+                class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-2xl p-5 text-center shadow-lg">
                 <div class="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i class="ri-shut-down-line text-3xl text-red-400"></i>
                 </div>
@@ -89,7 +177,8 @@
                 <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">1. Select Mode
                 </h3>
                 <div class="grid grid-cols-1 gap-3">
-                    <button class="selection-card border-2 rounded-xl p-3 bg-blue-500/10 border-blue-500 text-blue-400 font-display font-bold text-xl uppercase tracking-wide shadow-lg shadow-blue-500/10 flex items-center justify-center">
+                    <button
+                        class="selection-card border-2 rounded-xl p-3 bg-blue-500/10 border-blue-500 text-blue-400 font-display font-bold text-xl uppercase tracking-wide shadow-lg shadow-blue-500/10 flex items-center justify-center">
                         <span>Squad Mode</span>
                     </button>
                 </div>
@@ -98,7 +187,12 @@
                 <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">2. Select Lobby
                     Time</h3>
                 <div id="lobby-time-selector" class="grid grid-cols-3 gap-3"></div>
-
+                <div id="slot-rollover-note"
+                    class="mt-3 text-center text-xs text-blue-400 font-semibold bg-blue-500/10 border border-blue-500/20 py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 shadow-sm">
+                    <i class="ri-time-line text-sm text-blue-400"></i>
+                    <span>📌 <strong>Note:</strong> If a slot time is over, bookings automatically start taking bookings
+                        for the next available slot or tomorrow's slots.</span>
+                </div>
             </section>
             <section>
                 <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide mb-4">3. Select Lobby
@@ -109,35 +203,43 @@
             </section>
             <section id="team-details-section" class="hidden space-y-4 animate-fade-in">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide">4. Team & Player Lineup</h3>
-                    <span class="text-[11px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-lg uppercase">4 Players Required</span>
+                    <h3 class="font-display font-bold text-white text-2xl uppercase tracking-wide">4. Team & Player
+                        Lineup</h3>
+                    <span
+                        class="text-[11px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-lg uppercase">4
+                        Players Required</span>
                 </div>
 
                 <div class="bg-[#121216] border border-white/10 rounded-2xl p-4 space-y-3 shadow-xl">
                     <div>
-                        <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Team Name <span class="text-red-400">*</span></label>
+                        <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Team Name <span
+                                class="text-red-400">*</span></label>
                         <input type="text" id="input-team-name" placeholder="Enter Team Name (e.g. VOLT TITANS)"
                             class="w-full bg-white border-2 border-blue-500/40 rounded-xl px-4 py-3 text-sm text-black font-extrabold placeholder-gray-400 focus:outline-none focus:border-blue-600 transition-colors shadow-sm" />
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                         <div>
-                            <label class="block text-xs font-bold text-blue-400 uppercase mb-1">Player 1 (Leader) <span class="text-red-400">*</span></label>
+                            <label class="block text-xs font-bold text-blue-400 uppercase mb-1">Player 1 (Leader) <span
+                                    class="text-red-400">*</span></label>
                             <input type="text" id="input-player-1" placeholder="Captain / P1 IGN"
                                 class="w-full bg-white border-2 border-blue-500/40 rounded-xl px-3.5 py-2.5 text-sm text-black font-extrabold placeholder-gray-400 focus:outline-none focus:border-blue-600 transition-colors shadow-sm" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 2 <span class="text-red-400">*</span></label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 2 <span
+                                    class="text-red-400">*</span></label>
                             <input type="text" id="input-player-2" placeholder="Player 2 IGN"
                                 class="w-full bg-white border-2 border-blue-500/40 rounded-xl px-3.5 py-2.5 text-sm text-black font-extrabold placeholder-gray-400 focus:outline-none focus:border-blue-600 transition-colors shadow-sm" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 3 <span class="text-red-400">*</span></label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 3 <span
+                                    class="text-red-400">*</span></label>
                             <input type="text" id="input-player-3" placeholder="Player 3 IGN"
                                 class="w-full bg-white border-2 border-blue-500/40 rounded-xl px-3.5 py-2.5 text-sm text-black font-extrabold placeholder-gray-400 focus:outline-none focus:border-blue-600 transition-colors shadow-sm" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 4 <span class="text-red-400">*</span></label>
+                            <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Player 4 <span
+                                    class="text-red-400">*</span></label>
                             <input type="text" id="input-player-4" placeholder="Player 4 IGN"
                                 class="w-full bg-white border-2 border-blue-500/40 rounded-xl px-3.5 py-2.5 text-sm text-black font-extrabold placeholder-gray-400 focus:outline-none focus:border-blue-600 transition-colors shadow-sm" />
                         </div>
@@ -146,7 +248,9 @@
             </section>
 
             <section>
-                <button id="book-slot-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:bg-gray-800 disabled:text-gray-500 disabled:border disabled:border-white/5 disabled:cursor-not-allowed font-display tracking-wider text-xl uppercase" disabled>
+                <button id="book-slot-btn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:bg-gray-800 disabled:text-gray-500 disabled:border disabled:border-white/5 disabled:cursor-not-allowed font-display tracking-wider text-xl uppercase"
+                    disabled>
                     Book Your Slot → WhatsApp
                 </button>
                 <p id="book-btn-helper" class="text-xs text-yellow-400 font-semibold text-center mt-2">
@@ -157,8 +261,10 @@
     </main>
 
     <!-- NEW MODAL DESIGN -->
-    <div id="team-name-modal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="bg-[#1a1a1a] border border-white/10 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
+    <div id="team-name-modal"
+        class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-[#1a1a1a] border border-white/10 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
             <form id="team-name-form" class="p-6 space-y-5">
                 <div class="text-center">
                     <h3 class="text-xl font-extrabold text-white">Enter Details</h3>
@@ -167,21 +273,29 @@
 
                 <!-- Step 1: Phone Input -->
                 <div id="phone-step">
-                    <input id="customer-phone-input" type="tel" placeholder="Enter Registered WhatsApp Number" class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 block p-4 font-bold outline-none transition-all placeholder-gray-600 text-center" required="" maxlength="10">
-                    <p class="text-xs text-center text-gray-400 mt-2">Not registered? <a href="../user-signup/index.html" class="text-blue-500 font-bold">Create a team account.</a></p>
+                    <input id="customer-phone-input" type="tel" placeholder="Enter Registered WhatsApp Number"
+                        class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 block p-4 font-bold outline-none transition-all placeholder-gray-600 text-center"
+                        required="" maxlength="10">
+                    <p class="text-xs text-center text-gray-400 mt-2">Not registered? <a
+                            href="../user-signup/index.html" class="text-blue-500 font-bold">Create a team account.</a>
+                    </p>
                 </div>
 
                 <!-- Step 2: Fetched Data (hidden by default) -->
                 <div id="details-step" class="hidden space-y-5">
-                    <input id="team-name-input" type="text" placeholder="Team Name" class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl block p-4 font-bold outline-none placeholder-gray-600 text-center" readonly="">
+                    <input id="team-name-input" type="text" placeholder="Team Name"
+                        class="w-full bg-[#111] border-2 border-white/10 text-white text-sm rounded-xl block p-4 font-bold outline-none placeholder-gray-600 text-center"
+                        readonly="">
 
                     <!-- Player lineup selection removed - registration only requires team name -->
                 </div>
 
                 <!-- DISCOUNT BANNER (NEW) -->
-                <div id="discount-banner" class="hidden bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/30 rounded-xl p-3 flex items-center justify-between animate-fade-in shadow-sm">
+                <div id="discount-banner"
+                    class="hidden bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/30 rounded-xl p-3 flex items-center justify-between animate-fade-in shadow-sm">
                     <div class="flex items-center gap-2">
-                        <div class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg shadow-purple-600/30">
+                        <div
+                            class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg shadow-purple-600/30">
                             <i class="ri-gift-2-fill"></i>
                         </div>
                         <div>
@@ -198,20 +312,27 @@
 
                 <!-- Action Buttons -->
                 <div class="pt-2 space-y-3">
-                    <button type="submit" id="proceed-to-pay-btn" class="w-full text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 font-extrabold rounded-xl text-sm px-5 py-4 text-center shadow-lg shadow-green-500/30 transition-all active:scale-95 disabled:opacity-50" disabled="">Proceed to Pay</button>
-                    <button id="close-modal-btn" type="button" class="w-full text-gray-500 bg-transparent hover:bg-gray-100 font-bold rounded-xl text-sm px-5 py-2.5 text-center transition-all">Cancel</button>
+                    <button type="submit" id="proceed-to-pay-btn"
+                        class="w-full text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 font-extrabold rounded-xl text-sm px-5 py-4 text-center shadow-lg shadow-green-500/30 transition-all active:scale-95 disabled:opacity-50"
+                        disabled="">Proceed to Pay</button>
+                    <button id="close-modal-btn" type="button"
+                        class="w-full text-gray-500 bg-transparent hover:bg-gray-100 font-bold rounded-xl text-sm px-5 py-2.5 text-center transition-all">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Alert -->
-    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
+    <div id="custom-alert-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-xs p-6 text-center shadow-xl">
-            <div id="custom-alert-icon-bg" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-100"><i id="custom-alert-icon" class="ri-error-warning-line text-3xl text-red-600"></i></div>
+            <div id="custom-alert-icon-bg"
+                class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-100"><i
+                    id="custom-alert-icon" class="ri-error-warning-line text-3xl text-red-600"></i></div>
             <h3 id="custom-alert-title" class="text-lg font-bold text-secondary mb-2">Error</h3>
             <p id="custom-alert-message" class="text-sm text-gray-600 mb-6 font-medium">Something went wrong.</p>
-            <button id="custom-alert-btn" class="w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition-colors">OK</button>
+            <button id="custom-alert-btn"
+                class="w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition-colors">OK</button>
         </div>
     </div>
 
@@ -233,7 +354,7 @@
             firebase.initializeApp(FIREBASE_CONFIG);
         }
         if (firebase.auth) {
-            firebase.auth().signInAnonymously().catch(function(e) { console.warn("[Firebase] Auth notice:", e); });
+            firebase.auth().signInAnonymously().catch(function (e) { console.warn("[Firebase] Auth notice:", e); });
         }
         window.db = firebase.firestore();
     </script>
@@ -243,33 +364,44 @@
 
     <!-- Bottom Navigation -->
     <div id="bottom-nav-container">
-        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#0d0d0d] border-t border-white/10 shadow-2xl" style="padding-bottom: env(safe-area-inset-bottom);">
+        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#0d0d0d] border-t border-white/10 shadow-2xl"
+            style="padding-bottom: env(safe-area-inset-bottom);">
             <div class="grid grid-cols-4 h-16 items-center max-w-lg mx-auto px-1">
 
                 <!-- Support -->
-                <a href="../contact/index.html" class="flex flex-col items-center justify-center gap-1 group transition-colors">
-                    <i class="ri-customer-service-2-line text-2xl text-gray-500 group-hover:text-blue-400 transition-colors"></i>
-                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-blue-400 transition-colors uppercase">Support</span>
+                <a href="../contact/index.html"
+                    class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                    <i
+                        class="ri-customer-service-2-line text-2xl text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+                    <span
+                        class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-blue-400 transition-colors uppercase">Support</span>
                 </a>
 
                 <!-- Point Table -->
-                <button type="button" onclick="openPointsTableModal()" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                <button type="button" onclick="openPointsTableModal()"
+                    class="flex flex-col items-center justify-center gap-1 group transition-colors">
                     <i class="ri-trophy-line text-2xl text-gray-500 group-hover:text-yellow-400 transition-colors"></i>
-                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-yellow-400 transition-colors uppercase">Point Table</span>
+                    <span
+                        class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-yellow-400 transition-colors uppercase">Point
+                        Table</span>
                 </button>
 
                 <!-- Book (center elevated) -->
                 <a href="index.html" class="flex flex-col items-center justify-center gap-1 group transition-all -mt-5">
-                    <div class="w-13 h-13 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/40 group-hover:bg-blue-500 transition-all group-hover:scale-105 p-3">
+                    <div
+                        class="w-13 h-13 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/40 group-hover:bg-blue-500 transition-all group-hover:scale-105 p-3">
                         <i class="ri-ticket-2-fill text-2xl text-white"></i>
                     </div>
                     <span class="text-[9px] font-bold tracking-wide text-blue-400 uppercase">Book</span>
                 </a>
 
                 <!-- WhatsApp Channel -->
-                <a id="bottom-nav-wa-channel" href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener" class="flex flex-col items-center justify-center gap-1 group transition-colors">
+                <a id="bottom-nav-wa-channel" href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T"
+                    target="_blank" rel="noopener"
+                    class="flex flex-col items-center justify-center gap-1 group transition-colors">
                     <i class="ri-whatsapp-line text-2xl text-gray-500 group-hover:text-green-400 transition-colors"></i>
-                    <span class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-green-400 transition-colors uppercase">Channel</span>
+                    <span
+                        class="text-[9px] font-bold tracking-wide text-gray-500 group-hover:text-green-400 transition-colors uppercase">Channel</span>
                 </a>
 
             </div>
@@ -277,26 +409,32 @@
     </div>
 
     <!-- Points Table Image Modal -->
-    <div id="points-table-modal" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
-        <div class="relative max-w-lg w-full bg-[#121216] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+    <div id="points-table-modal"
+        class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
+        <div
+            class="relative max-w-lg w-full bg-[#121216] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <!-- Header -->
             <div class="px-4 py-3 bg-[#18181f] border-b border-white/10 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="ri-trophy-fill text-yellow-400 text-lg"></i>
-                    <h3 class="font-display font-bold text-white text-base tracking-wide uppercase">Free Fire Points System</h3>
+                    <h3 class="font-display font-bold text-white text-base tracking-wide uppercase">Free Fire Points
+                        System</h3>
                 </div>
-                <button type="button" onclick="closePointsTableModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+                <button type="button" onclick="closePointsTableModal()"
+                    class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
                     <i class="ri-close-line text-xl"></i>
                 </button>
             </div>
             <!-- Image Container -->
             <div class="p-2 overflow-y-auto flex justify-center bg-[#0a0a0c]">
-                <img id="modal-points-table-img" src="../assets/points-table.jpg" alt="Free Fire Points System Table" class="w-full h-auto rounded-xl object-contain shadow-lg" />
+                <img id="modal-points-table-img" src="../assets/points-table.jpg" alt="Free Fire Points System Table"
+                    class="w-full h-auto rounded-xl object-contain shadow-lg" />
             </div>
             <!-- Footer -->
             <div class="p-3 bg-[#18181f] border-t border-white/10 flex items-center justify-between">
                 <span class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Volt Esports Hub</span>
-                <button type="button" onclick="closePointsTableModal()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition-colors uppercase">
+                <button type="button" onclick="closePointsTableModal()"
+                    class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition-colors uppercase">
                     Got It
                 </button>
             </div>
@@ -304,24 +442,24 @@
     </div>
 
     <script>
-    function openPointsTableModal() {
-        var m = document.getElementById('points-table-modal');
-        var img = document.getElementById('modal-points-table-img');
-        if (window.VoltConfig && img) {
-            img.src = window.VoltConfig.get().pointsTableImg || '../assets/points-table.jpg';
+        function openPointsTableModal() {
+            var m = document.getElementById('points-table-modal');
+            var img = document.getElementById('modal-points-table-img');
+            if (window.VoltConfig && img) {
+                img.src = window.VoltConfig.get().pointsTableImg || '../assets/points-table.jpg';
+            }
+            if (m) {
+                m.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
         }
-        if (m) {
-            m.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+        function closePointsTableModal() {
+            var m = document.getElementById('points-table-modal');
+            if (m) {
+                m.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
         }
-    }
-    function closePointsTableModal() {
-        var m = document.getElementById('points-table-modal');
-        if (m) {
-            m.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-    }
     </script>
 
 
@@ -330,4 +468,6 @@
 
 
 
-</body></html>
+</body>
+
+</html>
