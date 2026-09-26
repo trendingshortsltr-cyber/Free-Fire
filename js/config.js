@@ -9,8 +9,8 @@
     whatsappNumber: "918087361230",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T",
     adminPasscode: atob("dm9sdDEyMw=="),
-    announcementText: "Welcome to Volt Esports Hub! Daily Scrims Open Now.",
-    announcementActive: false,
+    announcementText: "Volt Esports: Volt is about trust.",
+    announcementActive: true,
     initialSlotOffset: 8,
     modes: [
       { name: "Solo", available: false },
