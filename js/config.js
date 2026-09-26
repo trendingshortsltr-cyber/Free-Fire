@@ -22,7 +22,7 @@
       { amount: 50, available: true },
       { amount: 100, available: false }
     ],
-    matchDate: "tomorrow",
+    matchDate: "today",
     ruleBookImg: "/assets/rule-book.jpg",
     pointsTableImg: "/assets/points-table.jpg"
   };
@@ -38,9 +38,9 @@
       cfg.whatsappNumber = "918087361230";
       cfg.v8087_updated = true;
     }
-    if (!cfg.matchDate || cfg.matchDate === "tuesday" || cfg.matchDate === "today" || !cfg.vTomorrow_updated) {
-      cfg.matchDate = "tomorrow";
-      cfg.vTomorrow_updated = true;
+    if (!cfg.matchDate || cfg.matchDate === "tuesday" || cfg.matchDate === "tomorrow" || !cfg.vToday_26_updated) {
+      cfg.matchDate = "today";
+      cfg.vToday_26_updated = true;
     }
     if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v9pm_updated) {
       cfg.times = ["09:00 PM"];
@@ -159,7 +159,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("03:00 PM") || !cloudData.v9pm_updated || !cloudData.vTomorrow_updated) {
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("03:00 PM") || !cloudData.v9pm_updated || !cloudData.vToday_26_updated) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }
