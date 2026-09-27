@@ -17,7 +17,7 @@
       { name: "Duo", available: false },
       { name: "Squad", available: true }
     ],
-    times: ["09:00 PM"],
+    times: ["03:00 PM"],
     amounts: [
       { amount: 50, available: false },
       { amount: 100, available: true }
@@ -42,17 +42,17 @@
       cfg.matchDate = "today";
       cfg.vToday_27_v2_updated = true;
     }
-    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v9pm_updated) {
-      cfg.times = ["09:00 PM"];
-      cfg.v9pm_updated = true;
+    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v3pm_only_updated) {
+      cfg.times = ["03:00 PM"];
+      cfg.v3pm_only_updated = true;
     } else {
-      var has03 = cfg.times.some(function (t) {
+      var has09 = cfg.times.some(function (t) {
         var str = typeof t === "object" ? t.time : t;
-        return str === "03:00 PM" || str === "3:00 PM" || str === "03:00PM" || str === "3:00PM";
+        return str === "09:00 PM" || str === "9:00 PM" || str === "09:00PM" || str === "9:00PM";
       });
-      if (has03) {
-        cfg.times = ["09:00 PM"];
-        cfg.v9pm_updated = true;
+      if (has09 || !cfg.v3pm_only_updated) {
+        cfg.times = ["03:00 PM"];
+        cfg.v3pm_only_updated = true;
       }
     }
 
@@ -164,7 +164,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("03:00 PM") || !cloudData.v9pm_updated || !cloudData.vToday_27_v2_updated || !cloudData.v100_on_50_off_v27_updated) {
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("09:00 PM") || !cloudData.v3pm_only_updated || !cloudData.vToday_27_v2_updated || !cloudData.v100_on_50_off_v27_updated) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }
