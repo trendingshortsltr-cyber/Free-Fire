@@ -120,18 +120,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return cur > timeToMin(t);
   }
 
-  // Check and perform automatic rollover if slot time is over
+  // Automatic rollover disabled per user request
   function checkAutoRollover() {
-    var mDate = cfg.matchDate || "today";
-    if (mDate === "today") {
-      var times = Object.keys(schedule);
-      var allExpired = times.length > 0 && times.every(function (t) { return isPast(t); });
-      if (allExpired) {
-        cfg.matchDate = "tomorrow";
-        schedule = buildScheduleFromConfig(cfg);
-        renderMatchDateBadge();
-      }
-    }
+    // Disabled
   }
 
   // ─── SELECTED STYLE HELPERS ────────────────────────────────────────────────
@@ -213,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-40 cursor-not-allowed bg-[#111] border-white/5 rounded-xl border-2";
         btn.innerHTML = '<div class="flex flex-col items-center"><span class="text-gray-400">' + t + '</span><span class="text-[9px] text-yellow-500 font-bold uppercase mt-0.5">Expired</span></div>';
         btn.addEventListener("click", function () {
-          showUnavailableToast("This lobby (" + t + ") has EXPIRED. Taking bookings for next slot/tomorrow.");
+          showUnavailableToast("This lobby (" + t + ") has EXPIRED.");
         });
       } else if (isFull) {
         btn.className = "selection-card flex-row justify-center items-center p-3 text-sm font-bold opacity-75 cursor-not-allowed bg-red-950/20 border-red-500/30 rounded-xl border-2";
