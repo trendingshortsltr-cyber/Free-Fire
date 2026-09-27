@@ -428,9 +428,33 @@ document.addEventListener("DOMContentLoaded", function () {
     if (channelEl && cfg.whatsappChannel) {
       channelEl.href = cfg.whatsappChannel;
     }
+    var closedWaBtn = document.getElementById("closed-wa-channel-btn");
+    if (closedWaBtn && cfg.whatsappChannel) {
+      closedWaBtn.href = cfg.whatsappChannel;
+    }
+  }
+
+  function checkSiteStatus() {
+    var banner = document.getElementById("lobby-off-banner");
+    var bannerMsg = document.getElementById("lobby-off-banner-message");
+    var paidContent = document.getElementById("paid-content");
+
+    if (cfg.siteClosed) {
+      if (banner) {
+        if (bannerMsg) bannerMsg.textContent = cfg.siteClosedMessage || "Lobbies and registrations are currently closed. Check back soon for upcoming slots!";
+        banner.classList.remove("hidden");
+      }
+      if (paidContent) {
+        paidContent.classList.add("hidden");
+      }
+    } else {
+      if (banner) banner.classList.add("hidden");
+      if (paidContent) paidContent.classList.remove("hidden");
+    }
   }
 
   // ─── INITIALISE ────────────────────────────────────────────────────────────
+  checkSiteStatus();
   renderMatchDateBadge();
   renderModes();
   renderTimes();
@@ -442,6 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cfg = e.detail;
     WA_NUMBER = cfg.whatsappNumber || "918087361230";
     schedule = buildScheduleFromConfig(cfg);
+    checkSiteStatus();
     renderMatchDateBadge();
     renderModes();
     renderTimes();

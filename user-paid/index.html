@@ -160,15 +160,32 @@
     </div>
 
     <main class="flex-grow pt-5 pb-10">
-        <!-- Lobby Off Popup Banner -->
-        <div id="lobby-off-banner" class="hidden px-4 max-w-lg mx-auto mb-6 animate-fade-in">
-            <div
-                class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-2xl p-5 text-center shadow-lg">
-                <div class="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="ri-shut-down-line text-3xl text-red-400"></i>
+        <!-- Site Closed Banner -->
+        <div id="lobby-off-banner" class="hidden px-4 max-w-lg mx-auto mb-8 animate-fade-in">
+            <div class="bg-gradient-to-b from-[#1c1214] via-[#161014] to-[#120d10] border-2 border-red-500/40 rounded-3xl p-6 text-center shadow-2xl shadow-red-950/50 relative overflow-hidden backdrop-blur-xl">
+                <!-- Glowing ambient background -->
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-red-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-4 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> SITE STATUS: CLOSED
                 </div>
-                <h3 class="text-lg font-display font-bold text-red-400 uppercase tracking-wide mb-1">Lobbies Off</h3>
-                <p id="lobby-off-banner-message" class="text-sm text-gray-300 font-medium"></p>
+
+                <div class="w-16 h-16 bg-gradient-to-br from-red-600/30 to-red-950/50 border border-red-500/40 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-900/30">
+                    <i class="ri-lock-2-line text-3xl text-red-400"></i>
+                </div>
+
+                <h2 class="text-2xl font-display font-extrabold text-white uppercase tracking-wider mb-2">SITE CLOSED</h2>
+                <p id="lobby-off-banner-message" class="text-sm text-gray-300 font-semibold max-w-xs mx-auto leading-relaxed mb-5">
+                    Lobbies and registrations are currently closed. Please check back later!
+                </p>
+
+                <div class="pt-3 border-t border-white/10 flex items-center justify-center gap-3">
+                    <a id="closed-wa-channel-btn" href="https://whatsapp.com/channel/0029Vb8ykqDLY6dB0OJ6Wv0T" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-green-600/20 transition-all uppercase tracking-wider">
+                        <i class="ri-whatsapp-fill text-lg"></i> Join WhatsApp Channel for Updates
+                    </a>
+                </div>
             </div>
         </div>
 

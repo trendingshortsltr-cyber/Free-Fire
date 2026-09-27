@@ -23,6 +23,8 @@
       { amount: 100, available: true }
     ],
     matchDate: "today",
+    siteClosed: true,
+    siteClosedMessage: "Lobbies and registrations are currently closed. Check back soon for upcoming slots!",
     ruleBookImg: "/assets/rule-book.jpg",
     pointsTableImg: "/assets/points-table.jpg"
   };
@@ -41,6 +43,11 @@
     if (!cfg.matchDate || cfg.matchDate === "tuesday" || cfg.matchDate === "tomorrow" || !cfg.vToday_27_v2_updated) {
       cfg.matchDate = "today";
       cfg.vToday_27_v2_updated = true;
+    }
+    if (cfg.siteClosed === undefined || !cfg.vSiteClosed_v2_updated) {
+      cfg.siteClosed = true;
+      cfg.siteClosedMessage = cfg.siteClosedMessage || "Lobbies and registrations are currently closed. Check back soon for upcoming slots!";
+      cfg.vSiteClosed_v2_updated = true;
     }
     if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v3pm_only_updated) {
       cfg.times = ["03:00 PM"];
@@ -164,7 +171,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("09:00 PM") || !cloudData.v3pm_only_updated || !cloudData.vToday_27_v2_updated || !cloudData.v100_on_50_off_v27_updated) {
+                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || cloudTimes.includes("09:00 PM") || !cloudData.v3pm_only_updated || !cloudData.vToday_27_v2_updated || !cloudData.v100_on_50_off_v27_updated || !cloudData.vSiteClosed_v2_updated || cloudData.siteClosed !== true) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }

@@ -154,6 +154,36 @@
                 <span id="save-toast-text">Settings saved successfully!</span>
             </div>
 
+            <!-- GLOBAL SITE STATUS CONTROL CARD -->
+            <div class="glass-card rounded-2xl p-5 border border-red-500/30 bg-gradient-to-r from-red-950/30 to-[#161216] space-y-4 shadow-xl">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-xl">
+                            <i class="ri-shut-down-line"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wide">Site Registration & Lobby Status</h2>
+                            <p class="text-xs text-gray-400">Close the site to block bookings or open the site for registrations</p>
+                        </div>
+                    </div>
+                    <span id="admin-site-status-badge" class="text-xs font-black bg-red-600/30 text-red-400 border border-red-500/40 px-3.5 py-1.5 rounded-xl uppercase tracking-wider font-mono">
+                        🔴 SITE CLOSED
+                    </span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex-1 w-full">
+                        <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Site Closed Message Displayed to Users:</label>
+                        <input type="text" id="input-site-closed-msg" placeholder="Lobbies and registrations are currently closed. Check back soon for upcoming slots!"
+                            class="w-full bg-[#121216] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 font-medium" />
+                    </div>
+                    <button onclick="toggleSiteClosedStatus()" id="admin-toggle-site-btn"
+                        class="w-full sm:w-auto bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs px-5 py-3 rounded-xl transition-all shadow-lg shadow-red-600/30 uppercase tracking-wider whitespace-nowrap cursor-pointer">
+                        🟢 Open Site Now
+                    </button>
+                </div>
+            </div>
+
             <!-- TAB NAVIGATION -->
             <div class="flex gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-2">
                 <button onclick="switchTab('times')" id="tab-btn-times"
@@ -504,6 +534,13 @@
         function loadDashboardData() {
             currentConfig = VoltConfig.get();
 
+            // Load Site Closed Status & Message
+            updateSiteClosedUI();
+            var siteMsgEl = document.getElementById("input-site-closed-msg");
+            if (siteMsgEl && document.activeElement !== siteMsgEl) {
+                siteMsgEl.value = currentConfig.siteClosedMessage || "Lobbies and registrations are currently closed. Check back soon for upcoming slots!";
+            }
+
             // Load Match Date
             updateDateUI();
 
@@ -545,6 +582,44 @@
             var nextSlot = val + 1;
             if (badge) badge.textContent = "Offset: " + val + " (Next: Slot " + nextSlot + ")";
             if (preview) preview.textContent = "👉 Next booking will receive: Slot " + nextSlot;
+        }
+
+        // --- SITE STATUS MANAGER ---
+        function updateSiteClosedUI() {
+            var isClosed = !!currentConfig.siteClosed;
+            var badge = document.getElementById("admin-site-status-badge");
+            var btn = document.getElementById("admin-toggle-site-btn");
+
+            if (isClosed) {
+                if (badge) {
+                    badge.textContent = "🔴 SITE CLOSED";
+                    badge.className = "text-xs font-black bg-red-600/30 text-red-400 border border-red-500/40 px-3.5 py-1.5 rounded-xl uppercase tracking-wider font-mono";
+                }
+                if (btn) {
+                    btn.textContent = "🟢 Open Site Now";
+                    btn.className = "w-full sm:w-auto bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs px-5 py-3 rounded-xl transition-all shadow-lg shadow-green-600/30 uppercase tracking-wider whitespace-nowrap cursor-pointer";
+                }
+            } else {
+                if (badge) {
+                    badge.textContent = "🟢 SITE OPEN";
+                    badge.className = "text-xs font-black bg-green-600/30 text-green-400 border border-green-500/40 px-3.5 py-1.5 rounded-xl uppercase tracking-wider font-mono";
+                }
+                if (btn) {
+                    btn.textContent = "🔴 Close Site Now";
+                    btn.className = "w-full sm:w-auto bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs px-5 py-3 rounded-xl transition-all shadow-lg shadow-red-600/30 uppercase tracking-wider whitespace-nowrap cursor-pointer";
+                }
+            }
+        }
+
+        function toggleSiteClosedStatus() {
+            currentConfig.siteClosed = !currentConfig.siteClosed;
+            var msgInp = document.getElementById("input-site-closed-msg");
+            if (msgInp && msgInp.value.trim()) {
+                currentConfig.siteClosedMessage = msgInp.value.trim();
+            }
+            VoltConfig.save(currentConfig);
+            updateSiteClosedUI();
+            showSaveToast(currentConfig.siteClosed ? "🔴 Site is now CLOSED for bookings!" : "🟢 Site is now OPEN for bookings!");
         }
 
 
@@ -877,6 +952,12 @@
                     if (!isNaN(offsetVal) && offsetVal >= 0) {
                         currentConfig.initialSlotOffset = offsetVal;
                     }
+                }
+
+                // 7. Scrape Site Closed Message
+                var siteClosedMsgInp = document.getElementById("input-site-closed-msg");
+                if (siteClosedMsgInp && siteClosedMsgInp.value.trim()) {
+                    currentConfig.siteClosedMessage = siteClosedMsgInp.value.trim();
                 }
 
                 // 7. Save & Broadcast
