@@ -17,7 +17,7 @@
       { name: "Duo", available: false },
       { name: "Squad", available: true }
     ],
-    times: ["9:00 PM"],
+    times: ["7:00 PM"],
     amounts: [
       { amount: 50, available: false },
       { amount: 200, available: true }
@@ -48,14 +48,14 @@
       cfg.siteClosed = false;
       cfg.vOpen_v29 = true;
     }
-    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v9pm_v30) {
-      cfg.times = ["9:00 PM"];
-      cfg.v9pm_v30 = true;
+    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v7pm_Oct2_v1) {
+      cfg.times = ["7:00 PM"];
+      cfg.v7pm_Oct2_v1 = true;
     } else {
-      var isOnly9pm = cfg.times.length === 1 && (typeof cfg.times[0] === "object" ? cfg.times[0].time : cfg.times[0]) === "9:00 PM";
-      if (!isOnly9pm || !cfg.v9pm_v30) {
-        cfg.times = ["9:00 PM"];
-        cfg.v9pm_v30 = true;
+      var isOnly7pm = cfg.times.length === 1 && (typeof cfg.times[0] === "object" ? cfg.times[0].time : cfg.times[0]) === "7:00 PM";
+      if (!isOnly7pm || !cfg.v7pm_Oct2_v1) {
+        cfg.times = ["7:00 PM"];
+        cfg.v7pm_Oct2_v1 = true;
       }
     }
 
@@ -167,7 +167,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(100) || cloudAmounts.length !== 2 || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("9:00 PM") || cloudTimes.length !== 1 || !cloudData.v9pm_v30 || !cloudData.vTom_Oct2_v1 || !cloudData.v200on_v31 || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
+                    if (cloudAmounts.includes(100) || cloudAmounts.length !== 2 || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("7:00 PM") || cloudTimes.length !== 1 || !cloudData.v7pm_Oct2_v1 || !cloudData.vTom_Oct2_v1 || !cloudData.v200on_v31 || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }
