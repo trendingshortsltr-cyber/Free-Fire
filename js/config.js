@@ -19,10 +19,10 @@
     ],
     times: ["9:00 PM"],
     amounts: [
-      { amount: 50, available: true },
-      { amount: 100, available: false }
+      { amount: 50, available: false },
+      { amount: 200, available: true }
     ],
-    matchDate: "today",
+    matchDate: "tomorrow",
     siteClosed: false,
     siteClosedMessage: "Lobbies and registrations are currently closed. Check back soon for upcoming slots!",
     ruleBookImg: "/assets/rule-book.jpg",
@@ -40,9 +40,9 @@
       cfg.whatsappNumber = "918087361230";
       cfg.v8087_updated = true;
     }
-    if (!cfg.matchDate || cfg.matchDate === "tuesday" || cfg.matchDate === "tomorrow" || !cfg.vToday_27_v2_updated) {
-      cfg.matchDate = "today";
-      cfg.vToday_27_v2_updated = true;
+    if (!cfg.matchDate || cfg.matchDate === "today" || !cfg.vTom_Oct2_v1) {
+      cfg.matchDate = "tomorrow";
+      cfg.vTom_Oct2_v1 = true;
     }
     if (!cfg.vOpen_v29) {
       cfg.siteClosed = false;
@@ -60,24 +60,24 @@
     }
 
     var validAmounts = [
-      { amount: 50, available: true },
-      { amount: 100, available: false }
+      { amount: 50, available: false },
+      { amount: 200, available: true }
     ];
 
-    if (!cfg.amounts || !Array.isArray(cfg.amounts) || !cfg.v50on_v29b) {
+    if (!cfg.amounts || !Array.isArray(cfg.amounts) || !cfg.v200on_v31) {
       cfg.amounts = validAmounts;
-      cfg.v50on_v29b = true;
+      cfg.v200on_v31 = true;
     } else {
       var currentValues = cfg.amounts.map(function (a) { return typeof a === "object" ? a.amount : a; });
-      var isExactMatch = currentValues.length === 2 && currentValues.includes(50) && currentValues.includes(100);
+      var isExactMatch = currentValues.length === 2 && currentValues.includes(50) && currentValues.includes(200);
       var amt50Obj = cfg.amounts.find(function (a) { return (typeof a === "object" ? a.amount : a) === 50; });
-      var amt100Obj = cfg.amounts.find(function (a) { return (typeof a === "object" ? a.amount : a) === 100; });
-      var is50On = amt50Obj && amt50Obj.available === true;
-      var is100Off = amt100Obj && amt100Obj.available === false;
+      var amt200Obj = cfg.amounts.find(function (a) { return (typeof a === "object" ? a.amount : a) === 200; });
+      var is50Off = amt50Obj && amt50Obj.available === false;
+      var is200On = amt200Obj && amt200Obj.available === true;
 
-      if (!isExactMatch || !is50On || !is100Off || !cfg.v50on_v29b) {
+      if (!isExactMatch || !is50Off || !is200On || !cfg.v200on_v31) {
         cfg.amounts = validAmounts;
-        cfg.v50on_v29b = true;
+        cfg.v200on_v31 = true;
       }
     }
     return cfg;
@@ -167,7 +167,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(40) || cloudAmounts.includes(25) || cloudAmounts.length !== 2 || cloudData.matchDate === "tuesday" || cloudData.matchDate === "tomorrow" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("9:00 PM") || cloudTimes.length !== 1 || !cloudData.v9pm_v30 || !cloudData.vToday_27_v2_updated || !cloudData.v50on_v29b || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
+                    if (cloudAmounts.includes(100) || cloudAmounts.length !== 2 || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("9:00 PM") || cloudTimes.length !== 1 || !cloudData.v9pm_v30 || !cloudData.vTom_Oct2_v1 || !cloudData.v200on_v31 || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }

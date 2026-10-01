@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         whatsappNumber: "918087361230",
         modes: [{ name: "Squad", available: true }],
         times: ["03:00 PM"],
-        amounts: [{ amount: 50, available: false }, { amount: 100, available: true }],
+        amounts: [{ amount: 50, available: false }, { amount: 200, available: true }],
         matchDate: "today"
       };
   }
@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildScheduleFromConfig(c) {
     var sch = {};
     var times = c.times || ["03:00 PM"];
-    var rawAmts = c.amounts || [{ amount: 50, available: false }, { amount: 100, available: true }];
+    var rawAmts = c.amounts || [{ amount: 50, available: false }, { amount: 200, available: true }];
     var amts = rawAmts.filter(function (a) {
       var val = typeof a === "object" ? a.amount : a;
-      return val === 50 || val === 100;
+      return val === 50 || val === 200;
     });
     if (amts.length === 0) {
-      amts = [{ amount: 50, available: false }, { amount: 100, available: true }];
+      amts = [{ amount: 50, available: false }, { amount: 200, available: true }];
     }
     times.forEach(function (tItem) {
       var tStr = typeof tItem === "object" ? tItem.time : tItem;
