@@ -17,9 +17,9 @@
       { name: "Duo", available: false },
       { name: "Squad", available: true }
     ],
-    times: ["7:00 PM"],
+    times: ["9:00 PM"],
     amounts: [
-      { amount: 50, available: false },
+      { amount: 50, available: true },
       { amount: 200, available: true }
     ],
     matchDate: "tomorrow",
@@ -48,36 +48,36 @@
       cfg.siteClosed = false;
       cfg.vOpen_v29 = true;
     }
-    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v7pm_Oct2_v1) {
-      cfg.times = ["7:00 PM"];
-      cfg.v7pm_Oct2_v1 = true;
+    if (!cfg.times || !Array.isArray(cfg.times) || cfg.times.length === 0 || !cfg.v9pm_Oct2_v1) {
+      cfg.times = ["9:00 PM"];
+      cfg.v9pm_Oct2_v1 = true;
     } else {
-      var isOnly7pm = cfg.times.length === 1 && (typeof cfg.times[0] === "object" ? cfg.times[0].time : cfg.times[0]) === "7:00 PM";
-      if (!isOnly7pm || !cfg.v7pm_Oct2_v1) {
-        cfg.times = ["7:00 PM"];
-        cfg.v7pm_Oct2_v1 = true;
+      var isOnly9pm = cfg.times.length === 1 && (typeof cfg.times[0] === "object" ? cfg.times[0].time : cfg.times[0]) === "9:00 PM";
+      if (!isOnly9pm || !cfg.v9pm_Oct2_v1) {
+        cfg.times = ["9:00 PM"];
+        cfg.v9pm_Oct2_v1 = true;
       }
     }
 
     var validAmounts = [
-      { amount: 50, available: false },
+      { amount: 50, available: true },
       { amount: 200, available: true }
     ];
 
-    if (!cfg.amounts || !Array.isArray(cfg.amounts) || !cfg.v200on_v31) {
+    if (!cfg.amounts || !Array.isArray(cfg.amounts) || !cfg.v50on_v34) {
       cfg.amounts = validAmounts;
-      cfg.v200on_v31 = true;
+      cfg.v50on_v34 = true;
     } else {
       var currentValues = cfg.amounts.map(function (a) { return typeof a === "object" ? a.amount : a; });
       var isExactMatch = currentValues.length === 2 && currentValues.includes(50) && currentValues.includes(200);
       var amt50Obj = cfg.amounts.find(function (a) { return (typeof a === "object" ? a.amount : a) === 50; });
       var amt200Obj = cfg.amounts.find(function (a) { return (typeof a === "object" ? a.amount : a) === 200; });
-      var is50Off = amt50Obj && amt50Obj.available === false;
+      var is50On = amt50Obj && amt50Obj.available === true;
       var is200On = amt200Obj && amt200Obj.available === true;
 
-      if (!isExactMatch || !is50Off || !is200On || !cfg.v200on_v31) {
+      if (!isExactMatch || !is50On || !is200On || !cfg.v50on_v34) {
         cfg.amounts = validAmounts;
-        cfg.v200on_v31 = true;
+        cfg.v50on_v34 = true;
       }
     }
     return cfg;
@@ -167,7 +167,7 @@
 
                     var cloudAmounts = cloudData.amounts ? cloudData.amounts.map(function (a) { return typeof a === 'object' ? a.amount : a; }) : [];
                     var cloudTimes = cloudData.times ? cloudData.times.map(function (t) { return typeof t === 'object' ? t.time : t; }) : [];
-                    if (cloudAmounts.includes(100) || cloudAmounts.length !== 2 || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("7:00 PM") || cloudTimes.length !== 1 || !cloudData.v7pm_Oct2_v1 || !cloudData.vTom_Oct2_v1 || !cloudData.v200on_v31 || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
+                    if (cloudAmounts.includes(100) || cloudAmounts.length !== 2 || cloudData.matchDate === "today" || !cloudData.whatsappNumber || cloudData.whatsappNumber.includes("72525945") || !cloudTimes.includes("9:00 PM") || cloudTimes.length !== 1 || !cloudData.v9pm_Oct2_v1 || !cloudData.vTom_Oct2_v1 || !cloudData.v50on_v34 || !cloudData.vOpen_v29 || cloudData.siteClosed !== false) {
                       firestore.collection("system_settings").doc("app_config").set(merged)
                         .catch(function (e) { console.warn("[VoltConfig] Cloud cleanup update error:", e); });
                     }
